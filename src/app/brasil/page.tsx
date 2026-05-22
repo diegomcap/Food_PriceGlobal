@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { Truck, ShieldCheck, BarChart3, Globe2, ArrowRight, Check } from 'lucide-react';
 
 export default function BrasilWelcomePage() {
+  const currentYear = new Date().getFullYear();
+
   return (
     <div className="min-h-screen bg-green-50 font-sans">
       {/* Navbar */}
@@ -100,7 +102,7 @@ export default function BrasilWelcomePage() {
       {/* Footer */}
       <footer className="bg-green-950 text-green-400 py-8 px-4 text-center text-sm">
         <div className="container mx-auto">
-          <p>&copy; 2024 Brasil Food Transport. Todos os direitos reservados.</p>
+          <p>&copy; {currentYear} Brasil Food Transport. Todos os direitos reservados.</p>
           <div className="flex justify-center gap-4 mt-4">
             <a href="#" className="hover:text-white transition-colors">Termos de Uso</a>
             <a href="#" className="hover:text-white transition-colors">Privacidade</a>

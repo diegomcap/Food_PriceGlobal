@@ -7,6 +7,7 @@ import { latamCountries } from '@/data/locations';
 
 export default function LatamLoginPage() {
   const [loading, setLoading] = useState(false);
+  const currentYear = new Date().getFullYear();
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -142,7 +143,7 @@ export default function LatamLoginPage() {
         </div>
 
         <div className="mt-8 pt-6 border-t border-white/10 text-center text-xs text-blue-200/60">
-          &copy; 2024 LATAM Export. Conectando Américas.
+          &copy; {currentYear} LATAM Export. Conectando Américas.
         </div>
       </div>
     </div>

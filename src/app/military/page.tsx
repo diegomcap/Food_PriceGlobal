@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { Shield, Target, Lock, Database, ChevronRight } from 'lucide-react';
 
 export default function MilitaryPage() {
+  const currentYear = new Date().getFullYear();
+
   return (
     <div className="min-h-screen bg-zinc-950 font-mono text-gray-300">
       {/* Navbar */}
@@ -76,7 +78,7 @@ export default function MilitaryPage() {
       <footer className="border-t border-red-900/30 py-12 px-6 bg-black text-center">
         <div className="container mx-auto">
           <p className="text-gray-600 text-xs tracking-widest uppercase">
-            &copy; 2024 Military Food Development. Department of Defense Contractor.
+            &copy; {currentYear} Military Food Development. Department of Defense Contractor.
             <br/>All rights reserved. Unauthorized access is strictly prohibited.
           </p>
         </div>

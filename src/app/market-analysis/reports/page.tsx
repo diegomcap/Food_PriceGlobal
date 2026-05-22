@@ -7,25 +7,31 @@ import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { FileText, Download, Search, Filter } from 'lucide-react';
 import Link from 'next/link';
+import { formatDate, getCurrentCropSeason, shiftDate, type SupportedLanguage } from '@/lib/marketTime';
 
-// Mock data for reports
-const REPORTS = [
-  { id: 1, title: 'Global Soybean Market Outlook - Q1 2024', category: 'grains', date: '2024-01-15', size: '2.4 MB' },
-  { id: 2, title: 'Brazilian Corn Harvest Forecast', category: 'grains', date: '2024-01-10', size: '1.8 MB' },
-  { id: 3, title: 'Sugar & Ethanol Weekly Update', category: 'softs', date: '2024-01-08', size: '1.2 MB' },
-  { id: 4, title: 'Wheat Trade Flow Analysis: Black Sea Region', category: 'grains', date: '2024-01-05', size: '3.1 MB' },
-  { id: 5, title: 'Energy Markets: Oil vs Biofuels', category: 'energy', date: '2023-12-28', size: '2.9 MB' },
-  { id: 6, title: 'Cotton Production Estimates 2023/24', category: 'softs', date: '2023-12-20', size: '1.5 MB' },
-  { id: 7, title: 'Fertilizer Market Trends', category: 'energy', date: '2023-12-15', size: '2.2 MB' },
-  { id: 8, title: 'Coffee Market Report: Arabica vs Robusta', category: 'softs', date: '2023-12-10', size: '1.9 MB' },
-];
+function toIsoDate(date: Date) {
+  return date.toISOString().slice(0, 10);
+}
 
 export default function MarketReportsPage() {
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
   const [filter, setFilter] = useState('all');
   const [search, setSearch] = useState('');
+  const currentDate = new Date();
+  const currentYear = currentDate.getFullYear();
+  const cropSeason = getCurrentCropSeason(currentDate);
+  const reports = [
+    { id: 1, title: `Global Soybean Market Outlook - Q${Math.min(4, Math.floor(currentDate.getMonth() / 3) + 1)} ${currentYear}`, category: 'grains', date: toIsoDate(shiftDate(currentDate, -3)), size: '2.4 MB' },
+    { id: 2, title: 'Brazilian Corn Harvest Forecast', category: 'grains', date: toIsoDate(shiftDate(currentDate, -8)), size: '1.8 MB' },
+    { id: 3, title: 'Sugar & Ethanol Weekly Update', category: 'softs', date: toIsoDate(shiftDate(currentDate, -12)), size: '1.2 MB' },
+    { id: 4, title: 'Wheat Trade Flow Analysis: Black Sea Region', category: 'grains', date: toIsoDate(shiftDate(currentDate, -18)), size: '3.1 MB' },
+    { id: 5, title: 'Energy Markets: Oil vs Biofuels', category: 'energy', date: toIsoDate(shiftDate(currentDate, -24)), size: '2.9 MB' },
+    { id: 6, title: `Cotton Production Estimates ${cropSeason}`, category: 'softs', date: toIsoDate(shiftDate(currentDate, -31)), size: '1.5 MB' },
+    { id: 7, title: 'Fertilizer Market Trends', category: 'energy', date: toIsoDate(shiftDate(currentDate, -39)), size: '2.2 MB' },
+    { id: 8, title: 'Coffee Market Report: Arabica vs Robusta', category: 'softs', date: toIsoDate(shiftDate(currentDate, -46)), size: '1.9 MB' },
+  ];
 
-  const handleDownload = (report: typeof REPORTS[0]) => {
+  const handleDownload = (report: typeof reports[0]) => {
     try {
       console.log(`Starting download for report: ${report.title}`);
       const doc = new jsPDF();
@@ -43,7 +49,7 @@ export default function MarketReportsPage() {
       // Metadata
       doc.setFontSize(12);
       doc.setTextColor(100, 100, 100);
-      doc.text(`Date: ${report.date}`, 20, 50);
+      doc.text(`Date: ${formatDate(new Date(`${report.date}T12:00:00`), language as SupportedLanguage)}`, 20, 50);
       doc.text(`Category: ${report.category.charAt(0).toUpperCase() + report.category.slice(1)}`, 20, 58);
       doc.text(`Size: ${report.size}`, 20, 66);
       
@@ -69,7 +75,7 @@ export default function MarketReportsPage() {
       // Footer
       doc.setFontSize(8);
       doc.setTextColor(150, 150, 150);
-      doc.text("© 2024 FoodPrice Global - Confidential & Proprietary", 20, 280);
+      doc.text(`© ${currentYear} FoodPrice Global - Confidential & Proprietary`, 20, 280);
       
       // Save
       const filename = `${report.title.replace(/[^a-zA-Z0-9]/g, '_')}_Report.pdf`;
@@ -81,7 +87,7 @@ export default function MarketReportsPage() {
     }
   };
 
-  const filteredReports = REPORTS.filter(report => {
+  const filteredReports = reports.filter(report => {
     const matchesFilter = filter === 'all' || report.category === filter;
     const matchesSearch = report.title.toLowerCase().includes(search.toLowerCase());
     return matchesFilter && matchesSearch;
@@ -145,7 +151,7 @@ export default function MarketReportsPage() {
                 <h3 className="text-lg font-bold text-slate-900">{report.title}</h3>
                 <div className="flex flex-wrap justify-center md:justify-start gap-4 mt-2 text-sm text-slate-500">
                   <span className="capitalize px-2 py-0.5 bg-slate-100 rounded text-xs font-medium">{report.category}</span>
-                  <span>{t('reports_date')}: {report.date}</span>
+                  <span>{t('reports_date')}: {formatDate(new Date(`${report.date}T12:00:00`), language as SupportedLanguage)}</span>
                   <span>{t('reports_size')}: {report.size}</span>
                 </div>
               </div>

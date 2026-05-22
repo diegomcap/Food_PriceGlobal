@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { ArrowRight, LayoutDashboard } from 'lucide-react';
 
 export function BrasilHero() {
+  const previousYear = new Date().getFullYear() - 1;
+
   return (
     <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden bg-green-600">
       {/* Background Image with Overlay */}
@@ -46,7 +48,7 @@ export function BrasilHero() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 max-w-4xl mx-auto">
           <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all transform hover:-translate-y-1">
             <span className="block text-4xl font-bold mb-2 text-yellow-400">US$ 166,5 bi</span>
-            <span className="text-sm text-green-100 uppercase tracking-wide font-semibold">Exportações em 2023</span>
+            <span className="text-sm text-green-100 uppercase tracking-wide font-semibold">Exportações em {previousYear}</span>
           </div>
           <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all transform hover:-translate-y-1">
             <span className="block text-4xl font-bold mb-2 text-yellow-400">+10%</span>

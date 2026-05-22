@@ -8,6 +8,7 @@ import { brazilStates } from '@/data/locations';
 export default function BrasilLoginPage() {
   const [loading, setLoading] = useState(false);
   const [cnpj, setCnpj] = useState('');
+  const currentYear = new Date().getFullYear();
 
   const formatCNPJ = (value: string) => {
     return value
@@ -161,7 +162,7 @@ export default function BrasilLoginPage() {
         </div>
 
         <div className="mt-8 pt-6 border-t border-white/10 text-center text-xs text-green-200/60">
-          &copy; 2024 Brasil Food Transport. Sistema Homologado ANVISA e MAPA.
+          &copy; {currentYear} Brasil Food Transport. Sistema Homologado ANVISA e MAPA.
         </div>
       </div>
     </div>

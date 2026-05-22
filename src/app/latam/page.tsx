@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { Globe2, Ship, Coins, FileCheck, ArrowRight } from 'lucide-react';
 
 export default function LatamWelcomePage() {
+  const currentYear = new Date().getFullYear();
+
   return (
     <div className="min-h-screen bg-blue-50 font-sans">
       {/* Navbar */}
@@ -81,7 +83,7 @@ export default function LatamWelcomePage() {
       {/* Footer */}
       <footer className="bg-blue-950 text-blue-400 py-8 px-4 text-center text-sm">
         <div className="container mx-auto">
-          <p>&copy; 2024 LATAM Export. Todos los derechos reservados.</p>
+          <p>&copy; {currentYear} LATAM Export. Todos los derechos reservados.</p>
         </div>
       </footer>
     </div>

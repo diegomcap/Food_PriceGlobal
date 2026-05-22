@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Building2, ShieldCheck, RefreshCw, Apple, Award, Microscope, FileCheck, AlertCircle, XCircle, MapPin, TrendingUp, Truck } from 'lucide-react';
+import { formatDate, shiftDate } from '@/lib/marketTime';
 
 export const BrasilDashboard = () => {
   // State for real-time simulation
@@ -16,6 +17,7 @@ export const BrasilDashboard = () => {
     'Nordeste': { percentage: 6.1, volume: 152500, performance: 5.4 },
     'Norte': { percentage: 1.6, volume: 40000, performance: 3.1 }
   });
+  const lastAuditDate = formatDate(shiftDate(new Date(), -15), 'pt');
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -243,7 +245,7 @@ export const BrasilDashboard = () => {
             </div>
             <div className="flex items-center gap-2 text-sm text-slate-500">
               <FileCheck size={14} />
-              Última auditoria: 15/01/2024
+              Última auditoria: {lastAuditDate}
             </div>
           </div>
         </div>

@@ -12,6 +12,18 @@ interface CommodityData {
   category: string;
 }
 
+interface CommodityQuote {
+  symbol: string;
+  price: number;
+  previousClose: number;
+}
+
+interface CommoditiesApiResponse {
+  quotes: CommodityQuote[];
+  source: string;
+  updatedAt: string;
+}
+
 const SYMBOL_MAP: Record<string, { id: string; category: string }> = {
   'ZW=F': { id: 'commodity_wheat', category: 'grains' },
   'ZC=F': { id: 'commodity_corn', category: 'grains' },
@@ -36,44 +48,31 @@ export default function CommoditiesTable() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [lastUpdate, setLastUpdate] = useState<Date | null>(null);
+  const [dataSource, setDataSource] = useState<string>('market-data');
 
   const fetchCommodityData = async () => {
     setLoading(true);
     setError(null);
     try {
-      const symbols = Object.keys(SYMBOL_MAP).join(',');
-      // Add a timestamp to prevent caching
-      const yahooUrl = `https://query1.finance.yahoo.com/v7/finance/spark?symbols=${symbols}&range=1d&interval=1d&_=${new Date().getTime()}`;
-      
-      // Using corsproxy.io as it is more stable than allorigins.win
-      // corsproxy.io returns the raw response, unlike allorigins which wraps it
-      const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(yahooUrl)}`;
-      
-      const response = await fetch(proxyUrl);
+      const response = await fetch('/api/commodities');
       if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
       
-      const data = await response.json();
-      
-      // With corsproxy.io, we get the Yahoo response directly
-      const results = data.spark?.result || [];
-      
+      const data = await response.json() as CommoditiesApiResponse;
+      const results = data.quotes || [];
+
       if (results.length === 0) {
-        console.warn('Yahoo API returned no results', data);
-        if (data.spark?.error) {
-          throw new Error(`Yahoo API: ${data.spark.error.code || 'Unknown error'}`);
-        }
+        throw new Error('Commodities API returned no results');
       }
       
       const newCommodities: CommodityData[] = results.map((item: any) => {
           const symbol = item.symbol;
-          const meta = item.response?.[0]?.meta;
           // Case-insensitive lookup
           const mapData = SYMBOL_MAP[symbol] || Object.entries(SYMBOL_MAP).find(([key]) => key.toLowerCase() === symbol.toLowerCase())?.[1];
           
-          if (!meta || !mapData) return null;
+          if (!mapData) return null;
           
-          const price = meta.regularMarketPrice;
-          const prevClose = meta.chartPreviousClose || meta.previousClose;
+          const price = item.price;
+          const prevClose = item.previousClose;
           const change = ((price - prevClose) / prevClose) * 100;
           
           return {
@@ -90,7 +89,8 @@ export default function CommoditiesTable() {
         }
 
         setCommodities(newCommodities);
-        setLastUpdate(new Date());
+        setLastUpdate(new Date(data.updatedAt || Date.now()));
+        setDataSource(data.source || 'market-data');
     } catch (error) {
       console.error('Failed to fetch commodity data:', error);
       setError(error instanceof Error ? error.message : 'Unknown error occurred');
@@ -234,6 +234,7 @@ export default function CommoditiesTable() {
             )}
             <div className="p-3 border-t border-slate-100 bg-slate-50/50 text-xs text-slate-500 text-right italic">
               {t('commodities_table_source')}
+              {dataSource === 'fallback' ? ' | fallback snapshot active' : ''}
             </div>
           </div>
         </div>

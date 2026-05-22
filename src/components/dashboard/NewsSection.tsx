@@ -3,28 +3,57 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar, ArrowRight, Clock, Search, Loader2, X } from 'lucide-react';
 import { useTranslation } from '@/context/TranslationContext';
+import { formatShortDate, getCurrentCropSeason, getDayMonthParts, shiftDate, type SupportedLanguage } from '@/lib/marketTime';
+
+type Article = {
+  title: string;
+  link: string;
+  time: string;
+  source: string;
+  image: string;
+  description: string;
+  isNew: boolean;
+};
 
 export default function NewsSection() {
   const { t, language } = useTranslation();
+  const currentDate = new Date();
+  const activeLanguage = language as SupportedLanguage;
 
-  const events = [
-    { date: '20 Jun', title: t('event_title_1'), desc: t('event_desc_1') },
-    { date: '25 Jun', title: t('event_title_2'), desc: t('event_desc_2') },
-    { date: '2 Jul', title: t('event_title_3'), desc: t('event_desc_3') },
+  const baseEvents = [
+    { offset: 14, title: t('event_title_1'), desc: t('event_desc_1') },
+    { offset: 28, title: t('event_title_2'), desc: t('event_desc_2') },
+    { offset: 42, title: t('event_title_3'), desc: t('event_desc_3').replace(/\d{4}\/\d{2}/, getCurrentCropSeason(currentDate)) },
   ];
 
-  const fullEvents = [
-    { date: '20 Jun', title: t('event_title_1'), desc: t('event_desc_1') },
-    { date: '25 Jun', title: t('event_title_2'), desc: t('event_desc_2') },
-    { date: '02 Jul', title: t('event_title_3'), desc: t('event_desc_3') },
-    { date: '15 Jul', title: t('event_harvest_soy'), desc: 'Mato Grosso / Paraná' },
-    { date: '12 Aug', title: t('event_usda_report'), desc: 'Global Markets' },
-    { date: '05 Sep', title: t('event_harvest_corn'), desc: 'Brasil - Safrinha' },
-    { date: '18 Oct', title: t('event_coffee_expo'), desc: 'Minas Gerais' },
-    { date: '22 Nov', title: t('event_food_tech'), desc: 'São Paulo' },
+  const fullEventDefinitions = [
+    ...baseEvents,
+    { offset: 60, title: t('event_harvest_soy'), desc: 'Mato Grosso / Paraná' },
+    { offset: 90, title: t('event_usda_report'), desc: 'Global Markets' },
+    { offset: 120, title: t('event_harvest_corn'), desc: 'Brasil - Safrinha' },
+    { offset: 150, title: t('event_coffee_expo'), desc: 'Minas Gerais' },
+    { offset: 180, title: t('event_food_tech'), desc: 'São Paulo' },
   ];
 
-  const [articles, setArticles] = useState<any[]>([]);
+  const events = baseEvents.map((event) => {
+    const date = shiftDate(currentDate, event.offset);
+    return {
+      ...getDayMonthParts(date, activeLanguage),
+      title: event.title,
+      desc: event.desc,
+    };
+  });
+
+  const fullEvents = fullEventDefinitions.map((event) => {
+    const date = shiftDate(currentDate, event.offset);
+    return {
+      ...getDayMonthParts(date, activeLanguage),
+      title: event.title,
+      desc: event.desc,
+    };
+  });
+
+  const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -44,107 +73,27 @@ export default function NewsSection() {
   const fetchNews = async (query: string) => {
     setLoading(true);
     try {
-      const params = getGoogleNewsParams(language);
-      const encodedQuery = encodeURIComponent(query);
-      const rssUrl = `https://news.google.com/rss/search?q=${encodedQuery}&hl=${params.hl}&gl=${params.gl}&ceid=${params.ceid}`;
-      
-      // Fallback strategy for proxies
-      const proxies = [
-        { url: 'https://corsproxy.io/?', type: 'raw' },
-        { url: 'https://api.allorigins.win/get?url=', type: 'json' },
-        { url: 'https://api.codetabs.com/v1/proxy?quest=', type: 'raw' }
-      ];
-
-      let xmlText = '';
-      let fetchSuccess = false;
-
-      for (const proxy of proxies) {
-        try {
-          const proxyUrl = `${proxy.url}${encodeURIComponent(rssUrl)}`;
-          const response = await fetch(proxyUrl);
-          
-          if (!response.ok) {
-            console.warn(`Proxy ${proxy.url} returned ${response.status}`);
-            continue;
-          }
-
-          if (proxy.type === 'json') {
-            const data = await response.json();
-            if (data.contents) {
-              xmlText = data.contents;
-              fetchSuccess = true;
-              break;
-            }
-          } else {
-            const text = await response.text();
-            if (text && (text.includes('<?xml') || text.includes('<rss'))) {
-              xmlText = text;
-              fetchSuccess = true;
-              break;
-            }
-          }
-        } catch (err) {
-          console.warn(`Proxy ${proxy.url} failed:`, err);
-        }
+      const response = await fetch(`/api/market-news?query=${encodeURIComponent(query)}&language=${language}`);
+      if (!response.ok) {
+        throw new Error(`Failed to load market news (${response.status})`);
       }
 
-      if (!fetchSuccess) {
-        throw new Error('All proxies failed to fetch news');
+      const data = await response.json();
+      if (!Array.isArray(data.articles) || data.articles.length === 0) {
+        throw new Error('News API returned no articles');
       }
-      
-      const parser = new DOMParser();
-      const xmlDoc = parser.parseFromString(xmlText, "text/xml");
-      const items = xmlDoc.querySelectorAll("item");
-      
-      if (items.length === 0) throw new Error('No items found in RSS feed');
-      
-      const parsedArticles = Array.from(items).slice(0, 6).map((item, index) => {
-        const title = item.querySelector("title")?.textContent || "";
-        const link = item.querySelector("link")?.textContent || "#";
-        const pubDate = item.querySelector("pubDate")?.textContent || "";
-        const source = item.querySelector("source")?.textContent || "News";
-        const description = item.querySelector("description")?.textContent || "";
-        
-        // Extract image from description if present (often Google News puts it in HTML)
-        // Or assign a random category image
-        const dateObj = new Date(pubDate);
-        const formattedDate = dateObj.toLocaleDateString(language === 'pt' ? 'pt-BR' : 'en-US', { day: '2-digit', month: 'short' });
-        
-        // Static images pool for fallback
-        const fallbackImages = [
-            'https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-            'https://images.unsplash.com/photo-1593924689241-1b78c38f0071?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-            'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-            'https://images.unsplash.com/photo-1551754655-cd27e38d2076?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-            'https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-            'https://images.unsplash.com/photo-1550583724-b2692b85b150?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
-        ];
 
-        return {
-          title: title.replace(` - ${source}`, ''), // Clean title
-          link,
-          time: formattedDate,
-          source,
-          category: query.split(' ')[0].toUpperCase(), // Approximate category
-          image: fallbackImages[index % fallbackImages.length],
-          description: description.replace(/<[^>]*>?/gm, '').slice(0, 150) + '...', // Clean HTML from description
-          isNew: (new Date().getTime() - dateObj.getTime()) < (48 * 60 * 60 * 1000) // New if < 48h
-        };
-      });
-
-      setArticles(parsedArticles);
+      setArticles(data.articles as Article[]);
     } catch (error) {
       console.error('Failed to fetch news:', error);
       
       // Fallback to static news if fetch fails
-      const fallbackNews = Array.from({ length: 6 }).map((_, index) => {
+      const fallbackNews: Article[] = Array.from({ length: 6 }).map((_, index) => {
         const i = index + 1;
-        // Use static keys 1-6 (assuming they exist in translations)
-        // If keys 7,8 are better, we can use them, but 1-6 is standard sequence
         return {
           title: t(`news_title_static_${i}`) || `Market Update ${i}`,
           link: "#",
-          time: t(`news_item${i}_time`) || new Date().toLocaleDateString(),
+          time: formatShortDate(shiftDate(currentDate, -((index * 2) + 1)), activeLanguage),
           source: "Market Intelligence",
           category: "MARKET",
           image: [
@@ -294,8 +243,8 @@ export default function NewsSection() {
                 {events.map((event, index) => (
                   <div key={index} className="flex gap-4 group cursor-pointer">
                     <div className="w-16 h-16 bg-white rounded-xl shadow-sm border border-slate-100 flex flex-col items-center justify-center shrink-0 group-hover:border-blue-500 transition-colors">
-                      <span className="text-xs font-bold text-slate-500 uppercase">{event.date.split(' ')[1]}</span>
-                      <span className="text-xl font-bold text-slate-900">{event.date.split(' ')[0]}</span>
+                      <span className="text-xs font-bold text-slate-500 uppercase">{event.month}</span>
+                      <span className="text-xl font-bold text-slate-900">{event.day}</span>
                     </div>
                     <div>
                       <h4 className="font-bold text-slate-900 mb-1 group-hover:text-blue-600 transition-colors">{event.title}</h4>
@@ -340,8 +289,8 @@ export default function NewsSection() {
                 {fullEvents.map((event, index) => (
                   <div key={index} className="flex gap-4 group p-4 rounded-xl hover:bg-slate-50 transition-colors border border-slate-100 hover:border-blue-200">
                     <div className="w-16 h-16 bg-white rounded-xl shadow-sm border border-slate-100 flex flex-col items-center justify-center shrink-0 group-hover:border-blue-500 transition-colors">
-                      <span className="text-xs font-bold text-slate-500 uppercase">{event.date.split(' ')[1]}</span>
-                      <span className="text-xl font-bold text-slate-900">{event.date.split(' ')[0]}</span>
+                      <span className="text-xs font-bold text-slate-500 uppercase">{event.month}</span>
+                      <span className="text-xl font-bold text-slate-900">{event.day}</span>
                     </div>
                     <div>
                       <h4 className="font-bold text-slate-900 mb-1 group-hover:text-blue-600 transition-colors">{event.title}</h4>
