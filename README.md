@@ -1,36 +1,88 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# FoodPrice Global
 
-## Getting Started
+`FoodPriceGlobal` is a Next.js 16 application for food-price monitoring, market analysis, and regional landing pages for Brazil, Global, LATAM, and Military divisions.
 
-First, run the development server:
+## Local Verification
+
+Install dependencies and start the development server:
 
 ```bash
+npm ci
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Important routes:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `/`
+- `/login`
+- `/brasil`
+- `/brasil/dashboard`
+- `/global`
+- `/global/dashboard`
+- `/latam`
+- `/latam/dashboard`
+- `/military`
+- `/military/dashboard`
+- `/market-analysis/calendar`
+- `/market-analysis/correlations`
+- `/market-analysis/indicators`
+- `/market-analysis/reports`
 
-## Learn More
+Run the production validation build before deploying:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run build
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The current repository passes `npm run build`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Staging Deployment
 
-## Deploy on Vercel
+Recommended target: Vercel.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Vercel Setup
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Import the GitHub repository into Vercel.
+2. Set the project root to `.`.
+3. Let Vercel detect the framework as `Next.js`.
+4. Use the default install command or set `npm ci`.
+5. Use `npm run build` as the build command.
+6. Use the default output settings for a standard Next.js app.
+7. Create a staging project or a staging branch deployment, such as `staging`.
+
+### Environment Variables
+
+No required runtime environment variables were identified during the verified local build.
+
+If you add secrets later:
+
+1. Store them in Vercel Project Settings.
+2. Scope them to `Preview` for staging first.
+3. Promote them to `Production` only after validation.
+
+### Suggested Staging Flow
+
+1. Push the current repository state to GitHub.
+2. Create or update a staging branch.
+3. Let Vercel generate a Preview deployment for that branch.
+4. Smoke-test the key routes listed above.
+5. Validate static assets, especially videos under `public/videos/`.
+6. Promote the same commit to production only after staging approval.
+
+### Post-Deploy Checks
+
+Verify the following in staging:
+
+- Landing pages load without translation errors.
+- Division dashboards render correctly.
+- Market analysis pages pre-render successfully.
+- Static video assets load with acceptable performance.
+- Browser console stays free of obvious runtime errors.
+
+## Notes
+
+- The app depends on repository-level translation files in `translations/`.
+- A local-only warning may appear if Next.js detects multiple lockfiles outside this repo. This did not block the production build.
+- `public/videos/farm-harvest.mp4` is large enough to merit monitoring for bandwidth and repository growth.

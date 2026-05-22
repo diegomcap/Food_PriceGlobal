@@ -1,12 +1,12 @@
 'use client';
 
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-import pt from '../../../translations/pt.json';
-import en from '../../../translations/en.json';
-import es from '../../../translations/es.json';
-import ru from '../../../translations/ru.json';
-import ar from '../../../translations/ar.json';
-import zh from '../../../translations/zh.json';
+import pt from '../../translations/pt.json';
+import en from '../../translations/en.json';
+import es from '../../translations/es.json';
+import ru from '../../translations/ru.json';
+import ar from '../../translations/ar.json';
+import zh from '../../translations/zh.json';
 
 type Language = 'pt' | 'en' | 'es' | 'ru' | 'ar' | 'zh';
 
