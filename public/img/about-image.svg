@@ -1,0 +1,161 @@
+<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
+  <!-- Fundo com gradiente suave -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f8f9fa;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#e9ecef;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Padrão para textura sutil -->
+    <pattern id="gridPattern" width="20" height="20" patternUnits="userSpaceOnUse">
+      <rect width="20" height="20" fill="none" stroke="#dee2e6" stroke-width="0.5" opacity="0.3"/>
+    </pattern>
+  </defs>
+  
+  <!-- Retângulo de fundo -->
+  <rect width="100%" height="100%" fill="url(#bgGradient)"/>
+  <rect width="100%" height="100%" fill="url(#gridPattern)"/>
+  
+  <!-- Mapa-múndi estilizado -->
+  <g transform="translate(100, 100) scale(0.6)">
+    <!-- Contorno simplificado de continentes -->
+    <!-- América do Norte -->
+    <path d="M100,100 C150,80 200,90 250,70 C300,60 320,100 350,120 C370,150 350,200 330,230 C300,250 250,240 200,250 C150,240 120,200 100,170 C90,140 80,130 100,100 Z" 
+          fill="#2ecc71" opacity="0.7"/>
+    
+    <!-- América do Sul -->
+    <path d="M200,250 C220,280 250,300 230,350 C210,400 180,450 200,500 C230,520 270,500 300,480 C320,450 310,400 300,350 C290,300 270,270 250,240 C230,230 210,240 200,250 Z" 
+          fill="#2ecc71" opacity="0.7"/>
+    
+    <!-- Europa -->
+    <path d="M350,120 C380,100 420,90 450,100 C480,120 500,150 490,180 C470,200 440,210 410,200 C380,190 360,170 350,150 C340,130 340,120 350,120 Z" 
+          fill="#3498db" opacity="0.7"/>
+    
+    <!-- África -->
+    <path d="M410,200 C430,230 450,260 440,300 C430,340 410,380 380,400 C350,410 320,390 310,360 C300,330 310,300 330,270 C350,240 380,210 410,200 Z" 
+          fill="#f39c12" opacity="0.7"/>
+    
+    <!-- Ásia -->
+    <path d="M490,180 C520,160 550,150 580,170 C610,190 640,220 650,260 C660,300 650,340 620,370 C590,390 550,380 520,360 C490,340 470,310 460,280 C450,250 460,210 490,180 Z" 
+          fill="#e74c3c" opacity="0.7"/>
+    
+    <!-- Austrália -->
+    <path d="M650,350 C680,340 710,350 730,370 C750,390 760,420 750,450 C740,470 710,480 680,470 C650,460 630,440 620,410 C610,380 620,360 650,350 Z" 
+          fill="#9b59b6" opacity="0.7"/>
+  </g>
+  
+  <!-- Elementos gráficos representando comércio global de alimentos -->
+  <g>
+    <!-- Linhas de conexão entre continentes (rotas comerciais) -->
+    <g stroke="#34495e" stroke-width="1.5" opacity="0.4">
+      <path d="M200,180 C300,150 400,200 500,170" fill="none" stroke-dasharray="5,5"/>
+      <path d="M180,300 C250,250 350,280 420,250" fill="none" stroke-dasharray="5,5"/>
+      <path d="M420,250 C480,220 550,240 600,220" fill="none" stroke-dasharray="5,5"/>
+      <path d="M500,170 C550,200 580,250 600,300" fill="none" stroke-dasharray="5,5"/>
+    </g>
+    
+    <!-- Ícones de alimentos em diferentes regiões -->
+    <!-- Trigo na América do Norte -->
+    <g transform="translate(180, 150) scale(0.3)">
+      <path d="M50,10 C50,10 60,40 60,60 C60,80 50,90 50,90 C50,90 40,80 40,60 C40,40 50,10 50,10 Z" fill="#f1c40f"/>
+      <path d="M30,20 C30,20 40,50 40,70 C40,90 30,100 30,100 C30,100 20,90 20,70 C20,50 30,20 30,20 Z" fill="#f1c40f"/>
+      <path d="M70,20 C70,20 80,50 80,70 C80,90 70,100 70,100 C70,100 60,90 60,70 C60,50 70,20 70,20 Z" fill="#f1c40f"/>
+    </g>
+    
+    <!-- Café na América do Sul -->
+    <g transform="translate(220, 320) scale(0.3)">
+      <path d="M30,50 C30,30 70,30 70,50 L65,80 C65,90 35,90 35,80 L30,50 Z" fill="#8B4513"/>
+      <path d="M25,50 C25,45 75,45 75,50 C75,55 25,55 25,50 Z" fill="#8B4513"/>
+      <path d="M40,20 C40,10 60,10 60,20 L65,30 C65,35 35,35 35,30 L40,20 Z" fill="#8B4513"/>
+    </g>
+    
+    <!-- Queijo na Europa -->
+    <g transform="translate(420, 150) scale(0.3)">
+      <path d="M20,40 L80,40 L70,80 L30,80 Z" fill="#f1c40f"/>
+      <circle cx="40" cy="55" r="5" fill="#f8f9fa"/>
+      <circle cx="60" cy="65" r="5" fill="#f8f9fa"/>
+      <circle cx="50" cy="50" r="3" fill="#f8f9fa"/>
+    </g>
+    
+    <!-- Frutas na África -->
+    <g transform="translate(400, 300) scale(0.3)">
+      <circle cx="50" cy="50" r="30" fill="#e74c3c"/>
+      <path d="M50,20 C50,20 60,10 70,20 C80,30 50,40 50,40 C50,40 20,30 30,20 C40,10 50,20 50,20 Z" fill="#27ae60"/>
+    </g>
+    
+    <!-- Arroz na Ásia -->
+    <g transform="translate(550, 250) scale(0.3)">
+      <path d="M40,20 C40,20 50,10 60,20 C60,20 70,10 80,20 C80,40 60,80 60,80 C60,80 40,40 40,20 Z" fill="#27ae60"/>
+      <path d="M20,20 C20,20 30,10 40,20 C40,40 20,80 20,80 C20,80 0,40 20,20 Z" fill="#27ae60"/>
+      <line x1="60" y1="80" x2="60" y2="100" stroke="#27ae60" stroke-width="2"/>
+    </g>
+    
+    <!-- Carne na Austrália -->
+    <g transform="translate(600, 400) scale(0.3)">
+      <rect x="20" y="20" width="60" height="60" rx="10" fill="#d35400"/>
+      <line x1="30" y1="40" x2="70" y2="40" stroke="#ecf0f1" stroke-width="3"/>
+      <line x1="30" y1="60" x2="70" y2="60" stroke="#ecf0f1" stroke-width="3"/>
+    </g>
+  </g>
+  
+  <!-- Elementos de gráfico -->
+  <g transform="translate(100, 450)">
+    <!-- Eixos -->
+    <line x1="0" y1="0" x2="600" y2="0" stroke="#34495e" stroke-width="2"/>
+    <line x1="0" y1="0" x2="0" y2="-100" stroke="#34495e" stroke-width="2"/>
+    
+    <!-- Barras de gráfico representando preços de alimentos -->
+    <g>
+      <rect x="50" y="-80" width="30" height="80" fill="#2ecc71" opacity="0.7"/>
+      <rect x="100" y="-60" width="30" height="60" fill="#3498db" opacity="0.7"/>
+      <rect x="150" y="-90" width="30" height="90" fill="#e74c3c" opacity="0.7"/>
+      <rect x="200" y="-70" width="30" height="70" fill="#f1c40f" opacity="0.7"/>
+      <rect x="250" y="-50" width="30" height="50" fill="#9b59b6" opacity="0.7"/>
+      <rect x="300" y="-85" width="30" height="85" fill="#1abc9c" opacity="0.7"/>
+      <rect x="350" y="-65" width="30" height="65" fill="#d35400" opacity="0.7"/>
+    </g>
+    
+    <!-- Linha de tendência -->
+    <path d="M65,
+    -80 L115,-60 L165,-90 L215,-70 L265,-50 L315,-85 L365,-65" 
+          fill="none" stroke="#34495e" stroke-width="2" stroke-dasharray="5,5"/>
+  </g>
+  
+  <!-- Ícones de dispositivos mostrando monitoramento global -->
+  <g transform="translate(650, 100) scale(0.8)">
+    <!-- Computador -->
+    <rect x="0" y="0" width="120" height="80" rx="5" fill="#34495e"/>
+    <rect x="10" y="10" width="100" height="60" fill="#ecf0f1"/>
+    <rect x="40" y="80" width="40" height="10" fill="#34495e"/>
+    <rect x="30" y="90" width="60" height="5" fill="#34495e"/>
+    
+    <!-- Gráfico na tela -->
+    <g transform="translate(20, 20) scale(0.8)">
+      <line x1="0" y1="40" x2="80" y2="40" stroke="#34495e" stroke-width="1"/>
+      <line x1="0" y1="0" x2="0" y2="40" stroke="#34495e" stroke-width="1"/>
+      <path d="M0,30 L20,25 L40,35 L60,15 L80,20" fill="none" stroke="#2ecc71" stroke-width="2"/>
+      <circle cx="0" cy="30" r="3" fill="#2ecc71"/>
+      <circle cx="20" cy="25" r="3" fill="#2ecc71"/>
+      <circle cx="40" cy="35" r="3" fill="#2ecc71"/>
+      <circle cx="60" cy="15" r="3" fill="#2ecc71"/>
+      <circle cx="80" cy="20" r="3" fill="#2ecc71"/>
+    </g>
+  </g>
+  
+  <!-- Dispositivo móvel -->
+  <g transform="translate(650, 220)">
+    <rect x="0" y="0" width="50" height="90" rx="5" fill="#34495e"/>
+    <rect x="5" y="10" width="40" height="70" fill="#ecf0f1"/>
+    <circle cx="25" cy="85" r="3" fill="#7f8c8d"/>
+    
+    <!-- Gráfico na tela do celular -->
+    <g transform="translate(10, 15) scale(0.6)">
+      <line x1="0" y1="40" x2="50" y2="40" stroke="#34495e" stroke-width="1"/>
+      <line x1="0" y1="0" x2="0" y2="40" stroke="#34495e" stroke-width="1"/>
+      <rect x="5" y="20" width="5" height="20" fill="#3498db"/>
+      <rect x="15" y="15" width="5" height="25" fill="#3498db"/>
+      <rect x="25" y="25" width="5" height="15" fill="#3498db"/>
+      <rect x="35" y="10" width="5" height="30" fill="#3498db"/>
+    </g>
+  </g>
+</svg>

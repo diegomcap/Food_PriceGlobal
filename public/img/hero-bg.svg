@@ -1,0 +1,73 @@
+<svg width="1920" height="1080" xmlns="http://www.w3.org/2000/svg">
+  <!-- Fundo gradiente -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2c3e50;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1a2533;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Padrão de pontos para textura -->
+    <pattern id="dotPattern" width="20" height="20" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1" fill="#ffffff" opacity="0.1"/>
+    </pattern>
+  </defs>
+  
+  <!-- Retângulo de fundo com gradiente -->
+  <rect width="100%" height="100%" fill="url(#bgGradient)"/>
+  
+  <!-- Camada de textura -->
+  <rect width="100%" height="100%" fill="url(#dotPattern)"/>
+  
+  <!-- Elementos gráficos representando alimentos/commodities -->
+  <!-- Gráfico estilizado -->
+  <g opacity="0.15">
+    <polyline points="0,800 200,750 400,780 600,720 800,760 1000,700 1200,730 1400,690 1600,710 1800,680 1920,700" 
+              stroke="#2ecc71" stroke-width="5" fill="none"/>
+    <polyline points="0,850 200,830 400,860 600,820 800,840 1000,810 1200,830 1400,800 1600,820 1800,790 1920,810" 
+              stroke="#3498db" stroke-width="5" fill="none"/>
+  </g>
+  
+  <!-- Ícones estilizados de alimentos -->
+  <g opacity="0.1">
+    <!-- Ícone de trigo -->
+    <g transform="translate(300,300) scale(0.5)">
+      <path d="M50,10 C50,10 60,40 60,60 C60,80 50,90 50,90 C50,90 40,80 40,60 C40,40 50,10 50,10 Z" fill="#f1c40f"/>
+      <path d="M30,20 C30,20 40,50 40,70 C40,90 30,100 30,100 C30,100 20,90 20,70 C20,50 30,20 30,20 Z" fill="#f1c40f"/>
+      <path d="M70,20 C70,20 80,50 80,70 C80,90 70,100 70,100 C70,100 60,90 60,70 C60,50 70,20 70,20 Z" fill="#f1c40f"/>
+    </g>
+    
+    <!-- Ícone de fruta -->
+    <g transform="translate(1200,400) scale(0.6)">
+      <circle cx="50" cy="50" r="40" fill="#e74c3c"/>
+      <path d="M50,10 C50,10 60,0 70,10 C80,20 50,30 50,30 C50,30 20,20 30,10 C40,0 50,10 50,10 Z" fill="#27ae60"/>
+    </g>
+    
+    <!-- Ícone de carne -->
+    <g transform="translate(800,200) scale(0.5)">
+      <rect x="20" y="20" width="60" height="60" rx="10" fill="#d35400"/>
+      <line x1="30" y1="40" x2="70" y2="40" stroke="#ecf0f1" stroke-width="3"/>
+      <line x1="30" y1="60" x2="70" y2="60" stroke="#ecf0f1" stroke-width="3"/>
+    </g>
+    
+    <!-- Ícone de leite -->
+    <g transform="translate(500,500) scale(0.4)">
+      <path d="M30,20 L70,20 L80,40 L80,100 C80,110 70,120 60,120 L40,120 C30,120 20,110 20,100 L20,40 Z" fill="#ecf0f1"/>
+      <rect x="40" y="0" width="20" height="20" fill="#95a5a6"/>
+    </g>
+  </g>
+  
+  <!-- Elementos de gráfico de barras estilizado -->
+  <g opacity="0.08">
+    <rect x="100" y="900" width="40" height="100" fill="#2ecc71"/>
+    <rect x="160" y="850" width="40" height="150" fill="#2ecc71"/>
+    <rect x="220" y="880" width="40" height="120" fill="#2ecc71"/>
+    <rect x="280" y="830" width="40" height="170" fill="#2ecc71"/>
+    <rect x="340" y="860" width="40" height="140" fill="#2ecc71"/>
+    
+    <rect x="1500" y="900" width="40" height="100" fill="#3498db"/>
+    <rect x="1560" y="850" width="40" height="150" fill="#3498db"/>
+    <rect x="1620" y="880" width="40" height="120" fill="#3498db"/>
+    <rect x="1680" y="830" width="40" height="170" fill="#3498db"/>
+    <rect x="1740" y="860" width="40" height="140" fill="#3498db"/>
+  </g>
+</svg>
