@@ -3,61 +3,35 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar, ArrowRight, Clock, Search, Loader2, X } from 'lucide-react';
 import { useTranslation } from '@/context/TranslationContext';
-import { formatShortDate, getCurrentCropSeason, getDayMonthParts, shiftDate, type SupportedLanguage } from '@/lib/marketTime';
-
-type Article = {
-  title: string;
-  link: string;
-  time: string;
-  source: string;
-  image: string;
-  description: string;
-  isNew: boolean;
-};
+import { buildFallbackNews, buildRollingMarketEvents, type MarketArticle } from '@/lib/marketContent';
+import { formatDateTime, getCurrentCropSeason, type SupportedLanguage } from '@/lib/marketTime';
 
 export default function NewsSection() {
   const { t, language } = useTranslation();
   const currentDate = new Date();
   const activeLanguage = language as SupportedLanguage;
-
-  const baseEvents = [
-    { offset: 14, title: t('event_title_1'), desc: t('event_desc_1') },
-    { offset: 28, title: t('event_title_2'), desc: t('event_desc_2') },
-    { offset: 42, title: t('event_title_3'), desc: t('event_desc_3').replace(/\d{4}\/\d{2}/, getCurrentCropSeason(currentDate)) },
+  const eventDefinitions = [
+    { dayOfMonth: 5, title: t('event_title_1'), desc: t('event_desc_1') },
+    { dayOfMonth: 10, title: t('event_usda_report'), desc: 'Global Markets' },
+    { dayOfMonth: 14, title: t('event_title_3'), desc: t('event_desc_3').replace(/\d{4}\/\d{2}/, getCurrentCropSeason(currentDate)) },
+    { dayOfMonth: 18, title: t('event_title_2'), desc: t('event_desc_2') },
+    { dayOfMonth: 22, title: t('event_harvest_soy'), desc: 'Mato Grosso / Paraná' },
+    { dayOfMonth: 26, title: t('event_harvest_corn'), desc: 'Brasil - Safrinha' },
+    { dayOfMonth: 9, monthOffset: 1, title: t('event_coffee_expo'), desc: 'Minas Gerais' },
+    { dayOfMonth: 16, monthOffset: 1, title: t('event_food_tech'), desc: 'São Paulo' },
   ];
 
-  const fullEventDefinitions = [
-    ...baseEvents,
-    { offset: 60, title: t('event_harvest_soy'), desc: 'Mato Grosso / Paraná' },
-    { offset: 90, title: t('event_usda_report'), desc: 'Global Markets' },
-    { offset: 120, title: t('event_harvest_corn'), desc: 'Brasil - Safrinha' },
-    { offset: 150, title: t('event_coffee_expo'), desc: 'Minas Gerais' },
-    { offset: 180, title: t('event_food_tech'), desc: 'São Paulo' },
-  ];
+  const fullEvents = buildRollingMarketEvents(currentDate, activeLanguage, eventDefinitions).sort(
+    (a, b) => a.date.getTime() - b.date.getTime()
+  );
+  const events = fullEvents.slice(0, 3);
 
-  const events = baseEvents.map((event) => {
-    const date = shiftDate(currentDate, event.offset);
-    return {
-      ...getDayMonthParts(date, activeLanguage),
-      title: event.title,
-      desc: event.desc,
-    };
-  });
-
-  const fullEvents = fullEventDefinitions.map((event) => {
-    const date = shiftDate(currentDate, event.offset);
-    return {
-      ...getDayMonthParts(date, activeLanguage),
-      title: event.title,
-      desc: event.desc,
-    };
-  });
-
-  const [articles, setArticles] = useState<Article[]>([]);
+  const [articles, setArticles] = useState<MarketArticle[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [showCalendar, setShowCalendar] = useState(false);
+  const [newsUpdatedAt, setNewsUpdatedAt] = useState<string>('');
 
   const getGoogleNewsParams = (lang: string) => {
     switch(lang) {
@@ -83,33 +57,13 @@ export default function NewsSection() {
         throw new Error('News API returned no articles');
       }
 
-      setArticles(data.articles as Article[]);
+      setArticles(data.articles as MarketArticle[]);
+      setNewsUpdatedAt(data.updatedAt || new Date().toISOString());
     } catch (error) {
       console.error('Failed to fetch news:', error);
-      
-      // Fallback to static news if fetch fails
-      const fallbackNews: Article[] = Array.from({ length: 6 }).map((_, index) => {
-        const i = index + 1;
-        return {
-          title: t(`news_title_static_${i}`) || `Market Update ${i}`,
-          link: "#",
-          time: formatShortDate(shiftDate(currentDate, -((index * 2) + 1)), activeLanguage),
-          source: "Market Intelligence",
-          category: "MARKET",
-          image: [
-            'https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-            'https://images.unsplash.com/photo-1593924689241-1b78c38f0071?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-            'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-            'https://images.unsplash.com/photo-1551754655-cd27e38d2076?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-            'https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-            'https://images.unsplash.com/photo-1550583724-b2692b85b150?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
-          ][index],
-          description: t(`news_description_static_${i}`) || "Market analysis and commodities update.",
-          isNew: index < 2
-        };
-      });
-      
-      setArticles(fallbackNews);
+
+      setArticles(buildFallbackNews(query, activeLanguage));
+      setNewsUpdatedAt(new Date().toISOString());
     } finally {
       setLoading(false);
     }
@@ -184,6 +138,9 @@ export default function NewsSection() {
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </form>
+            </div>
+            <div className="mb-6 text-xs text-slate-400">
+              {t('last_update')}: {newsUpdatedAt ? formatDateTime(new Date(newsUpdatedAt), activeLanguage) : formatDateTime(new Date(), activeLanguage)}
             </div>
 
             {loading ? (
