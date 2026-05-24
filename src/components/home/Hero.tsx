@@ -367,11 +367,18 @@ export function Hero() {
 
                     <div className="rounded-[1.8rem] border border-slate-200 bg-gradient-to-br from-emerald-50 via-white to-cyan-50 p-5 md:p-6">
                       <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-500">{copy.railLabel}</p>
-                      <div className="mt-5 space-y-4">
+                      <div className="mt-5 grid gap-3">
                         {copy.railStats.map((stat) => (
-                          <div key={stat.label} className="flex items-end justify-between gap-4 border-b border-slate-200 pb-4 last:border-b-0 last:pb-0">
-                            <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-500">{stat.label}</p>
-                            <p className="text-right text-[1.65rem] font-black text-slate-900">{stat.value}</p>
+                          <div
+                            key={stat.label}
+                            className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 rounded-2xl border border-white/70 bg-white/80 px-4 py-3 shadow-sm"
+                          >
+                            <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-500">
+                              {stat.label}
+                            </p>
+                            <p className="text-right text-[1.35rem] font-black leading-none text-slate-900 md:text-[1.5rem]">
+                              {stat.value}
+                            </p>
                           </div>
                         ))}
                       </div>
