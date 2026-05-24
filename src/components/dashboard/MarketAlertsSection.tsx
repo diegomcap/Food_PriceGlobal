@@ -101,17 +101,17 @@ const COPY = {
       `${label} cierra ${month} en ${value.toFixed(1)} puntos, con movimiento de ${change}; revisar margen y costo de reposicion.`,
   },
   ru: {
-    eyebrow: 'Market Desk',
-    title: 'Alerty dnia',
+    eyebrow: 'Rynochnyy desk',
+    title: 'Alerty dnya',
     subtitle: 'Korotkie i deystvennye chteniya po risku, taimingu i klyuchevym dvizheniyam rynka.',
-    deskNote: 'Editorial brief assembled from the FAO reference and the monitored commodities basket.',
+    deskNote: 'Redaktsionnyy brif, sobrannyy na osnove orientira FAO i otslezhivaemoy tovarnoy korziny.',
     loading: 'Sobiraem alerty po poslednim rynochnym dannym...',
     fallback: 'Rabota v rezervnom rezhime',
     lastUpdate: 'Poslednee chtenie',
     faoTag: 'FAO',
-    futuresTag: 'Futures',
-    riskTag: 'Risk',
-    flowTag: 'Flow',
+    futuresTag: 'Fyuchersy',
+    riskTag: 'Riski',
+    flowTag: 'Potok',
     faoTitle: (direction: string, change: string, month: string) =>
       `FAO: globalnyy indeks prodovolstviya ${direction} na ${change} v ${month}`,
     faoDetail: (value: number, source: string) =>
@@ -135,7 +135,7 @@ const COPY = {
     fallback: 'يعمل في وضع احتياطي',
     lastUpdate: 'اخر قراءة',
     faoTag: 'FAO',
-    futuresTag: 'Futures',
+    futuresTag: 'العقود',
     riskTag: 'مخاطر',
     flowTag: 'تدفق',
     faoTitle: (direction: string, change: string, month: string) =>
@@ -161,7 +161,7 @@ const COPY = {
     fallback: '当前运行在后备模式',
     lastUpdate: '最近读取',
     faoTag: 'FAO',
-    futuresTag: 'Futures',
+    futuresTag: '期货',
     riskTag: '风险',
     flowTag: '流向',
     faoTitle: (direction: string, change: string, month: string) =>

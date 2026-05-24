@@ -11,7 +11,7 @@ export default function MarketAnalysis() {
     pt: {
       title: 'Confiabilidade dos Dados',
       description:
-        'Freshness, frequencia e continuidade em um resumo publico.',
+        'Atualizacao, frequencia e continuidade em um resumo publico.',
       action: 'Ver confiabilidade',
     },
     en: {
@@ -23,13 +23,13 @@ export default function MarketAnalysis() {
     es: {
       title: 'Confiabilidad de los Datos',
       description:
-        'Freshness, frecuencia y continuidad en un solo resumen publico.',
+        'Actualizacion, frecuencia y continuidad en un solo resumen publico.',
       action: 'Ver confiabilidad',
     },
     ru: {
-      title: 'Nadezhnost Dannykh',
+      title: 'Nadezhnost dannykh',
       description:
-        'Freshness, cadence and continuity in one public summary.',
+        'Aktualnost, chastota i nepreryvnost v odnom publichnom obzore.',
       action: 'Smotret nadezhnost',
     },
     ar: {
@@ -114,9 +114,9 @@ export default function MarketAnalysis() {
       { label: 'Foco', value: 'Accion' },
     ],
     ru: [
-      { label: 'Blocks', value: '5' },
-      { label: 'Read', value: 'Short' },
-      { label: 'Focus', value: 'Action' },
+      { label: 'Bloki', value: '5' },
+      { label: 'Format', value: 'Korotkiy' },
+      { label: 'Fokus', value: 'Deystvie' },
     ],
     ar: [
       { label: 'الكتل', value: '5' },

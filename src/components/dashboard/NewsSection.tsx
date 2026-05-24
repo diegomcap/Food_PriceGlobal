@@ -51,13 +51,13 @@ export default function NewsSection() {
     ru: {
       editorialTitle: 'Redaktsionnye alerty',
       editorialSubtitle: 'Korotkie chteniya po risku, potoku i taimingu pered polnym novostnym potokom.',
-      editorialTags: ['Potok', 'Risk', 'Timing'],
+      editorialTags: ['Potok', 'Risk', 'Vremya'],
       marketNewsTitle: 'Rynochnye novosti',
       marketNewsSubtitle: 'Nepreyrvnoye pokrytie po tsepochkam s filtrami po temam i otdelnym poiskom.',
       summary: [
-        { label: 'Alerts', value: '3' },
-        { label: 'Agenda', value: '3 dates' },
-        { label: 'Feed', value: 'Live search' },
+        { label: 'Alerty', value: '3' },
+        { label: 'Agenda', value: '3 daty' },
+        { label: 'Potok', value: 'Zhivoy poisk' },
       ],
     },
     ar: {
@@ -81,7 +81,7 @@ export default function NewsSection() {
       summary: [
         { label: '预警', value: '3' },
         { label: '日程', value: '3 个日期' },
-        { label: 'Feed', value: '主动搜索' },
+        { label: '信息流', value: '主动搜索' },
       ],
     },
   } as const;
