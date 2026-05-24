@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Flame, Globe2, TrendingDown, TrendingUp, Zap } from 'lucide-react';
+import { Flame, Fuel, Globe2, Ship, TrendingDown, TrendingUp, Zap } from 'lucide-react';
 import { useTranslation } from '@/context/TranslationContext';
 import { formatDateTime, type SupportedLanguage } from '@/lib/marketTime';
 import { formatPercent, getSourceLabel } from '@/lib/marketOverview';
@@ -17,6 +17,8 @@ type MacroDriver = {
   unit: string;
 };
 
+const MACRO_DRIVER_ORDER = ['DX=F', 'CL=F', 'NG=F', 'GC=F', 'HO=F', 'BDI'] as const;
+
 type MacroApiResponse = {
   drivers: MacroDriver[];
   source: string;
@@ -28,7 +30,7 @@ const COPY = {
   pt: {
     eyebrow: 'Macro Agro',
     title: 'Drivers Macro e Energia',
-    subtitle: 'Os sinais externos que mais afetam câmbio, frete, insumos e precificação da cadeia alimentar.',
+    subtitle: 'Os sinais externos que mais afetam cambio, energia, diesel, frete maritimo, insumos e precificacao da cadeia alimentar.',
     loading: 'Carregando drivers macro...',
     source: 'Fonte',
     update: 'Ultima leitura',
@@ -37,12 +39,14 @@ const COPY = {
       'CL=F': 'Afeta frete, fertilizantes e custo logístico internacional.',
       'NG=F': 'Pressiona energia e parte dos custos industriais e de fertilizantes.',
       'GC=F': 'Sinaliza busca por proteção e aversão global a risco.',
+      'HO=F': 'Proxy operacional para diesel e custo de transporte na fazenda, no truck e no escoamento.',
+      BDI: 'Le a pressao do frete maritimo de granéis e o custo global de mover carga agro.',
     },
   },
   en: {
     eyebrow: 'Macro Agro',
     title: 'Macro and Energy Drivers',
-    subtitle: 'External signals with direct impact on FX, freight, inputs and food-chain pricing.',
+    subtitle: 'External signals with direct impact on FX, energy, diesel, ocean freight, inputs and food-chain pricing.',
     loading: 'Loading macro drivers...',
     source: 'Source',
     update: 'Last reading',
@@ -51,12 +55,14 @@ const COPY = {
       'CL=F': 'Impacts freight, fertilizers and international logistics costs.',
       'NG=F': 'Pressures energy and part of industrial and fertilizer costs.',
       'GC=F': 'Signals demand for protection and global risk aversion.',
+      'HO=F': 'Operational proxy for diesel and transport costs across farm, trucking and inland logistics.',
+      BDI: 'Reads dry-bulk ocean freight pressure and the global cost of moving agro cargo.',
     },
   },
   es: {
     eyebrow: 'Macro Agro',
     title: 'Drivers Macro y Energia',
-    subtitle: 'Las senales externas con mayor impacto sobre FX, flete, insumos y formacion de precios de la cadena alimentaria.',
+    subtitle: 'Las senales externas con mayor impacto sobre FX, energia, diesel, flete maritimo, insumos y formacion de precios de la cadena alimentaria.',
     loading: 'Cargando drivers macro...',
     source: 'Fuente',
     update: 'Ultima lectura',
@@ -65,6 +71,8 @@ const COPY = {
       'CL=F': 'Impacta flete, fertilizantes y costo logistico internacional.',
       'NG=F': 'Presiona energia y parte de los costos industriales y de fertilizantes.',
       'GC=F': 'Senala busqueda de proteccion y aversion global al riesgo.',
+      'HO=F': 'Proxy operativo para diesel y costo de transporte en campo, camion y logistica interna.',
+      BDI: 'Lee la presion del flete maritimo de graneles y el costo global de mover carga agro.',
     },
   },
   ru: {
@@ -79,6 +87,8 @@ const COPY = {
       'CL=F': 'Vliyaet na freyt, udobreniya i mezhdunarodnye logisticheskie zatraty.',
       'NG=F': 'Davlenie na energiyu i chast promyshlennykh i fertilizernykh zatrat.',
       'GC=F': 'Signaliziruet spros na zashchitu i globalnuyu risk-aversion.',
+      'HO=F': 'Operational proxy for diesel and transport costs across farm, trucking and inland logistics.',
+      BDI: 'Reads dry-bulk ocean freight pressure and the global cost of moving agro cargo.',
     },
   },
   ar: {
@@ -93,6 +103,8 @@ const COPY = {
       'CL=F': 'يؤثر في الشحن والاسمدة والتكلفة اللوجستية الدولية.',
       'NG=F': 'يضغط على الطاقة وجزء من التكاليف الصناعية وتكاليف الاسمدة.',
       'GC=F': 'يشير الى طلب على التحوط وارتفاع النفور العالمي من المخاطر.',
+      'HO=F': 'مؤشر تشغيلي للديزل وتكلفة النقل عبر المزرعة والشاحنات واللوجستيات الداخلية.',
+      BDI: 'يقيس ضغط الشحن البحري للبضائع السائبة والتكلفة العالمية لتحريك الشحنات الزراعية.',
     },
   },
   zh: {
@@ -107,6 +119,8 @@ const COPY = {
       'CL=F': '影响运费、化肥和国际物流成本。',
       'NG=F': '推动能源以及部分工业和化肥成本。',
       'GC=F': '反映避险需求和全球风险厌恶情绪。',
+      'HO=F': '作为柴油与农场、卡车及内陆物流运输成本的操作代理指标。',
+      BDI: '反映干散货海运费压力和全球农产品货运成本。',
     },
   },
 } as const;
@@ -119,6 +133,10 @@ function getIcon(symbol: string) {
       return Flame;
     case 'NG=F':
       return Zap;
+    case 'HO=F':
+      return Fuel;
+    case 'BDI':
+      return Ship;
     default:
       return Globe2;
   }
@@ -133,6 +151,9 @@ export default function MacroAgroSection() {
   const [updatedAt, setUpdatedAt] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [premiumConfigured, setPremiumConfigured] = useState(false);
+  const orderedDrivers = MACRO_DRIVER_ORDER.map((symbol) => drivers.find((driver) => driver.symbol === symbol)).filter(
+    (driver): driver is MacroDriver => Boolean(driver)
+  );
 
   useEffect(() => {
     let cancelled = false;
@@ -213,8 +234,8 @@ export default function MacroAgroSection() {
               language={language as SupportedLanguage}
             />
 
-            <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
-              {drivers.map((driver) => {
+            <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+              {orderedDrivers.map((driver) => {
                 const Icon = getIcon(driver.symbol);
                 const change = ((driver.price - driver.previousClose) / driver.previousClose) * 100;
                 return (

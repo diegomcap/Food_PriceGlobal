@@ -37,9 +37,9 @@ type Copy = {
 const COPY: Record<SupportedLanguage, Copy> = {
   pt: {
     title: '2026 Top hubs macro por pressao composta',
-    subtitle: 'Em pontos compostos usando DXY, WTI, Natural Gas e Gold.',
+    subtitle: 'Em pontos compostos usando DXY, WTI, Natural Gas, Gold, ULSD Diesel e Baltic Dry.',
     description:
-      'Variable pie interativo indicando os principais hubs macro do agronegocio. O ranking e recalculado a cada atualizacao periodica do feed macro.',
+      'Variable pie interativo indicando os principais hubs macro do agronegocio. O score combina cambio, energia, diesel e frete maritimo e e recalculado a cada atualizacao periodica do feed macro.',
     clickHint: 'Clique em uma fatia para girar o globe ate o pais correspondente.',
     filterLabel: 'Filtro',
     top30: 'Top 30',
@@ -50,9 +50,9 @@ const COPY: Record<SupportedLanguage, Copy> = {
   },
   en: {
     title: '2026 Top macro hubs by composite pressure',
-    subtitle: 'In composite points using DXY, WTI, Natural Gas and Gold.',
+    subtitle: 'In composite points using DXY, WTI, Natural Gas, Gold, ULSD Diesel and Baltic Dry.',
     description:
-      'Interactive variable pie showing the leading agribusiness macro hubs. Rankings are recalculated on every periodic macro-feed refresh.',
+      'Interactive variable pie showing the leading agribusiness macro hubs. The score combines FX, energy, diesel and ocean freight on every periodic macro-feed refresh.',
     clickHint: 'Click a slice to rotate the globe to the corresponding country.',
     filterLabel: 'Filter',
     top30: 'Top 30',
@@ -63,9 +63,9 @@ const COPY: Record<SupportedLanguage, Copy> = {
   },
   es: {
     title: '2026 Top hubs macro por presion compuesta',
-    subtitle: 'En puntos compuestos usando DXY, WTI, Natural Gas y Gold.',
+    subtitle: 'En puntos compuestos usando DXY, WTI, Natural Gas, Gold, ULSD Diesel y Baltic Dry.',
     description:
-      'Variable pie interactivo que muestra los principales hubs macro del agronegocio. El ranking se recalcula en cada actualizacion periodica del feed macro.',
+      'Variable pie interactivo que muestra los principales hubs macro del agronegocio. El score combina FX, energia, diesel y flete maritimo en cada actualizacion periodica del feed macro.',
     clickHint: 'Haz clic en una porcion para girar el globo al pais correspondiente.',
     filterLabel: 'Filtro',
     top30: 'Top 30',
@@ -76,9 +76,9 @@ const COPY: Record<SupportedLanguage, Copy> = {
   },
   ru: {
     title: '2026 Top macro hubs by composite pressure',
-    subtitle: 'In composite points using DXY, WTI, Natural Gas and Gold.',
+    subtitle: 'In composite points using DXY, WTI, Natural Gas, Gold, ULSD Diesel and Baltic Dry.',
     description:
-      'Interactive variable pie showing the leading agribusiness macro hubs. Rankings are recalculated on every periodic macro-feed refresh.',
+      'Interactive variable pie showing the leading agribusiness macro hubs. The score combines FX, energy, diesel and ocean freight on every periodic macro-feed refresh.',
     clickHint: 'Click a slice to rotate the globe to the corresponding country.',
     filterLabel: 'Filter',
     top30: 'Top 30',
@@ -89,9 +89,9 @@ const COPY: Record<SupportedLanguage, Copy> = {
   },
   ar: {
     title: '2026 Top macro hubs by composite pressure',
-    subtitle: 'In composite points using DXY, WTI, Natural Gas and Gold.',
+    subtitle: 'In composite points using DXY, WTI, Natural Gas, Gold, ULSD Diesel and Baltic Dry.',
     description:
-      'Interactive variable pie showing the leading agribusiness macro hubs. Rankings are recalculated on every periodic macro-feed refresh.',
+      'Interactive variable pie showing the leading agribusiness macro hubs. The score combines FX, energy, diesel and ocean freight on every periodic macro-feed refresh.',
     clickHint: 'Click a slice to rotate the globe to the corresponding country.',
     filterLabel: 'Filter',
     top30: 'Top 30',
@@ -102,9 +102,9 @@ const COPY: Record<SupportedLanguage, Copy> = {
   },
   zh: {
     title: '2026 Top macro hubs by composite pressure',
-    subtitle: 'In composite points using DXY, WTI, Natural Gas and Gold.',
+    subtitle: 'In composite points using DXY, WTI, Natural Gas, Gold, ULSD Diesel and Baltic Dry.',
     description:
-      'Interactive variable pie showing the leading agribusiness macro hubs. Rankings are recalculated on every periodic macro-feed refresh.',
+      'Interactive variable pie showing the leading agribusiness macro hubs. The score combines FX, energy, diesel and ocean freight on every periodic macro-feed refresh.',
     clickHint: 'Click a slice to rotate the globe to the corresponding country.',
     filterLabel: 'Filter',
     top30: 'Top 30',

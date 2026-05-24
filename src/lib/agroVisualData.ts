@@ -39,11 +39,13 @@ export type MacroHubProfile = {
     'CL=F': number;
     'NG=F': number;
     'GC=F': number;
+    'HO=F': number;
+    BDI: number;
   };
 };
 
 export type DriverSlice = {
-  id: 'DX=F' | 'CL=F' | 'NG=F' | 'GC=F';
+  id: 'DX=F' | 'CL=F' | 'NG=F' | 'GC=F' | 'HO=F' | 'BDI';
   label: string;
   price: number;
   unit: string;
@@ -90,6 +92,8 @@ const DRIVER_LEVEL_RANGES = {
   'CL=F': 120,
   'NG=F': 8,
   'GC=F': 3000,
+  'HO=F': 4,
+  BDI: 5000,
 } as const;
 
 const MACRO_ARCHETYPE_PRESETS: Record<
@@ -103,37 +107,37 @@ const MACRO_ARCHETYPE_PRESETS: Record<
   'agro-exporter': {
     corridor: 'Agro export corridor',
     rankBias: 1.08,
-    weights: { 'DX=F': 1.08, 'CL=F': 1.02, 'NG=F': 0.92, 'GC=F': 0.66 },
+    weights: { 'DX=F': 1.08, 'CL=F': 1.02, 'NG=F': 0.92, 'GC=F': 0.66, 'HO=F': 1.08, BDI: 1.2 },
   },
   balanced: {
     corridor: 'Regional food and logistics corridor',
     rankBias: 1,
-    weights: { 'DX=F': 1, 'CL=F': 1, 'NG=F': 1, 'GC=F': 0.72 },
+    weights: { 'DX=F': 1, 'CL=F': 1, 'NG=F': 1, 'GC=F': 0.72, 'HO=F': 1, BDI: 1 },
   },
   'demand-center': {
     corridor: 'Demand and import corridor',
     rankBias: 1.04,
-    weights: { 'DX=F': 0.96, 'CL=F': 1.05, 'NG=F': 1.02, 'GC=F': 0.7 },
+    weights: { 'DX=F': 0.96, 'CL=F': 1.05, 'NG=F': 1.02, 'GC=F': 0.7, 'HO=F': 1.04, BDI: 0.94 },
   },
   'energy-linked': {
     corridor: 'Energy-linked pricing corridor',
     rankBias: 1.03,
-    weights: { 'DX=F': 0.92, 'CL=F': 1.18, 'NG=F': 1.2, 'GC=F': 0.72 },
+    weights: { 'DX=F': 0.92, 'CL=F': 1.18, 'NG=F': 1.2, 'GC=F': 0.72, 'HO=F': 1.12, BDI: 0.96 },
   },
   'fertilizer-sensitive': {
     corridor: 'Fertilizer-sensitive food corridor',
     rankBias: 1.01,
-    weights: { 'DX=F': 1.04, 'CL=F': 1.06, 'NG=F': 1.18, 'GC=F': 0.68 },
+    weights: { 'DX=F': 1.04, 'CL=F': 1.06, 'NG=F': 1.18, 'GC=F': 0.68, 'HO=F': 1.1, BDI: 1.04 },
   },
   'processing-hub': {
     corridor: 'Processing and trading corridor',
     rankBias: 1.02,
-    weights: { 'DX=F': 0.94, 'CL=F': 1, 'NG=F': 1.14, 'GC=F': 0.64 },
+    weights: { 'DX=F': 0.94, 'CL=F': 1, 'NG=F': 1.14, 'GC=F': 0.64, 'HO=F': 1.06, BDI: 1.18 },
   },
   'safe-haven': {
     corridor: 'Defensive capital corridor',
     rankBias: 0.98,
-    weights: { 'DX=F': 0.88, 'CL=F': 0.9, 'NG=F': 0.94, 'GC=F': 1.2 },
+    weights: { 'DX=F': 0.88, 'CL=F': 0.9, 'NG=F': 0.94, 'GC=F': 1.2, 'HO=F': 0.82, BDI: 0.72 },
   },
 };
 
@@ -473,7 +477,7 @@ export const MACRO_HUBS: MacroHubProfile[] = [
     lat: -15.8,
     lon: -47.9,
     corridor: 'Soy / sugar / coffee export desk',
-    weights: { 'DX=F': 1.15, 'CL=F': 1.05, 'NG=F': 0.9, 'GC=F': 0.72 },
+    weights: { 'DX=F': 1.15, 'CL=F': 1.05, 'NG=F': 0.9, 'GC=F': 0.72, 'HO=F': 1.14, BDI: 1.24 },
   },
   {
     code3: 'USA',
@@ -481,7 +485,7 @@ export const MACRO_HUBS: MacroHubProfile[] = [
     lat: 38.9,
     lon: -77.0,
     corridor: 'Corn / soy / energy-linked logistics',
-    weights: { 'DX=F': 0.95, 'CL=F': 1.1, 'NG=F': 1.05, 'GC=F': 0.74 },
+    weights: { 'DX=F': 0.95, 'CL=F': 1.1, 'NG=F': 1.05, 'GC=F': 0.74, 'HO=F': 1.08, BDI: 1.12 },
   },
   {
     code3: 'ARG',
@@ -489,7 +493,7 @@ export const MACRO_HUBS: MacroHubProfile[] = [
     lat: -34.6,
     lon: -58.4,
     corridor: 'Soy complex / crush margins',
-    weights: { 'DX=F': 1.2, 'CL=F': 0.95, 'NG=F': 0.82, 'GC=F': 0.78 },
+    weights: { 'DX=F': 1.2, 'CL=F': 0.95, 'NG=F': 0.82, 'GC=F': 0.78, 'HO=F': 1.1, BDI: 1.22 },
   },
   {
     code3: 'NLD',
@@ -497,7 +501,7 @@ export const MACRO_HUBS: MacroHubProfile[] = [
     lat: 52.1,
     lon: 5.3,
     corridor: 'EU import-export processing hub',
-    weights: { 'DX=F': 0.9, 'CL=F': 1.0, 'NG=F': 1.22, 'GC=F': 0.64 },
+    weights: { 'DX=F': 0.9, 'CL=F': 1.0, 'NG=F': 1.22, 'GC=F': 0.64, 'HO=F': 1.06, BDI: 1.16 },
   },
   {
     code3: 'CHN',
@@ -505,7 +509,7 @@ export const MACRO_HUBS: MacroHubProfile[] = [
     lat: 39.9,
     lon: 116.4,
     corridor: 'Feed demand / import pull',
-    weights: { 'DX=F': 1.08, 'CL=F': 1.04, 'NG=F': 0.88, 'GC=F': 0.7 },
+    weights: { 'DX=F': 1.08, 'CL=F': 1.04, 'NG=F': 0.88, 'GC=F': 0.7, 'HO=F': 1.04, BDI: 0.98 },
   },
   {
     code3: 'IND',
@@ -513,7 +517,7 @@ export const MACRO_HUBS: MacroHubProfile[] = [
     lat: 28.6,
     lon: 77.2,
     corridor: 'Sugar / edible oils / fertilizer sensitivity',
-    weights: { 'DX=F': 1.12, 'CL=F': 1.08, 'NG=F': 1.14, 'GC=F': 0.82 },
+    weights: { 'DX=F': 1.12, 'CL=F': 1.08, 'NG=F': 1.14, 'GC=F': 0.82, 'HO=F': 1.1, BDI: 1.02 },
   },
   {
     code3: 'CAN',
@@ -521,7 +525,7 @@ export const MACRO_HUBS: MacroHubProfile[] = [
     lat: 45.4,
     lon: -75.7,
     corridor: 'Canola / grains / transpacific freight',
-    weights: { 'DX=F': 0.92, 'CL=F': 1.02, 'NG=F': 1.16, 'GC=F': 0.66 },
+    weights: { 'DX=F': 0.92, 'CL=F': 1.02, 'NG=F': 1.16, 'GC=F': 0.66, 'HO=F': 1.08, BDI: 1.18 },
   },
   {
     code3: 'AUS',
@@ -529,7 +533,7 @@ export const MACRO_HUBS: MacroHubProfile[] = [
     lat: -35.3,
     lon: 149.1,
     corridor: 'Wheat / LNG-linked export corridor',
-    weights: { 'DX=F': 0.98, 'CL=F': 1.04, 'NG=F': 1.1, 'GC=F': 0.68 },
+    weights: { 'DX=F': 0.98, 'CL=F': 1.04, 'NG=F': 1.1, 'GC=F': 0.68, 'HO=F': 1.08, BDI: 1.2 },
   },
   {
     code3: 'UKR',
@@ -537,7 +541,7 @@ export const MACRO_HUBS: MacroHubProfile[] = [
     lat: 50.4,
     lon: 30.5,
     corridor: 'Black Sea grains / war-risk freight',
-    weights: { 'DX=F': 1.04, 'CL=F': 1.12, 'NG=F': 1.08, 'GC=F': 0.8 },
+    weights: { 'DX=F': 1.04, 'CL=F': 1.12, 'NG=F': 1.08, 'GC=F': 0.8, 'HO=F': 1.16, BDI: 1.28 },
   },
   {
     code3: 'THA',
@@ -545,7 +549,7 @@ export const MACRO_HUBS: MacroHubProfile[] = [
     lat: 13.7,
     lon: 100.5,
     corridor: 'Sugar / rice / Asia refining flows',
-    weights: { 'DX=F': 1.06, 'CL=F': 1.0, 'NG=F': 0.94, 'GC=F': 0.62 },
+    weights: { 'DX=F': 1.06, 'CL=F': 1.0, 'NG=F': 0.94, 'GC=F': 0.62, 'HO=F': 1.04, BDI: 1.08 },
   },
   {
     code3: 'VNM',
@@ -553,7 +557,7 @@ export const MACRO_HUBS: MacroHubProfile[] = [
     lat: 21.0,
     lon: 105.8,
     corridor: 'Coffee / feed / ASEAN import-export desk',
-    weights: { 'DX=F': 1.01, 'CL=F': 0.97, 'NG=F': 0.92, 'GC=F': 0.6 },
+    weights: { 'DX=F': 1.01, 'CL=F': 0.97, 'NG=F': 0.92, 'GC=F': 0.6, 'HO=F': 1.02, BDI: 1.06 },
   },
   {
     code3: 'SAU',
@@ -561,7 +565,7 @@ export const MACRO_HUBS: MacroHubProfile[] = [
     lat: 24.7,
     lon: 46.7,
     corridor: 'MENA import demand / energy pricing nexus',
-    weights: { 'DX=F': 1.1, 'CL=F': 1.18, 'NG=F': 1.02, 'GC=F': 0.76 },
+    weights: { 'DX=F': 1.1, 'CL=F': 1.18, 'NG=F': 1.02, 'GC=F': 0.76, 'HO=F': 1.12, BDI: 0.94 },
   },
 ];
 
@@ -669,6 +673,8 @@ function createHybridMacroProfile(seed: MacroCountrySeed): MacroHubProfile {
       'CL=F': Number((preset.weights['CL=F'] * tierFactor * getVariation(seed.code3, 5)).toFixed(3)),
       'NG=F': Number((preset.weights['NG=F'] * tierFactor * getVariation(seed.code3, 9)).toFixed(3)),
       'GC=F': Number((preset.weights['GC=F'] * tierFactor * getVariation(seed.code3, 11)).toFixed(3)),
+      'HO=F': Number((preset.weights['HO=F'] * tierFactor * getVariation(seed.code3, 13)).toFixed(3)),
+      BDI: Number((preset.weights.BDI * tierFactor * getVariation(seed.code3, 15)).toFixed(3)),
     },
   };
 }
@@ -690,7 +696,7 @@ export function buildMacroHubPoints(drivers: MacroDriverInput[]): MacroHubPoint[
   const macroProfiles = buildHybridMacroProfiles();
 
   return macroProfiles.map((hub) => {
-    const slices: DriverSlice[] = (['DX=F', 'CL=F', 'NG=F', 'GC=F'] as const)
+    const slices: DriverSlice[] = (['DX=F', 'CL=F', 'NG=F', 'GC=F', 'HO=F', 'BDI'] as const)
       .map((symbol) => {
         const driver = driverMap.get(symbol);
         if (!driver) {

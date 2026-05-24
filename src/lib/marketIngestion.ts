@@ -69,6 +69,8 @@ export const FALLBACK_MACRO_DRIVERS: MacroDriverSnapshot[] = [
   { symbol: 'CL=F', label: 'WTI Crude Oil', price: 78.42, previousClose: 77.58, unit: 'USD/bbl' },
   { symbol: 'NG=F', label: 'Natural Gas', price: 2.67, previousClose: 2.61, unit: 'USD/mmbtu' },
   { symbol: 'GC=F', label: 'Gold', price: 2384.1, previousClose: 2371.4, unit: 'USD/oz' },
+  { symbol: 'HO=F', label: 'ULSD Diesel', price: 2.41, previousClose: 2.37, unit: 'USD/gal' },
+  { symbol: 'BDI', label: 'Baltic Dry Index', price: 1896, previousClose: 1874, unit: 'pts' },
 ];
 
 const COMMODITY_BARCHART_SYMBOLS: Record<string, string> = {
@@ -92,6 +94,7 @@ const MACRO_BARCHART_SYMBOLS: Record<string, string> = {
   'CL=F': 'CL*0',
   'NG=F': 'NG*0',
   'GC=F': 'GC*0',
+  'HO=F': 'HO*0',
 };
 
 const TRADING_ECONOMICS_COMMODITY_MATCHERS: Record<string, string[]> = {
@@ -115,6 +118,8 @@ const TRADING_ECONOMICS_MACRO_MATCHERS: Record<string, { names: string[]; catego
   'CL=F': { names: ['Crude Oil'], category: 'commodities' },
   'NG=F': { names: ['Natural gas', 'Natural Gas'], category: 'commodities' },
   'GC=F': { names: ['Gold'], category: 'commodities' },
+  'HO=F': { names: ['Heating Oil', 'ULSD'], category: 'commodities' },
+  BDI: { names: ['Baltic Dry', 'Baltic Exchange Dry Index'], category: 'commodities' },
 };
 
 function getBarchartApiKey() {
@@ -215,6 +220,103 @@ function normalizeYahooSparkMacro(payload: any): MacroDriverSnapshot[] {
     .filter((item): item is MacroDriverSnapshot => item !== null);
 }
 
+function mergeMacroDrivers(base: MacroDriverSnapshot[], supplemental: MacroDriverSnapshot[]) {
+  const merged = new Map(base.map((item) => [item.symbol, item]));
+
+  for (const item of supplemental) {
+    if (!merged.has(item.symbol)) {
+      merged.set(item.symbol, item);
+    }
+  }
+
+  return FALLBACK_MACRO_DRIVERS.map((driver) => merged.get(driver.symbol)).filter(
+    (item): item is MacroDriverSnapshot => item !== undefined
+  );
+}
+
+function parseTradingEconomicsMove(html: string) {
+  const roseMatch = html.match(
+    /Baltic Dry rose to ([0-9,]+(?:\.[0-9]+)?) Index Points[\s\S]*?up ([0-9.]+)% from the previous day/i
+  );
+  if (roseMatch) {
+    return { direction: 'up' as const, price: roseMatch[1], percent: roseMatch[2] };
+  }
+
+  const fellMatch = html.match(
+    /Baltic Dry (?:fell|declined|slipped) to ([0-9,]+(?:\.[0-9]+)?) Index Points[\s\S]*?(?:down|falling) ([0-9.]+)% from the previous day/i
+  );
+  if (fellMatch) {
+    return { direction: 'down' as const, price: fellMatch[1], percent: fellMatch[2] };
+  }
+
+  const unchangedMatch = html.match(
+    /Baltic Dry (?:was )?(?:unchanged|steady) at ([0-9,]+(?:\.[0-9]+)?) Index Points/i
+  );
+  if (unchangedMatch) {
+    return { direction: 'flat' as const, price: unchangedMatch[1], percent: '0' };
+  }
+
+  return null;
+}
+
+async function fetchBalticDryFromPublicPage(): Promise<TimedMacroDriverSnapshot | null> {
+  const response = await fetch('https://tradingeconomics.com/commodity/baltic', {
+    headers: {
+      'User-Agent': 'Mozilla/5.0 FoodPriceGlobal/1.0',
+      Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+    },
+    next: { revalidate: 300 },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Trading Economics Baltic page failed with status ${response.status}`);
+  }
+
+  const html = await response.text();
+  const parsed = parseTradingEconomicsMove(html);
+  if (!parsed) {
+    throw new Error('Unable to parse Baltic Dry public page');
+  }
+
+  const price = Number(parsed.price.replace(/,/g, ''));
+  const percent = Number(parsed.percent);
+
+  if (!Number.isFinite(price) || !Number.isFinite(percent)) {
+    throw new Error('Baltic Dry public page returned invalid numeric values');
+  }
+
+  let previousClose = price;
+  if (parsed.direction === 'up') {
+    previousClose = price / (1 + percent / 100);
+  } else if (parsed.direction === 'down' && percent < 100) {
+    previousClose = price / (1 - percent / 100);
+  }
+
+  return {
+    symbol: 'BDI',
+    label: 'Baltic Dry Index',
+    price: Number(price.toFixed(2)),
+    previousClose: Number(previousClose.toFixed(2)),
+    unit: 'pts',
+    updatedAt: new Date().toISOString(),
+  };
+}
+
+async function fetchSupplementalMacroDrivers() {
+  const supplementals: TimedMacroDriverSnapshot[] = [];
+
+  try {
+    const balticDry = await fetchBalticDryFromPublicPage();
+    if (balticDry) {
+      supplementals.push(balticDry);
+    }
+  } catch (error) {
+    console.error('Unable to fetch supplemental Baltic Dry data:', error);
+  }
+
+  return supplementals;
+}
+
 function normalizeBarchartQuotes(payload: any, symbolMap: Record<string, string>): TimedCommoditySnapshot[] {
   const results = Array.isArray(payload?.results) ? payload.results : [];
   const inverseMap = Object.fromEntries(Object.entries(symbolMap).map(([internal, external]) => [external, internal]));
@@ -264,13 +366,15 @@ export async function fetchCommodityQuotesFromYahoo(): Promise<ProviderResult<Co
 export async function fetchMacroDriversFromYahoo(): Promise<ProviderResult<MacroDriverSnapshot>> {
   const payload = await fetchJson(buildYahooSparkUrl(FALLBACK_MACRO_DRIVERS.map((item) => item.symbol)));
   const items = normalizeYahooSparkMacro(payload);
+  const supplementals = await fetchSupplementalMacroDrivers();
+  const merged = mergeMacroDrivers(items, supplementals);
 
-  if (items.length === 0) {
+  if (merged.length === 0) {
     throw new Error('Yahoo Finance returned no usable macro driver data');
   }
 
   return {
-    items,
+    items: merged,
     source: 'yahoo-finance-macro',
     updatedAt: new Date().toISOString(),
   };
@@ -298,26 +402,35 @@ export async function fetchCommodityQuotesFromBarchart(): Promise<ProviderResult
 export async function fetchMacroDriversFromBarchart(): Promise<ProviderResult<MacroDriverSnapshot>> {
   const payload = await fetchJson(buildBarchartQuoteUrl(Object.values(MACRO_BARCHART_SYMBOLS)));
   const rows: TimedCommoditySnapshot[] = normalizeBarchartQuotes(payload, MACRO_BARCHART_SYMBOLS);
+  const supplementals = await fetchSupplementalMacroDrivers();
 
   if (rows.length === 0) {
     throw new Error('Barchart returned no usable macro driver data');
   }
 
   return {
-    items: rows.map(({ symbol, price, previousClose }) => {
-      const meta = FALLBACK_MACRO_DRIVERS.find((driver) => driver.symbol === symbol);
-      if (!meta) {
-        return null;
-      }
+    items: mergeMacroDrivers(
+      rows
+        .map(({ symbol, price, previousClose }) => {
+          const meta = FALLBACK_MACRO_DRIVERS.find((driver) => driver.symbol === symbol);
+          if (!meta) {
+            return null;
+          }
 
-      return {
-        ...meta,
-        price,
-        previousClose,
-      };
-    }).filter((item: MacroDriverSnapshot | null): item is MacroDriverSnapshot => item !== null),
+          return {
+            ...meta,
+            price,
+            previousClose,
+          };
+        })
+        .filter((item: MacroDriverSnapshot | null): item is MacroDriverSnapshot => item !== null),
+      supplementals
+    ),
     source: 'barchart-macro',
-    updatedAt: getLatestTimestamp(rows.map((row) => row.updatedAt)),
+    updatedAt: getLatestTimestamp([
+      ...rows.map((row) => row.updatedAt),
+      ...supplementals.map((driver) => driver.updatedAt),
+    ]),
   };
 }
 
@@ -406,21 +519,28 @@ export async function fetchMacroDriversFromTradingEconomics(): Promise<ProviderR
   const drivers: TimedMacroDriverSnapshot[] = mappedDrivers.filter(
     (item: TimedMacroDriverSnapshot | null): item is TimedMacroDriverSnapshot => item !== null
   );
+  const supplementals = await fetchSupplementalMacroDrivers();
 
-  if (drivers.length === 0) {
+  if (drivers.length === 0 && supplementals.length === 0) {
     throw new Error('Trading Economics returned no usable macro driver data');
   }
 
   return {
-    items: drivers.map((driver) => ({
-      symbol: driver.symbol,
-      label: driver.label,
-      price: driver.price,
-      previousClose: driver.previousClose,
-      unit: driver.unit,
-    })),
+    items: mergeMacroDrivers(
+      drivers.map((driver) => ({
+        symbol: driver.symbol,
+        label: driver.label,
+        price: driver.price,
+        previousClose: driver.previousClose,
+        unit: driver.unit,
+      })),
+      supplementals
+    ),
     source: 'trading-economics-macro',
-    updatedAt: getLatestTimestamp(drivers.map((driver) => driver.updatedAt)),
+    updatedAt: getLatestTimestamp([
+      ...drivers.map((driver) => driver.updatedAt),
+      ...supplementals.map((driver) => driver.updatedAt),
+    ]),
   };
 }
 
