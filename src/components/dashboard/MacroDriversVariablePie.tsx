@@ -5,54 +5,55 @@ import 'highcharts/highcharts-more';
 import 'highcharts/modules/variable-pie';
 import HighchartsReact from 'highcharts-react-official';
 import type { Options } from 'highcharts';
-import { formatPercent } from '@/lib/marketOverview';
-import type { DriverSlice } from '@/lib/agroVisualData';
+import type { MacroHubPoint } from '@/lib/agroVisualData';
 
 type Props = {
-  titleImpact: string;
-  titleChange: string;
-  titlePrice: string;
-  slices: DriverSlice[];
+  titlePressure: string;
+  titleTopDriver: string;
+  titleCorridor: string;
+  hubs: MacroHubPoint[];
+  selectedCode: string;
+  onSelect: (code3: string) => void;
 };
 
-function driverColor(symbol: DriverSlice['id']) {
-  switch (symbol) {
-    case 'CL=F':
-      return '#f97316';
-    case 'NG=F':
-      return '#38bdf8';
-    case 'GC=F':
-      return '#facc15';
-    default:
-      return '#22c55e';
-  }
+function sliceColor(rank: number) {
+  const palette = ['#0f766e', '#0284c7', '#4f46e5', '#f59e0b', '#ea580c', '#7c3aed'];
+  return palette[rank % palette.length];
 }
 
 export default function MacroDriversVariablePie({
-  titleImpact,
-  titleChange,
-  titlePrice,
-  slices,
+  titlePressure,
+  titleTopDriver,
+  titleCorridor,
+  hubs,
+  selectedCode,
+  onSelect,
 }: Props) {
+  const selectedIndex = Math.max(
+    hubs.findIndex((hub) => hub.code3 === selectedCode),
+    0
+  );
+
   const options: Options = {
     chart: {
       type: 'variablepie',
       backgroundColor: 'transparent',
-      height: 360,
+      height: 500,
     },
     title: undefined,
     credits: { enabled: false },
     exporting: { enabled: false },
+    legend: { enabled: false },
     tooltip: {
       useHTML: true,
       pointFormatter: function (this: any) {
         return `
-          <div style="min-width:180px">
+          <div style="min-width:220px;color:#0f172a">
             <div style="font-size:13px;font-weight:700;margin-bottom:8px">${this.name}</div>
             <div style="font-size:12px;line-height:1.7">
-              <div>${titleImpact}: <b>${this.y}</b></div>
-              <div>${titleChange}: <b>${formatPercent(this.custom.change)}</b></div>
-              <div>${titlePrice}: <b>${this.custom.price.toFixed(2)} ${this.custom.unit}</b></div>
+              <div>${titlePressure}: <b>${this.y}</b></div>
+              <div>${titleTopDriver}: <b>${this.custom.topDriver}</b></div>
+              <div>${titleCorridor}: <b>${this.custom.corridor}</b></div>
             </div>
           </div>
         `;
@@ -60,35 +61,60 @@ export default function MacroDriversVariablePie({
     },
     plotOptions: {
       variablepie: {
-        minPointSize: 24,
-        innerSize: '18%',
-        borderColor: 'rgba(15,23,42,0.12)',
+        minPointSize: 18,
+        innerSize: '12%',
+        borderColor: 'rgba(255,255,255,0.95)',
         borderWidth: 2,
+        slicedOffset: 10,
         dataLabels: {
           enabled: true,
-          format: '{point.name}',
+          format: '{point.custom.short}',
+          distance: 14,
           style: {
-            color: '#e2e8f0',
+            color: '#334155',
             textOutline: 'none',
-            fontSize: '12px',
+            fontSize: '11px',
+            fontWeight: '700',
           },
+        },
+        point: {
+          events: {
+            click: function (this: any) {
+              if (this.custom.code3) {
+                onSelect(this.custom.code3);
+              }
+            },
+          },
+        },
+      },
+      series: {
+        dataLabels: {
+          crop: false,
+          overflow: 'allow',
         },
       },
     },
     series: [
       {
         type: 'variablepie',
-        data: slices.map((slice) => ({
-          name: slice.label,
-          y: slice.impact,
-          z: slice.z,
-          color: driverColor(slice.id),
+        data: hubs.map((hub, index) => {
+          const topDriver = hub.slices.slice().sort((a, b) => b.impact - a.impact)[0];
+
+          return {
+            name: hub.country,
+            y: hub.totalPressure,
+            z: topDriver?.impact ?? hub.totalPressure,
+            sliced: index === selectedIndex,
+            selected: index === selectedIndex,
+            color: sliceColor(index),
           custom: {
-            change: slice.change,
-            price: slice.price,
-            unit: slice.unit,
-          },
-        })),
+              code3: hub.code3,
+              corridor: hub.corridor,
+              topDriver: topDriver?.label ?? '--',
+              short: hub.code3,
+            },
+          };
+        }),
       },
     ],
   };
