@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useTranslation } from '@/context/TranslationContext';
-import { MapPin, Activity, Radio } from 'lucide-react';
+import { Activity, Layers3, MapPin, Play, ShieldCheck } from 'lucide-react';
 
 const MONITORING_FEEDS = [
   { 
@@ -93,14 +93,94 @@ const MONITORING_FEEDS = [
   */
 ];
 
+const COPY = {
+  pt: {
+    eyebrow: 'Como a mesa opera',
+    title: 'Contexto real, leitura operacional e continuidade de feed.',
+    intro:
+      'O produto foi redesenhado para funcionar como camada de decisao. Menos storytelling institucional genérico e mais sinais utilizaveis no dia a dia comercial.',
+    pillars: [
+      {
+        title: 'Camadas reais de dados',
+        detail: 'FAO, mercado monitorado, macro drivers e leitura editorial convivem no mesmo enquadramento.',
+      },
+      {
+        title: 'Continuidade operacional',
+        detail: 'A leitura permanece viva com fallback controlado, snapshot persistido e observabilidade de fonte.',
+      },
+      {
+        title: 'Uso comercial diario',
+        detail: 'Pensado para margem, repasse, timing e comparacao entre contratos e referencias oficiais.',
+      },
+    ],
+    mediaEyebrow: 'Operations canvas',
+    mediaTitle: 'Ambiente visual da cadeia monitorada',
+    mediaNote: 'As cenas abaixo funcionam como contexto visual do desk, nao como falso live feed.',
+    visualLabel: 'Visual',
+    feedContextLabel: 'Contexto de feed',
+  },
+  en: {
+    eyebrow: 'How the desk works',
+    title: 'Real context, operating read and feed continuity.',
+    intro:
+      'The product is designed to work as a decision layer. Less generic institutional storytelling and more signals that operators can use every day.',
+    pillars: [
+      {
+        title: 'Real data layers',
+        detail: 'FAO, monitored markets, macro drivers and editorial reading coexist inside the same frame.',
+      },
+      {
+        title: 'Operating continuity',
+        detail: 'The read stays alive with controlled fallback, persisted snapshots and source observability.',
+      },
+      {
+        title: 'Daily commercial use',
+        detail: 'Built for margin, pass-through, timing and comparison across contracts and official references.',
+      },
+    ],
+    mediaEyebrow: 'Operations canvas',
+    mediaTitle: 'Visual context from the monitored chain',
+    mediaNote: 'The scenes below act as visual context for the desk, not as fake live feed.',
+    visualLabel: 'Visual',
+    feedContextLabel: 'Feed context',
+  },
+  es: {
+    eyebrow: 'Como opera la mesa',
+    title: 'Contexto real, lectura operativa y continuidad del feed.',
+    intro:
+      'El producto fue redisenado para funcionar como capa de decision. Menos storytelling institucional generico y mas senales utilizables en el dia comercial.',
+    pillars: [
+      {
+        title: 'Capas reales de datos',
+        detail: 'FAO, mercado monitoreado, drivers macro y lectura editorial conviven en un mismo cuadro.',
+      },
+      {
+        title: 'Continuidad operativa',
+        detail: 'La lectura se mantiene viva con fallback controlado, snapshot persistido y observabilidad de fuente.',
+      },
+      {
+        title: 'Uso comercial diario',
+        detail: 'Pensado para margen, traslado de precios, timing y comparacion entre contratos y referencias oficiales.',
+      },
+    ],
+    mediaEyebrow: 'Operations canvas',
+    mediaTitle: 'Contexto visual de la cadena monitoreada',
+    mediaNote: 'Las escenas de abajo funcionan como contexto visual de la mesa, no como falso live feed.',
+    visualLabel: 'Visual',
+    feedContextLabel: 'Contexto del feed',
+  },
+} as const;
+
 export default function AboutSection() {
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
   const [currentFeedIndex, setCurrentFeedIndex] = useState(0);
+  const activeLanguage = language === 'pt' ? 'pt' : language === 'es' ? 'es' : 'en';
+  const copy = COPY[activeLanguage];
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentFeedIndex((prev) => (prev + 1) % MONITORING_FEEDS.length);
-    }, 15000); // Switch every 15 seconds (increased to allow 65MB+ videos to load without aborting)
+    }, 12000);
 
     return () => clearInterval(interval);
   }, []);
@@ -108,87 +188,109 @@ export default function AboutSection() {
   const currentFeed = MONITORING_FEEDS[currentFeedIndex];
 
   return (
-    <section id="sobre" className="py-20 bg-slate-900 text-white relative overflow-hidden">
-      {/* Background pattern */}
-      <div className="absolute inset-0 opacity-10" 
-           style={{ backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)', backgroundSize: '30px 30px' }}>
-      </div>
+    <section id="sobre" className="relative overflow-hidden bg-slate-900 py-20 text-white">
+      <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)', backgroundSize: '30px 30px' }} />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(59,130,246,0.12),_transparent_24%),radial-gradient(circle_at_bottom_right,_rgba(16,185,129,0.10),_transparent_24%)]" />
 
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="flex flex-col lg:flex-row items-center gap-12">
-          <div className="lg:w-1/2">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-green-400">
-              {t('about_title')}
-            </h2>
-            <div className="space-y-6 text-slate-300 text-lg leading-relaxed">
-              <p>
-                {t('about_p1')}
-              </p>
-              <p>
-                {t('about_p2')}
-              </p>
-              <p>
-                {t('about_p3')}
-              </p>
+      <div className="container relative z-10 mx-auto px-4">
+        <div className="grid items-center gap-12 lg:grid-cols-[0.95fr_1.05fr]">
+          <div>
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-300">
+              <Layers3 className="h-4 w-4" />
+              {copy.eyebrow}
+            </div>
+            <h2 className="mb-6 text-3xl font-bold md:text-4xl">{copy.title}</h2>
+            <p className="max-w-2xl text-lg leading-8 text-slate-300">{copy.intro}</p>
+
+            <div className="mt-8 space-y-4">
+              {copy.pillars.map((pillar, index) => (
+                <article
+                  key={pillar.title}
+                  className="rounded-[1.75rem] border border-white/10 bg-white/[0.04] p-5 transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/[0.06]"
+                >
+                  <div className="flex items-start gap-4">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-emerald-400/20 bg-emerald-400/10 text-sm font-bold text-emerald-200">
+                      0{index + 1}
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold text-white">{pillar.title}</h3>
+                      <p className="mt-2 text-sm leading-7 text-slate-300">{pillar.detail}</p>
+                    </div>
+                  </div>
+                </article>
+              ))}
             </div>
           </div>
-          <div className="lg:w-1/2 relative group">
-            <div className="absolute -inset-4 bg-gradient-to-r from-blue-500 to-green-500 rounded-full blur-3xl opacity-20 animate-pulse group-hover:opacity-40 transition-opacity duration-1000"></div>
-            
-            <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-white/10 backdrop-blur-sm bg-slate-900 aspect-video">
-              {/* Video Player */}
-              <video 
-                key={currentFeed.src} // Key change forces reload/transition
-                autoPlay 
-                loop 
-                muted 
+
+          <div className="relative group">
+            <div className="absolute -inset-4 rounded-full bg-gradient-to-r from-blue-500 to-green-500 blur-3xl opacity-20 transition-opacity duration-1000 group-hover:opacity-40 motion-safe:animate-[pulse_10s_ease-in-out_infinite]" />
+
+            <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-slate-950/65 shadow-2xl backdrop-blur-sm">
+              <div className="border-b border-white/10 p-5">
+                <div className="flex flex-wrap items-center justify-between gap-4">
+                  <div>
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-emerald-200">{copy.mediaEyebrow}</p>
+                    <h3 className="mt-2 text-2xl font-semibold text-white">{copy.mediaTitle}</h3>
+                    <p className="mt-2 max-w-xl text-sm leading-7 text-slate-300">{copy.mediaNote}</p>
+                  </div>
+                  <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold text-slate-300">
+                    <Play className="h-3.5 w-3.5 text-emerald-300" />
+                    {copy.visualLabel}
+                  </div>
+                </div>
+              </div>
+
+              <div className="relative aspect-video">
+                <video
+                key={currentFeed.src}
+                autoPlay
+                loop
+                muted
                 playsInline
-                className="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-105 animate-fade-in"
+                className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                 poster="/img/about-image.svg"
               >
                 <source src={currentFeed.src} type="video/mp4" />
                 Seu navegador não suporta a tag de vídeo.
               </video>
-              
-              {/* Overlay Gradient */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/40 pointer-events-none"></div>
 
-              {/* Top Bar: CAM Info */}
-              <div className="absolute top-4 left-4 right-4 flex justify-between items-start">
-                <div className="bg-black/60 backdrop-blur-md px-3 py-1.5 rounded text-xs font-mono text-green-400 border border-green-500/30 flex items-center gap-2">
-                  <Radio className="w-3 h-3 animate-pulse" />
-                  LIVE FEED • CAM {currentFeed.id}
-                </div>
-                <div className="bg-red-500/20 backdrop-blur-md px-2 py-1 rounded text-[10px] font-bold text-red-500 border border-red-500/30 animate-pulse">
-                  REC
-                </div>
-              </div>
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-black/30" />
 
-              {/* Bottom Bar: Location & Type */}
-              <div className="absolute bottom-4 left-4 right-4 flex justify-between items-end">
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2 text-white font-medium text-sm">
-                    <Activity className="w-4 h-4 text-blue-400" />
-                    {t(currentFeed.labelKey)}
+                <div className="absolute left-4 right-4 top-4 flex flex-wrap items-center justify-between gap-3">
+                  <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/40 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur-md">
+                    <ShieldCheck className="h-3.5 w-3.5 text-emerald-300" />
+                    {copy.feedContextLabel}
                   </div>
-                  <div className="flex items-center gap-2 text-slate-400 text-xs">
-                    <MapPin className="w-3 h-3" />
-                    {t(currentFeed.locationKey)}
+                  <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/40 px-3 py-1.5 text-xs font-semibold text-slate-300 backdrop-blur-md">
+                    <Activity className="h-3.5 w-3.5 text-sky-300" />
+                    {t(currentFeed.typeKey)}
                   </div>
                 </div>
 
-                {/* Feed Selectors */}
-                <div className="flex gap-2">
-                  {MONITORING_FEEDS.map((feed, idx) => (
-                    <button
-                      key={feed.id}
-                      onClick={() => setCurrentFeedIndex(idx)}
-                      className={`h-1.5 rounded-full transition-all duration-300 ${
-                        idx === currentFeedIndex ? 'w-8 bg-blue-500' : 'w-2 bg-slate-600 hover:bg-slate-500'
-                      }`}
-                      aria-label={`Select feed ${feed.id}`}
-                    />
-                  ))}
+                <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between gap-4">
+                  <div className="space-y-2 rounded-2xl border border-white/10 bg-black/35 px-4 py-3 backdrop-blur-md">
+                    <div className="flex items-center gap-2 text-sm font-medium text-white">
+                      <Activity className="h-4 w-4 text-emerald-300" />
+                      {t(currentFeed.labelKey)}
+                    </div>
+                    <div className="flex items-center gap-2 text-xs text-slate-300">
+                      <MapPin className="h-3 w-3" />
+                      {t(currentFeed.locationKey)}
+                    </div>
+                  </div>
+
+                  <div className="flex gap-2">
+                    {MONITORING_FEEDS.map((feed, idx) => (
+                      <button
+                        key={feed.id}
+                        onClick={() => setCurrentFeedIndex(idx)}
+                        className={`h-1.5 rounded-full transition-all duration-300 ${
+                          idx === currentFeedIndex ? 'w-8 bg-emerald-400' : 'w-2 bg-slate-600 hover:bg-slate-500'
+                        }`}
+                        aria-label={`Select feed ${feed.id}`}
+                      />
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, ArrowUpRight, Database, Globe2, Newspaper, Radar, ShieldCheck, TrendingUp, Workflow } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, Database, Globe2, Radar, ShieldCheck, Workflow } from 'lucide-react';
 import { useTranslation } from '@/context/TranslationContext';
 
 const COPY = {
@@ -34,6 +34,10 @@ const COPY = {
       { label: 'Operacao', value: 'Dados reais' },
       { label: 'Foco', value: 'Timing diario' },
     ],
+    useCasesLabel: 'Casos de uso',
+    railLabel: 'Trilho de sinais',
+    pulseLabel: 'Pulso',
+    pulseItems: ['Continuidade do feed', 'Contexto cross-market', 'Timing editorial'],
     useCases: ['trading', 'exportacao', 'origination', 'sourcing'],
     footnote: 'Leitura desenhada para margem, repasse e timing. Nao para parecer igual a qualquer site de dashboard.',
   },
@@ -68,6 +72,10 @@ const COPY = {
       { label: 'Operation', value: 'Real data' },
       { label: 'Focus', value: 'Daily timing' },
     ],
+    useCasesLabel: 'Use cases',
+    railLabel: 'Signal rail',
+    pulseLabel: 'Pulse',
+    pulseItems: ['Feed continuity', 'Cross-market context', 'Editorial timing'],
     useCases: ['trading', 'exports', 'origination', 'sourcing'],
     footnote: 'Built for margin, pass-through and timing decisions. Not to look like every other dashboard site.',
   },
@@ -102,6 +110,10 @@ const COPY = {
       { label: 'Operacion', value: 'Datos reales' },
       { label: 'Foco', value: 'Timing diario' },
     ],
+    useCasesLabel: 'Casos de uso',
+    railLabel: 'Carril de senales',
+    pulseLabel: 'Pulso',
+    pulseItems: ['Continuidad del feed', 'Contexto cross-market', 'Timing editorial'],
     useCases: ['trading', 'exportacion', 'origination', 'sourcing'],
     footnote: 'Pensado para margen, traslado de precios y timing. No para verse como cualquier dashboard comun.',
   },
@@ -135,6 +147,10 @@ const COPY = {
       { label: 'Operation', value: 'Real data' },
       { label: 'Focus', value: 'Daily timing' },
     ],
+    useCasesLabel: 'Use cases',
+    railLabel: 'Signal rail',
+    pulseLabel: 'Pulse',
+    pulseItems: ['Feed continuity', 'Cross-market context', 'Editorial timing'],
     useCases: ['trading', 'exports', 'origination', 'sourcing'],
     footnote: 'Built for margin and timing decisions, not generic dashboard aesthetics.',
   },
@@ -168,6 +184,10 @@ const COPY = {
       { label: 'التشغيل', value: 'بيانات حقيقية' },
       { label: 'التركيز', value: 'توقيت يومي' },
     ],
+    useCasesLabel: 'حالات الاستخدام',
+    railLabel: 'مسار الاشارات',
+    pulseLabel: 'النبض',
+    pulseItems: ['استمرارية المصدر', 'سياق مترابط', 'توقيت تحريري'],
     useCases: ['trading', 'exports', 'origination', 'sourcing'],
     footnote: 'مصمم للهامش والتوقيت ونقل السعر. ليس نسخة من شكل داشبورد شائع.',
   },
@@ -201,6 +221,10 @@ const COPY = {
       { label: '运行', value: '真实数据' },
       { label: '重点', value: '日常时机' },
     ],
+    useCasesLabel: '使用场景',
+    railLabel: '信号轨道',
+    pulseLabel: '脉冲',
+    pulseItems: ['数据连续性', '跨市场上下文', '编辑时机'],
     useCases: ['trading', 'exports', 'origination', 'sourcing'],
     footnote: '为利润、传导与时机判断而设计，不做千篇一律的 dashboard 首页。',
   },
@@ -218,6 +242,8 @@ export function Hero() {
         <img src="/img/hero-bg.svg" alt="Agriculture Background" className="h-full w-full object-cover opacity-10 mix-blend-screen" />
         <div className="absolute inset-x-0 top-24 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
         <div className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-white/5 to-transparent" />
+        <div className="absolute left-[8%] top-28 h-24 w-24 rounded-full bg-emerald-400/10 blur-2xl motion-safe:animate-[pulse_10s_ease-in-out_infinite]" />
+        <div className="absolute right-[12%] top-36 h-28 w-28 rounded-full bg-cyan-400/10 blur-2xl motion-safe:animate-[pulse_12s_ease-in-out_infinite]" />
       </div>
 
       <div className="relative z-10 container mx-auto px-4">
@@ -255,7 +281,7 @@ export function Hero() {
                   {copy.chips.map((chip) => (
                     <span
                       key={chip}
-                      className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-slate-200 backdrop-blur-sm"
+                      className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-slate-200 backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-white/20 hover:bg-white/10"
                     >
                       {chip}
                     </span>
@@ -264,7 +290,7 @@ export function Hero() {
 
                 <div className="mt-10 grid gap-4 md:grid-cols-3">
                   {copy.bullets.map((bullet, index) => (
-                    <div key={bullet} className="rounded-3xl border border-white/10 bg-white/[0.04] p-5 backdrop-blur-sm">
+                    <div key={bullet} className="rounded-3xl border border-white/10 bg-white/[0.04] p-5 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-emerald-300/20 hover:bg-white/[0.06]">
                       <div className="text-[11px] font-semibold uppercase tracking-[0.26em] text-emerald-200">
                         0{index + 1}
                       </div>
@@ -294,8 +320,9 @@ export function Hero() {
 
             <div className="relative">
               <div className="absolute -inset-6 rounded-[2.4rem] bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.12),_transparent_40%),radial-gradient(circle_at_bottom_right,_rgba(14,165,233,0.12),_transparent_35%)] blur-2xl" />
-              <div className="relative overflow-hidden rounded-[2.2rem] border border-white/10 bg-white/[0.06] p-5 shadow-2xl backdrop-blur-xl">
+              <div className="relative overflow-hidden rounded-[2.2rem] border border-white/10 bg-white/[0.06] p-5 shadow-2xl backdrop-blur-xl transition-transform duration-500 hover:-translate-y-1">
                 <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:32px_32px] opacity-[0.12]" />
+                <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-white/[0.05] to-transparent" />
                 <div className="relative grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
                   <div className="rounded-[1.8rem] border border-white/10 bg-slate-950/55 p-6">
                     <div className="flex items-start justify-between gap-4">
@@ -312,7 +339,7 @@ export function Hero() {
 
                     <div className="mt-6 space-y-3">
                       {copy.deckBlocks.map((block) => (
-                        <div key={block.label} className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+                        <div key={block.label} className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 transition-all duration-300 hover:border-white/20 hover:bg-white/[0.07]">
                           <div className="flex items-start justify-between gap-4">
                             <div>
                               <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">{block.label}</p>
@@ -328,10 +355,10 @@ export function Hero() {
 
                   <div className="grid gap-4">
                     <div className="rounded-[1.8rem] border border-white/10 bg-white/[0.05] p-5">
-                      <p className="text-[11px] font-semibold uppercase tracking-[0.26em] text-slate-400">Use cases</p>
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.26em] text-slate-400">{copy.useCasesLabel}</p>
                       <div className="mt-4 flex flex-wrap gap-2">
                         {copy.useCases.map((item) => (
-                          <span key={item} className="rounded-full border border-white/10 bg-slate-950/50 px-3 py-2 text-xs font-medium text-slate-200">
+                          <span key={item} className="rounded-full border border-white/10 bg-slate-950/50 px-3 py-2 text-xs font-medium text-slate-200 transition-colors duration-300 hover:border-emerald-300/30 hover:text-white">
                             {item}
                           </span>
                         ))}
@@ -339,12 +366,32 @@ export function Hero() {
                     </div>
 
                     <div className="rounded-[1.8rem] border border-white/10 bg-gradient-to-br from-white/[0.08] to-white/[0.03] p-5">
-                      <p className="text-[11px] font-semibold uppercase tracking-[0.26em] text-slate-400">Signal rail</p>
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.26em] text-slate-400">{copy.railLabel}</p>
                       <div className="mt-5 space-y-4">
                         {copy.railStats.map((stat) => (
                           <div key={stat.label} className="flex items-end justify-between gap-4 border-b border-white/10 pb-4 last:border-b-0 last:pb-0">
                             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">{stat.label}</p>
                             <p className="text-right text-2xl font-black text-white">{stat.value}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="rounded-[1.8rem] border border-white/10 bg-slate-950/50 p-5">
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.26em] text-slate-400">{copy.pulseLabel}</p>
+                      <div className="mt-4 space-y-3">
+                        {copy.pulseItems.map((item, index) => (
+                          <div key={item}>
+                            <div className="mb-2 flex items-center justify-between text-xs text-slate-300">
+                              <span>{item}</span>
+                              <span>0{index + 1}</span>
+                            </div>
+                            <div className="h-2 overflow-hidden rounded-full bg-white/10">
+                              <div
+                                className="h-full rounded-full bg-gradient-to-r from-emerald-400 via-lime-300 to-cyan-300 motion-safe:animate-[pulse_6s_ease-in-out_infinite]"
+                                style={{ width: `${78 - index * 11}%` }}
+                              />
+                            </div>
                           </div>
                         ))}
                       </div>
