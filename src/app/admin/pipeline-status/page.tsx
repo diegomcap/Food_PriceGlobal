@@ -3,6 +3,7 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import PipelineAdminStatusPage from '@/components/admin/PipelineAdminStatusPage';
 import {
+  getPipelineAdminSecretName,
   hasPipelineAdminAccess,
   hasPipelineAdminSecret,
   isValidPipelineAdminToken,
@@ -44,8 +45,9 @@ export default async function AdminPipelineStatusPage({
           usando o segredo configurado no servidor.
         </p>
         <p className="mt-4 text-sm leading-6 text-slate-400">
-          O projeto aceita <code className="mx-1 rounded bg-white/10 px-2 py-1">PIPELINE_ADMIN_SECRET</code> e,
-          na ausencia dele, reutiliza <code className="mx-1 rounded bg-white/10 px-2 py-1">MARKET_INGESTION_SECRET</code>.
+          Esta area exige a env dedicada
+          <code className="mx-1 rounded bg-white/10 px-2 py-1">{getPipelineAdminSecretName()}</code>
+          configurada no servidor. Nao existe mais fallback para outros segredos.
         </p>
         <Link href="/market-analysis/pipeline-status" className="mt-6 inline-flex rounded-full border border-white/10 px-4 py-2 text-sm font-semibold text-slate-200 hover:bg-white/10">
           Abrir Versao Publica Resumida

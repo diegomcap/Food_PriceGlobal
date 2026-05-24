@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
-import { Activity, AlertTriangle, CheckCircle2, Clock3, DatabaseZap, RefreshCw, ShieldAlert, Siren } from 'lucide-react';
+import { Activity, AlertTriangle, CheckCircle2, Clock3, DatabaseZap, LogOut, RefreshCw, ShieldAlert, Siren } from 'lucide-react';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { useTranslation } from '@/context/TranslationContext';
@@ -53,6 +53,7 @@ const COPY = {
     source: 'Fonte',
     yes: 'Sim',
     no: 'Nao',
+    logout: 'Encerrar sessao admin',
     runFailedTitle: (dataset: string) => `${dataset} com falha na ultima ingestao`,
     runFailedDetail: 'O ultimo ingestion run falhou. Revise o erro, o provider e a persistencia.',
     freshnessDelayedTitle: (dataset: string) => `${dataset} com atraso operacional`,
@@ -93,6 +94,7 @@ const COPY = {
     source: 'Source',
     yes: 'Yes',
     no: 'No',
+    logout: 'End admin session',
     runFailedTitle: (dataset: string) => `${dataset} failed on the latest ingestion`,
     runFailedDetail: 'The latest ingestion run failed. Review the error, provider and persistence path.',
     freshnessDelayedTitle: (dataset: string) => `${dataset} is operationally delayed`,
@@ -133,6 +135,7 @@ const COPY = {
     source: 'Fuente',
     yes: 'Si',
     no: 'No',
+    logout: 'Cerrar sesion admin',
     runFailedTitle: (dataset: string) => `${dataset} fallo en la ultima ingesta`,
     runFailedDetail: 'La ultima ingestion fallo. Revise el error, el provider y la persistencia.',
     freshnessDelayedTitle: (dataset: string) => `${dataset} presenta retraso operativo`,
@@ -173,6 +176,7 @@ const COPY = {
     source: 'Istochnik',
     yes: 'Da',
     no: 'Net',
+    logout: 'End admin session',
     runFailedTitle: (dataset: string) => `${dataset} sboi v posledney ingestii`,
     runFailedDetail: 'Posledniy ingestion run zavershilsya s oshibkoy. Proverte provider, oshibku i persist.',
     freshnessDelayedTitle: (dataset: string) => `${dataset} operatsionno zaderzhan`,
@@ -213,6 +217,7 @@ const COPY = {
     source: 'المصدر',
     yes: 'نعم',
     no: 'لا',
+    logout: 'إنهاء جلسة الادمن',
     runFailedTitle: (dataset: string) => `${dataset} فشل في اخر عملية ادخال`,
     runFailedDetail: 'فشلت اخر عملية ادخال. راجع الخطأ والمزود ومسار الحفظ.',
     freshnessDelayedTitle: (dataset: string) => `${dataset} متأخر تشغيليا`,
@@ -253,6 +258,7 @@ const COPY = {
     source: '来源',
     yes: '是',
     no: '否',
+    logout: '结束管理员会话',
     runFailedTitle: (dataset: string) => `${dataset} 最近一次采集失败`,
     runFailedDetail: '最近一次采集失败。请检查错误、provider 与持久化路径。',
     freshnessDelayedTitle: (dataset: string) => `${dataset} 运行已延迟`,
@@ -360,12 +366,21 @@ export default function PipelineStatusPage() {
               <h1 className="text-4xl font-bold text-slate-900">{copy.title}</h1>
               <p className="mt-2 max-w-3xl text-slate-600">{copy.subtitle}</p>
             </div>
-            {payload?.generatedAt && (
-              <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm text-slate-600">
-                <RefreshCw className="h-4 w-4" />
-                {copy.updatedAt}: {formatDateTime(new Date(payload.generatedAt), language as SupportedLanguage)}
-              </div>
-            )}
+            <div className="flex flex-wrap items-center gap-3">
+              {payload?.generatedAt && (
+                <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm text-slate-600">
+                  <RefreshCw className="h-4 w-4" />
+                  {copy.updatedAt}: {formatDateTime(new Date(payload.generatedAt), language as SupportedLanguage)}
+                </div>
+              )}
+              <Link
+                href="/admin/pipeline-status/logout"
+                className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+              >
+                <LogOut className="h-4 w-4" />
+                {copy.logout}
+              </Link>
+            </div>
           </div>
         </div>
 

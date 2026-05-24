@@ -6,12 +6,7 @@ import type { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension
 export const PIPELINE_ADMIN_COOKIE = 'fpg_pipeline_admin';
 
 function getPipelineAdminSecret() {
-  return (
-    process.env.PIPELINE_ADMIN_SECRET ??
-    process.env.MARKET_INGESTION_SECRET ??
-    process.env.CRON_SECRET ??
-    ''
-  );
+  return process.env.PIPELINE_ADMIN_SECRET ?? '';
 }
 
 function toDigest(value: string) {
@@ -31,6 +26,10 @@ function safeEquals(left: string, right: string) {
 
 export function hasPipelineAdminSecret() {
   return Boolean(getPipelineAdminSecret());
+}
+
+export function getPipelineAdminSecretName() {
+  return 'PIPELINE_ADMIN_SECRET';
 }
 
 export function isValidPipelineAdminToken(token?: string | null) {

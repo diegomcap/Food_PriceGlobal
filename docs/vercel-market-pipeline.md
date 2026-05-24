@@ -18,10 +18,10 @@ NEXT_PUBLIC_SUPABASE_URL=https://smcbwelnugbubokzsumt.supabase.co
 SUPABASE_SERVICE_ROLE_KEY=sb_secret_...
 MARKET_INGESTION_SECRET=your-long-random-secret
 CRON_SECRET=your-vercel-cron-secret
-PIPELINE_ADMIN_SECRET=optional-dedicated-admin-secret
+PIPELINE_ADMIN_SECRET=dedicated-admin-secret-for-pipeline-observability
 ```
 
-`PIPELINE_ADMIN_SECRET` protects the full admin observability page and the admin pipeline status API. If omitted, the app falls back to `MARKET_INGESTION_SECRET`.
+`PIPELINE_ADMIN_SECRET` protects the full admin observability page and the admin pipeline status API. It is now a dedicated secret and no longer falls back to `MARKET_INGESTION_SECRET`.
 
 ### Optional Premium Providers
 
