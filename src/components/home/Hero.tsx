@@ -386,14 +386,19 @@ export function Hero() {
 
                     <div className="rounded-[1.8rem] border border-slate-200 bg-white p-5 md:p-6">
                       <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-500">{copy.pulseLabel}</p>
-                      <div className="mt-4 space-y-3">
+                      <div className="mt-5 grid gap-3">
                         {copy.pulseItems.map((item, index) => (
-                          <div key={item}>
-                            <div className="mb-2 flex items-center justify-between text-[11px] text-slate-600">
-                              <span>{item}</span>
-                              <span className="font-semibold text-slate-500">0{index + 1}</span>
+                          <div
+                            key={item}
+                            className="rounded-2xl border border-slate-200 bg-slate-50/80 px-4 py-3 shadow-sm"
+                          >
+                            <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4">
+                              <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-600">
+                                {item}
+                              </span>
+                              <span className="text-[12px] font-bold text-slate-500">0{index + 1}</span>
                             </div>
-                            <div className="h-2 overflow-hidden rounded-full bg-slate-100">
+                            <div className="mt-3 h-2 overflow-hidden rounded-full bg-slate-200">
                               <div
                                 className="h-full rounded-full bg-gradient-to-r from-emerald-400 via-lime-300 to-cyan-300 motion-safe:animate-[pulse_6s_ease-in-out_infinite]"
                                 style={{ width: `${78 - index * 11}%` }}
