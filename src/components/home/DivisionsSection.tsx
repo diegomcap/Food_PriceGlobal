@@ -125,17 +125,17 @@ export function DivisionsSection() {
   const copy = COPY[activeLanguage];
 
   return (
-    <section className="relative overflow-hidden bg-slate-900 py-24 text-white">
+    <section className="py-20 bg-slate-900 text-white relative overflow-hidden">
       <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop')] bg-cover bg-center opacity-10"></div>
       
       <div className="container mx-auto px-4 relative z-10">
-        <div className="mb-16 text-center">
+        <div className="text-center mb-16">
           <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-300">
             <Route className="h-4 w-4" />
             {copy.eyebrow}
           </div>
-          <h2 className="mb-4 text-3xl font-bold tracking-[-0.02em] md:text-4xl">{copy.title}</h2>
-          <p className="mx-auto max-w-3xl text-lg leading-8 text-slate-300 md:text-xl">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">{copy.title}</h2>
+          <p className="text-xl text-slate-300 max-w-3xl mx-auto">
             {copy.subtitle}
           </p>
         </div>
@@ -146,13 +146,13 @@ export function DivisionsSection() {
 
             return (
               <Link key={item.href} href={item.href} className="group">
-                <div className="h-full rounded-[1.8rem] border border-white/10 bg-white/5 p-8 md:p-9 backdrop-blur-sm transition-all duration-300 hover:-translate-y-2 hover:border-white/20 hover:bg-white/[0.08] hover:shadow-2xl">
+                <div className="h-full rounded-[1.8rem] border border-white/10 bg-white/5 p-8 backdrop-blur-sm transition-all duration-300 hover:-translate-y-2 hover:border-white/20 hover:bg-white/[0.08] hover:shadow-2xl">
                   <div className={`mb-6 inline-flex rounded-2xl border px-4 py-4 ${item.accent}`}>
                     <Icon className="h-6 w-6" />
                   </div>
-                  <h3 className="mb-3 text-[1.65rem] font-bold tracking-[-0.02em] text-white">{item.title}</h3>
-                  <p className="text-sm leading-7 text-slate-300/95">{item.description}</p>
-                  <span className="mt-7 inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.14em] text-white transition-transform group-hover:translate-x-1">
+                  <h3 className="mb-3 text-2xl font-bold text-white">{item.title}</h3>
+                  <p className="text-sm leading-relaxed text-slate-300">{item.description}</p>
+                  <span className="mt-6 inline-flex items-center gap-2 font-semibold text-white transition-transform group-hover:translate-x-1">
                     {copy.cta}
                     <ArrowUpRight className="h-4 w-4" />
                   </span>

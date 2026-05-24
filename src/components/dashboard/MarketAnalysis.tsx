@@ -11,37 +11,37 @@ export default function MarketAnalysis() {
     pt: {
       title: 'Confiabilidade dos Dados',
       description:
-        'Resumo publico de freshness, frequencia de atualizacao e monitoramento continuo das camadas de dados exibidas no produto.',
+        'Freshness, frequencia e continuidade em um resumo publico.',
       action: 'Ver confiabilidade',
     },
     en: {
       title: 'Data Reliability',
       description:
-        'Public summary of freshness, update cadence and continuity monitoring for the market datasets shown in the product.',
+        'Freshness, cadence and continuity in one public summary.',
       action: 'View reliability',
     },
     es: {
       title: 'Confiabilidad de los Datos',
       description:
-        'Resumen publico de freshness, frecuencia de actualizacion y monitoreo continuo de las capas de datos mostradas en el producto.',
+        'Freshness, frecuencia y continuidad en un solo resumen publico.',
       action: 'Ver confiabilidad',
     },
     ru: {
       title: 'Nadezhnost Dannykh',
       description:
-        'Publichnoye rezume po freshness, chastote obnovleniya i nepreryvnomu monitoringu naborov rynochnykh dannykh produkta.',
+        'Freshness, cadence and continuity in one public summary.',
       action: 'Smotret nadezhnost',
     },
     ar: {
       title: 'موثوقية البيانات',
       description:
-        'ملخص عام عن حداثة البيانات وتيرة التحديث ومراقبة الاستمرارية لمجموعات البيانات المعروضة في المنتج.',
+        'ملخص عام يجمع الحداثة والتحديث والاستمرارية.',
       action: 'عرض الموثوقية',
     },
     zh: {
       title: '数据可靠性',
       description:
-        '面向公开页面的数据新鲜度、更新频率与连续性监控摘要，覆盖产品中的核心市场数据集。',
+        '把新鲜度、频率和连续性压缩为公开摘要。',
       action: '查看可靠性',
     },
   } as const;
@@ -97,22 +97,70 @@ export default function MarketAnalysis() {
     }
   ];
 
+  const summaryCopy = {
+    pt: [
+      { label: 'Blocos', value: '5' },
+      { label: 'Leitura', value: 'Curta' },
+      { label: 'Foco', value: 'Acao' },
+    ],
+    en: [
+      { label: 'Blocks', value: '5' },
+      { label: 'Read', value: 'Short' },
+      { label: 'Focus', value: 'Action' },
+    ],
+    es: [
+      { label: 'Bloques', value: '5' },
+      { label: 'Lectura', value: 'Corta' },
+      { label: 'Foco', value: 'Accion' },
+    ],
+    ru: [
+      { label: 'Blocks', value: '5' },
+      { label: 'Read', value: 'Short' },
+      { label: 'Focus', value: 'Action' },
+    ],
+    ar: [
+      { label: 'الكتل', value: '5' },
+      { label: 'القراءة', value: 'سريعة' },
+      { label: 'التركيز', value: 'فعل' },
+    ],
+    zh: [
+      { label: '模块', value: '5' },
+      { label: '阅读', value: '短' },
+      { label: '重点', value: '动作' },
+    ],
+  } as const;
+  const summary = summaryCopy[activeLanguage];
+
   return (
     <section id="analise-mercado" className="py-20 bg-slate-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-3xl font-bold text-center text-slate-900 mb-12 relative pb-4 after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-20 after:h-1 after:bg-gradient-to-r after:from-blue-500 after:to-green-500 after:rounded-full">
+        <h2 className="text-3xl font-bold text-center text-slate-900 mb-6 relative pb-4 after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-20 after:h-1 after:bg-gradient-to-r after:from-blue-500 after:to-green-500 after:rounded-full">
           {t('market_analysis_title')}
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+        <div className="mx-auto mb-10 grid max-w-3xl gap-4 sm:grid-cols-3">
+          {summary.map((item) => (
+            <div key={item.label} className="rounded-2xl border border-slate-200 bg-white px-5 py-4 text-center shadow-sm">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">{item.label}</p>
+              <p className="mt-2 text-lg font-bold text-slate-900">{item.value}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-5">
           {analysisCards.map((card, index) => (
-            <div key={index} className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 border border-slate-100 group flex flex-col hover:-translate-y-1">
-              <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 ${card.iconTone}`}>
-                <card.icon size={28} />
+            <div key={index} className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 border border-slate-200 group flex flex-col hover:-translate-y-1">
+              <div className="mb-4 flex items-center justify-between">
+                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center group-hover:scale-105 transition-transform duration-300 ${card.iconTone}`}>
+                  <card.icon size={24} />
+                </div>
+                <span className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+                  0{index + 1}
+                </span>
               </div>
               
-              <h3 className="text-xl font-bold text-slate-900 mb-4">{card.title}</h3>
-              <p className="text-slate-600 mb-6 leading-relaxed text-sm flex-grow">
+              <h3 className="text-lg font-bold text-slate-900 mb-3">{card.title}</h3>
+              <p className="text-slate-600 mb-5 leading-6 text-sm flex-grow">
                 {card.description}
               </p>
               
