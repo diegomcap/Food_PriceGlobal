@@ -1,15 +1,61 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Calendar, ArrowRight, Clock, Search, Loader2, X } from 'lucide-react';
+import { Calendar, ArrowRight, Clock, Search, Loader2, X, Siren } from 'lucide-react';
 import { useTranslation } from '@/context/TranslationContext';
 import { buildFallbackNews, buildRollingMarketEvents, type MarketArticle } from '@/lib/marketContent';
 import { formatDateTime, getCurrentCropSeason, type SupportedLanguage } from '@/lib/marketTime';
+import DataFreshnessBadge from '@/components/dashboard/DataFreshnessBadge';
 
 export default function NewsSection() {
   const { t, language } = useTranslation();
   const currentDate = new Date();
   const activeLanguage = language as SupportedLanguage;
+  const copyMap = {
+    pt: {
+      editorialTitle: 'Alertas editoriais',
+      editorialSubtitle: 'Leituras curtas para risco, fluxo e timing antes de entrar no noticiario completo.',
+      editorialTags: ['Fluxo', 'Risco', 'Timing'],
+      marketNewsTitle: 'Noticias de mercado',
+      marketNewsSubtitle: 'Cobertura continua por cadeia, com filtro por tema e busca dedicada.',
+    },
+    en: {
+      editorialTitle: 'Editorial alerts',
+      editorialSubtitle: 'Short reads for risk, flow and timing before the full market news feed.',
+      editorialTags: ['Flow', 'Risk', 'Timing'],
+      marketNewsTitle: 'Market news',
+      marketNewsSubtitle: 'Continuous coverage by chain, with category filters and dedicated search.',
+    },
+    es: {
+      editorialTitle: 'Alertas editoriales',
+      editorialSubtitle: 'Lecturas cortas para riesgo, flujo y timing antes de entrar al noticiario completo.',
+      editorialTags: ['Flujo', 'Riesgo', 'Timing'],
+      marketNewsTitle: 'Noticias de mercado',
+      marketNewsSubtitle: 'Cobertura continua por cadena, con filtros por tema y busqueda dedicada.',
+    },
+    ru: {
+      editorialTitle: 'Redaktsionnye alerty',
+      editorialSubtitle: 'Korotkie chteniya po risku, potoku i taimingu pered polnym novostnym potokom.',
+      editorialTags: ['Potok', 'Risk', 'Timing'],
+      marketNewsTitle: 'Rynochnye novosti',
+      marketNewsSubtitle: 'Nepreyrvnoye pokrytie po tsepochkam s filtrami po temam i otdelnym poiskom.',
+    },
+    ar: {
+      editorialTitle: 'تنبيهات تحريرية',
+      editorialSubtitle: 'قراءات قصيرة للمخاطر والتدفق والتوقيت قبل الدخول الى موجز الاخبار الكامل.',
+      editorialTags: ['تدفق', 'مخاطر', 'توقيت'],
+      marketNewsTitle: 'اخبار السوق',
+      marketNewsSubtitle: 'تغطية مستمرة حسب السلسلة مع فلاتر موضوعية وبحث مخصص.',
+    },
+    zh: {
+      editorialTitle: '编辑预警',
+      editorialSubtitle: '在进入完整新闻流之前，先快速阅读风险、流向和时机。',
+      editorialTags: ['流向', '风险', '时机'],
+      marketNewsTitle: '市场新闻',
+      marketNewsSubtitle: '按产业链持续覆盖，并提供主题筛选和专门搜索。',
+    },
+  } as const;
+  const copy = copyMap[(['pt', 'en', 'es', 'ru', 'ar', 'zh'].includes(language) ? language : 'en') as keyof typeof copyMap];
   const eventDefinitions = [
     { dayOfMonth: 5, title: t('event_title_1'), desc: t('event_desc_1') },
     { dayOfMonth: 10, title: t('event_usda_report'), desc: 'Global Markets' },
@@ -32,6 +78,7 @@ export default function NewsSection() {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [showCalendar, setShowCalendar] = useState(false);
   const [newsUpdatedAt, setNewsUpdatedAt] = useState<string>('');
+  const [newsSource, setNewsSource] = useState<string>('google-news-rss');
 
   const getGoogleNewsParams = (lang: string) => {
     switch(lang) {
@@ -58,11 +105,13 @@ export default function NewsSection() {
       }
 
       setArticles(data.articles as MarketArticle[]);
+      setNewsSource(data.source || 'google-news-rss');
       setNewsUpdatedAt(data.updatedAt || new Date().toISOString());
     } catch (error) {
       console.error('Failed to fetch news:', error);
 
       setArticles(buildFallbackNews(query, activeLanguage));
+      setNewsSource('fallback');
       setNewsUpdatedAt(new Date().toISOString());
     } finally {
       setLoading(false);
@@ -108,6 +157,11 @@ export default function NewsSection() {
     window.open(searchUrl, '_blank');
   };
 
+  const editorialAlerts = articles.slice(0, 3).map((item, index) => ({
+    ...item,
+    tag: copy.editorialTags[index] ?? copy.editorialTags[copy.editorialTags.length - 1],
+  }));
+
   return (
     <section id="noticias" className="py-20 bg-white relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -116,6 +170,64 @@ export default function NewsSection() {
         <div className="flex flex-col lg:flex-row gap-12">
           {/* News Feed */}
           <div className="lg:w-2/3">
+            <div className="mb-10">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-10 h-10 rounded-2xl bg-red-50 text-red-600 flex items-center justify-center">
+                  <Siren className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold text-slate-900">{copy.editorialTitle}</h3>
+                  <p className="text-sm text-slate-500">{copy.editorialSubtitle}</p>
+                </div>
+              </div>
+
+              {loading ? (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {Array.from({ length: 3 }).map((_, index) => (
+                    <div key={index} className="rounded-2xl border border-slate-100 bg-slate-50 p-5 animate-pulse">
+                      <div className="h-5 w-20 bg-slate-200 rounded mb-4"></div>
+                      <div className="h-6 w-full bg-slate-200 rounded mb-3"></div>
+                      <div className="h-16 w-full bg-slate-200 rounded"></div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {editorialAlerts.map((alert, index) => (
+                    <a
+                      key={`${alert.link}-${index}`}
+                      href={alert.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="rounded-2xl border border-slate-100 bg-slate-50 p-5 hover:border-red-200 hover:shadow-md transition-all"
+                    >
+                      <div className="inline-flex items-center rounded-full bg-red-50 text-red-600 px-3 py-1 text-xs font-semibold mb-4">
+                        {alert.tag}
+                      </div>
+                      <h4 className="text-lg font-bold text-slate-900 mb-3 leading-snug">{alert.title}</h4>
+                      <p className="text-sm text-slate-600 leading-6 line-clamp-4">{alert.description}</p>
+                      <div className="mt-5 pt-4 border-t border-slate-100 text-xs text-slate-500 flex items-center justify-between gap-3">
+                        <span>{alert.source}</span>
+                        <span>{alert.time}</span>
+                      </div>
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div className="mb-6">
+              <h3 className="text-2xl font-bold text-slate-900 mb-2">{copy.marketNewsTitle}</h3>
+              <p className="text-sm text-slate-500">{copy.marketNewsSubtitle}</p>
+            </div>
+            <div className="mb-6">
+              <DataFreshnessBadge
+                dataset="market_news"
+                updatedAt={newsUpdatedAt}
+                source={newsSource}
+                language={activeLanguage}
+              />
+            </div>
             <div className="flex flex-col md:flex-row gap-4 mb-8 justify-between items-center">
               <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide max-w-full">
                 {filters.map((filter) => (

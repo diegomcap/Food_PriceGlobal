@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { TrendingDown, TrendingUp, Calendar } from 'lucide-react';
 import { useTranslation } from '@/context/TranslationContext';
 import { formatDateTime, formatMonthYear, getLocale, type SupportedLanguage } from '@/lib/marketTime';
+import DataFreshnessBadge from '@/components/dashboard/DataFreshnessBadge';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -42,6 +43,7 @@ type FaoApiResponse = {
   latest: FaoRecord;
   previous: FaoRecord;
   series: FaoRecord[];
+  source?: string;
   updatedAt: string;
 };
 
@@ -90,6 +92,7 @@ export function FoodPriceIndex() {
             latest: fallbackSeries[fallbackSeries.length - 1],
             previous: fallbackSeries[fallbackSeries.length - 2],
             series: fallbackSeries,
+            source: 'fallback',
             updatedAt: new Date().toISOString(),
           });
         }
@@ -117,6 +120,7 @@ export function FoodPriceIndex() {
   const isPositive = monthlyChange >= 0;
   const latestMonth = formatMonthYear(parseRecordDate(latest.date), language as SupportedLanguage);
   const updatedAt = formatDateTime(new Date(faoData?.updatedAt ?? new Date().toISOString()), language as SupportedLanguage);
+  const source = faoData?.source ?? 'fallback';
 
   const chartLabels = useMemo(
     () =>
@@ -227,6 +231,15 @@ export function FoodPriceIndex() {
               </div>
             </div>
           </div>
+        </div>
+
+        <div className="mb-6">
+          <DataFreshnessBadge
+            dataset="fao_index"
+            updatedAt={faoData?.updatedAt}
+            source={source}
+            language={language as SupportedLanguage}
+          />
         </div>
 
         <div className="h-[300px] w-full">

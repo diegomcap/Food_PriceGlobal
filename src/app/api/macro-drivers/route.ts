@@ -1,25 +1,25 @@
 export const revalidate = 300;
 
 import {
-  FALLBACK_COMMODITY_QUOTES,
-  fetchCommodityQuotesFromBestAvailable,
-  persistCommodityQuotes,
-  readLatestCommodityQuotes,
+  FALLBACK_MACRO_DRIVERS,
+  fetchMacroDriversFromBestAvailable,
+  persistMacroDrivers,
+  readLatestMacroDrivers,
   shouldRefreshPersistedData,
 } from '@/lib/marketIngestion';
 
 export async function GET() {
-  const persisted = await readLatestCommodityQuotes();
+  const persisted = await readLatestMacroDrivers();
 
-  if (persisted && !shouldRefreshPersistedData('commodities', persisted.updatedAt)) {
+  if (persisted && !shouldRefreshPersistedData('macro_drivers', persisted.updatedAt)) {
     return Response.json(persisted);
   }
 
   try {
-    const fresh = await fetchCommodityQuotesFromBestAvailable({ persisted });
+    const fresh = await fetchMacroDriversFromBestAvailable({ persisted });
 
     if (fresh.source !== 'supabase-snapshot' && fresh.source !== 'fallback') {
-      await persistCommodityQuotes({
+      await persistMacroDrivers({
         items: fresh.items,
         source: fresh.source,
         updatedAt: fresh.updatedAt,
@@ -27,19 +27,19 @@ export async function GET() {
     }
 
     return Response.json({
-      quotes: fresh.items,
+      drivers: fresh.items,
       source: fresh.source,
       updatedAt: fresh.updatedAt,
     });
   } catch (error) {
-    console.error('Failed to resolve commodities from multi-source stack:', error);
+    console.error('Failed to resolve macro drivers from multi-source stack:', error);
 
     if (persisted) {
       return Response.json(persisted);
     }
 
     return Response.json({
-      quotes: FALLBACK_COMMODITY_QUOTES,
+      drivers: FALLBACK_MACRO_DRIVERS,
       source: 'fallback',
       updatedAt: new Date().toISOString(),
     });

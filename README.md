@@ -54,13 +54,26 @@ Recommended target: Vercel.
 
 ### Environment Variables
 
-No required runtime environment variables were identified during the verified local build.
+Required for the persisted market pipeline:
 
-If you add secrets later:
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `MARKET_INGESTION_SECRET`
+- `CRON_SECRET`
 
-1. Store them in Vercel Project Settings.
-2. Scope them to `Preview` for staging first.
-3. Promote them to `Production` only after validation.
+Optional premium providers:
+
+- `BARCHART_API_KEY`
+- `TRADING_ECONOMICS_API_KEY`
+
+Recommended Vercel scoping:
+
+1. Add the required variables to both `Preview` and `Production`.
+2. Add premium provider keys only when the contracts are active.
+3. Keep `MARKET_INGESTION_SECRET` and `CRON_SECRET` private server-side only.
+4. Use the same `NEXT_PUBLIC_SUPABASE_URL` across environments unless you maintain separate Supabase projects.
+
+See `docs/vercel-market-pipeline.md` for the full matrix and cron validation flow.
 
 ### Suggested Staging Flow
 
@@ -80,6 +93,10 @@ Verify the following in staging:
 - Market analysis pages pre-render successfully.
 - Static video assets load with acceptable performance.
 - Browser console stays free of obvious runtime errors.
+- `GET /api/internal/ingest/commodities` returns `200` with `Authorization: Bearer $CRON_SECRET`.
+- `GET /api/internal/ingest/macro-drivers` returns `200` with `Authorization: Bearer $CRON_SECRET`.
+- `GET /api/commodities` returns persisted quotes with `source` and `updatedAt`.
+- `GET /api/macro-drivers` returns persisted drivers with `source` and `updatedAt`.
 
 ## Notes
 

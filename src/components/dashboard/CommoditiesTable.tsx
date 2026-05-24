@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import { Search, ArrowUp, ArrowDown, Loader2, RefreshCw } from 'lucide-react';
 import { useTranslation } from '@/context/TranslationContext';
+import { type SupportedLanguage } from '@/lib/marketTime';
+import DataFreshnessBadge from '@/components/dashboard/DataFreshnessBadge';
 
 interface CommodityData {
   id: string;
@@ -41,7 +43,7 @@ const SYMBOL_MAP: Record<string, { id: string; category: string }> = {
 };
 
 export default function CommoditiesTable() {
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [commodities, setCommodities] = useState<CommodityData[]>([]);
@@ -165,6 +167,14 @@ export default function CommoditiesTable() {
                   ))}
                 </div>
               </div>
+            </div>
+            <div className="mt-4">
+              <DataFreshnessBadge
+                dataset="commodities"
+                updatedAt={lastUpdate?.toISOString()}
+                source={dataSource}
+                language={language as SupportedLanguage}
+              />
             </div>
           </div>
 

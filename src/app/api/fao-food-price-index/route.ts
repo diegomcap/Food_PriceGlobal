@@ -60,6 +60,7 @@ export async function GET() {
       latest,
       previous,
       series,
+      source: 'fao-csv',
       updatedAt: new Date().toISOString(),
     });
   } catch (error) {

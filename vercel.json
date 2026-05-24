@@ -1,0 +1,12 @@
+{
+  "crons": [
+    {
+      "path": "/api/internal/ingest/commodities",
+      "schedule": "*/5 * * * *"
+    },
+    {
+      "path": "/api/internal/ingest/macro-drivers",
+      "schedule": "*/5 * * * *"
+    }
+  ]
+}

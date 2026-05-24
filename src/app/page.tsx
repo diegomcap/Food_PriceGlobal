@@ -3,6 +3,10 @@
 import { Navbar } from '@/components/layout/Navbar';
 import { Hero } from '@/components/home/Hero';
 import SpotOffersTicker from '@/components/dashboard/SpotOffersTicker';
+import MarketAlertsSection from '@/components/dashboard/MarketAlertsSection';
+import TopMoversSection from '@/components/dashboard/TopMoversSection';
+import CommodityHubsSection from '@/components/dashboard/CommodityHubsSection';
+import MacroAgroSection from '@/components/dashboard/MacroAgroSection';
 import { MarketsSection } from '@/components/dashboard/MarketsSection';
 import { Footer } from '@/components/layout/Footer';
 import CommoditiesTable from '@/components/dashboard/CommoditiesTable';
@@ -24,22 +28,31 @@ export default function Home() {
       
       <main>
         <Hero />
-        
+
         <SpotOffersTicker />
 
+        <MarketAlertsSection />
+
         <MarketsSection />
-        
+
+        <MacroAgroSection />
+
+        <TopMoversSection />
+
+        <CommodityHubsSection />
+
         <CommoditiesTable />
 
         <MarketAnalysis />
+
+        <NewsSection />
 
         <CommodityLinks />
 
         <FundsSection />
         
         <DivisionsSection />
-        
-        <NewsSection />
+
         <AboutSection />
         <ContactSection />
       </main>
