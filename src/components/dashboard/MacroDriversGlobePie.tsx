@@ -2,7 +2,6 @@
 
 import dynamic from 'next/dynamic';
 import { useEffect, useMemo, useState } from 'react';
-import Highcharts from 'highcharts';
 import HighchartsMap from 'highcharts/highmaps';
 import { Globe2 } from 'lucide-react';
 import { buildMacroHubPoints } from '@/lib/agroVisualData';
@@ -10,6 +9,10 @@ import { formatPercent } from '@/lib/marketOverview';
 import type { SupportedLanguage } from '@/lib/marketTime';
 
 const HighchartsReact = dynamic(() => import('highcharts-react-official'), { ssr: false });
+const MacroDriversVariablePie = dynamic(
+  () => import('@/components/dashboard/MacroDriversVariablePie'),
+  { ssr: false }
+);
 
 type MacroDriver = {
   symbol: string;
@@ -154,25 +157,10 @@ export default function MacroDriversGlobePie({ drivers, language }: Props) {
   const copy = COPY[language] ?? COPY.en;
   const [worldMap, setWorldMap] = useState<any | null>(null);
   const [selectedCode, setSelectedCode] = useState('BRA');
-  const [modulesReady, setModulesReady] = useState(false);
   const hubs = useMemo(() => buildMacroHubPoints(drivers), [drivers]);
 
   useEffect(() => {
     let cancelled = false;
-
-    async function loadModules() {
-      try {
-        await Promise.all([
-          import('highcharts/highcharts-more'),
-          import('highcharts/modules/variable-pie'),
-        ]);
-        if (!cancelled) {
-          setModulesReady(true);
-        }
-      } catch (error) {
-        console.error('Unable to load variable pie modules:', error);
-      }
-    }
 
     async function loadMap() {
       try {
@@ -186,7 +174,6 @@ export default function MacroDriversGlobePie({ drivers, language }: Props) {
       }
     }
 
-    loadModules();
     loadMap();
     return () => {
       cancelled = true;
@@ -250,8 +237,8 @@ export default function MacroDriversGlobePie({ drivers, language }: Props) {
           borderColor: '#1e293b',
           shadow: false,
           style: { color: '#e2e8f0' },
-          formatter: function (this: Highcharts.Point) {
-            const point = this as Highcharts.Point & { options: any };
+          formatter: function (this: any) {
+            const point = this as any;
             if (typeof point.value !== 'number') {
               return false;
             }
@@ -278,8 +265,8 @@ export default function MacroDriversGlobePie({ drivers, language }: Props) {
             },
             point: {
               events: {
-                click: function (this: Highcharts.Point) {
-                  const point = this as Highcharts.Point & { options: any };
+                click: function (this: any) {
+                  const point = this as any;
                   if (point.options.code3) {
                     setSelectedCode(point.options.code3);
                   }
@@ -316,69 +303,6 @@ export default function MacroDriversGlobePie({ drivers, language }: Props) {
         ],
       }) as Highcharts.Options,
     [copy, hubs, worldMap]
-  );
-
-  const pieOptions = useMemo(
-    () =>
-      ({
-        chart: {
-          type: 'variablepie',
-          backgroundColor: 'transparent',
-          height: 360,
-        },
-        title: undefined,
-        credits: { enabled: false },
-        exporting: { enabled: false },
-        tooltip: {
-          useHTML: true,
-          pointFormatter: function (this: any) {
-            return `
-              <div style="min-width:180px">
-                <div style="font-size:13px;font-weight:700;margin-bottom:8px">${this.name}</div>
-                <div style="font-size:12px;line-height:1.7">
-                  <div>${copy.tooltipImpact}: <b>${this.y}</b></div>
-                  <div>${copy.tooltipChange}: <b>${formatPercent(this.custom.change)}</b></div>
-                  <div>${copy.tooltipPrice}: <b>${this.custom.price.toFixed(2)} ${this.custom.unit}</b></div>
-                </div>
-              </div>
-            `;
-          },
-        },
-        plotOptions: {
-          variablepie: {
-            minPointSize: 24,
-            innerSize: '18%',
-            borderColor: 'rgba(15,23,42,0.12)',
-            borderWidth: 2,
-            dataLabels: {
-              enabled: true,
-              format: '{point.name}',
-              style: {
-                color: '#e2e8f0',
-                textOutline: 'none',
-                fontSize: '12px',
-              },
-            },
-          },
-        },
-        series: [
-          {
-            type: 'variablepie',
-            data: selectedHub?.slices.map((slice) => ({
-              name: slice.label,
-              y: slice.impact,
-              z: slice.z,
-              color: driverColor(slice.id),
-              custom: {
-                change: slice.change,
-                price: slice.price,
-                unit: slice.unit,
-              },
-            })) ?? [],
-          },
-        ],
-      }) as Highcharts.Options,
-    [copy, selectedHub]
   );
 
   if (!selectedHub || hubs.length === 0) {
@@ -432,11 +356,12 @@ export default function MacroDriversGlobePie({ drivers, language }: Props) {
         </div>
 
         <div className="overflow-hidden rounded-[1.7rem] border border-white/10 bg-slate-950/55 p-2">
-          {modulesReady ? (
-            <HighchartsReact highcharts={Highcharts} options={pieOptions} />
-          ) : (
-            <div className="flex h-[360px] items-center justify-center text-slate-300">Loading drivers...</div>
-          )}
+          <MacroDriversVariablePie
+            titleImpact={copy.tooltipImpact}
+            titleChange={copy.tooltipChange}
+            titlePrice={copy.tooltipPrice}
+            slices={selectedHub.slices}
+          />
         </div>
 
         <div className="grid gap-3 sm:grid-cols-2">

@@ -2,7 +2,6 @@
 
 import dynamic from 'next/dynamic';
 import { useEffect, useMemo, useState } from 'react';
-import Highcharts from 'highcharts';
 import HighchartsMap from 'highcharts/highmaps';
 import { BarChart3, Globe2, ShipWheel, Wheat } from 'lucide-react';
 import type { FaoApiResponse, MarketCommodity } from '@/lib/marketOverview';
@@ -230,8 +229,8 @@ export default function AgroExportRichMap({ commodities, faoData, language }: Pr
           backgroundColor: 'rgba(255,255,255,0.96)',
           borderColor: '#cbd5e1',
           shadow: false,
-          formatter: function (this: Highcharts.Point) {
-            const point = this as Highcharts.Point & { options: any };
+          formatter: function (this: any) {
+            const point = this as any;
             if (typeof point.value !== 'number') {
               return false;
             }
@@ -242,7 +241,7 @@ export default function AgroExportRichMap({ commodities, faoData, language }: Pr
                 <div style="font-size:12px;line-height:1.7">
                   <div>${copy.tooltipScore}: <b>${point.options.exportScore}</b></div>
                   <div>${copy.tooltipExports}: <b>US$ ${point.options.exportValueBn} bn</b></div>
-                  <div>${copy.tooltipCommodity}: <b>${point.options.mix[0]?.label ?? '--'}</b></div>
+                  <div>${copy.tooltipCommodity}: <b>${point.options.mix?.[0]?.label ?? '--'}</b></div>
                 </div>
               </div>
             `;
@@ -262,8 +261,8 @@ export default function AgroExportRichMap({ commodities, faoData, language }: Pr
             },
             point: {
               events: {
-                click: function (this: Highcharts.Point) {
-                  const point = this as Highcharts.Point & { options: any };
+                click: function (this: any) {
+                  const point = this as any;
                   if (point.options.code3) {
                     setSelectedCode(point.options.code3);
                   }
@@ -435,7 +434,7 @@ export default function AgroExportRichMap({ commodities, faoData, language }: Pr
               <BarChart3 className="h-3.5 w-3.5" />
               {copy.mixTitle}
             </div>
-            <HighchartsReact highcharts={Highcharts} options={mixOptions} />
+            <HighchartsReact highcharts={HighchartsMap} options={mixOptions} />
           </div>
         </div>
       </div>
