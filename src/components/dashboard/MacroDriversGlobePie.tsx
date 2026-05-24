@@ -26,6 +26,10 @@ type Copy = {
   subtitle: string;
   description: string;
   clickHint: string;
+  filterLabel: string;
+  top8: string;
+  top12: string;
+  all: string;
   totalLabel: string;
   dominantLabel: string;
 };
@@ -37,6 +41,10 @@ const COPY: Record<SupportedLanguage, Copy> = {
     description:
       'Variable pie interativo indicando os principais hubs macro do agronegocio. As fatias seguem a pressao dominante por hub.',
     clickHint: 'Clique em uma fatia para girar o globe ate o pais correspondente.',
+    filterLabel: 'Filtro',
+    top8: 'Top 8',
+    top12: 'Top 12',
+    all: 'All',
     totalLabel: 'Pressao combinada',
     dominantLabel: 'Pressao dominante',
   },
@@ -46,6 +54,10 @@ const COPY: Record<SupportedLanguage, Copy> = {
     description:
       'Interactive variable pie showing the leading agribusiness macro hubs. Slice height follows dominant-driver pressure.',
     clickHint: 'Click a slice to rotate the globe to the corresponding country.',
+    filterLabel: 'Filter',
+    top8: 'Top 8',
+    top12: 'Top 12',
+    all: 'All',
     totalLabel: 'Combined pressure',
     dominantLabel: 'Dominant pressure',
   },
@@ -55,6 +67,10 @@ const COPY: Record<SupportedLanguage, Copy> = {
     description:
       'Variable pie interactivo que muestra los principales hubs macro del agronegocio. La altura de la porcion sigue la presion dominante.',
     clickHint: 'Haz clic en una porcion para girar el globo al pais correspondiente.',
+    filterLabel: 'Filtro',
+    top8: 'Top 8',
+    top12: 'Top 12',
+    all: 'All',
     totalLabel: 'Presion combinada',
     dominantLabel: 'Presion dominante',
   },
@@ -64,6 +80,10 @@ const COPY: Record<SupportedLanguage, Copy> = {
     description:
       'Interactive variable pie showing the leading agribusiness macro hubs. Slice height follows dominant-driver pressure.',
     clickHint: 'Click a slice to rotate the globe to the corresponding country.',
+    filterLabel: 'Filter',
+    top8: 'Top 8',
+    top12: 'Top 12',
+    all: 'All',
     totalLabel: 'Combined pressure',
     dominantLabel: 'Dominant pressure',
   },
@@ -73,6 +93,10 @@ const COPY: Record<SupportedLanguage, Copy> = {
     description:
       'Interactive variable pie showing the leading agribusiness macro hubs. Slice height follows dominant-driver pressure.',
     clickHint: 'Click a slice to rotate the globe to the corresponding country.',
+    filterLabel: 'Filter',
+    top8: 'Top 8',
+    top12: 'Top 12',
+    all: 'All',
     totalLabel: 'Combined pressure',
     dominantLabel: 'Dominant pressure',
   },
@@ -82,10 +106,16 @@ const COPY: Record<SupportedLanguage, Copy> = {
     description:
       'Interactive variable pie showing the leading agribusiness macro hubs. Slice height follows dominant-driver pressure.',
     clickHint: 'Click a slice to rotate the globe to the corresponding country.',
+    filterLabel: 'Filter',
+    top8: 'Top 8',
+    top12: 'Top 12',
+    all: 'All',
     totalLabel: 'Combined pressure',
     dominantLabel: 'Dominant pressure',
   },
 };
+
+type TopFilter = 8 | 12 | 'all';
 
 function getRotationForHub(lon: number, lat: number): [number, number, number] {
   return [-lon, -lat, 0];
@@ -131,6 +161,7 @@ export default function MacroDriversGlobePie({ drivers, language }: Props) {
   const [worldMap, setWorldMap] = useState<any | null>(null);
   const [modulesReady, setModulesReady] = useState(false);
   const [selectedCode, setSelectedCode] = useState('BRA');
+  const [topFilter, setTopFilter] = useState<TopFilter>(8);
   const hubs = useMemo(() => buildMacroHubPoints(drivers), [drivers]);
   const graticule = useMemo(() => getGraticule(), []);
 
@@ -158,18 +189,25 @@ export default function MacroDriversGlobePie({ drivers, language }: Props) {
     };
   }, []);
 
-  useEffect(() => {
-    if (!hubs.some((hub) => hub.code3 === selectedCode) && hubs[0]) {
-      setSelectedCode(hubs[0].code3);
+  const visibleHubs = useMemo(() => {
+    if (topFilter === 'all') {
+      return hubs;
     }
-  }, [hubs, selectedCode]);
+    return hubs.slice(0, topFilter);
+  }, [hubs, topFilter]);
 
-  const selectedHub = hubs.find((hub) => hub.code3 === selectedCode) ?? hubs[0] ?? null;
+  useEffect(() => {
+    if (!visibleHubs.some((hub) => hub.code3 === selectedCode) && visibleHubs[0]) {
+      setSelectedCode(visibleHubs[0].code3);
+    }
+  }, [selectedCode, visibleHubs]);
+
+  const selectedHub = visibleHubs.find((hub) => hub.code3 === selectedCode) ?? visibleHubs[0] ?? null;
   const rotation = selectedHub ? getRotationForHub(selectedHub.lon, selectedHub.lat) : [20, -18, 0];
 
   const mapData = useMemo(
     () =>
-      hubs.map((hub, index) => {
+      visibleHubs.map((hub, index) => {
         const topSlice = hub.slices.slice().sort((a, b) => b.impact - a.impact)[0];
 
         return {
@@ -183,7 +221,7 @@ export default function MacroDriversGlobePie({ drivers, language }: Props) {
           color: pieColor(index),
         };
       }),
-    [hubs]
+    [visibleHubs]
   );
 
   const pieData = useMemo(
@@ -348,12 +386,36 @@ export default function MacroDriversGlobePie({ drivers, language }: Props) {
     [copy, graticule, mapData, pieData, rotation, selectedCode, worldMap]
   );
 
-  if (!selectedHub || hubs.length === 0) {
+  if (!selectedHub || visibleHubs.length === 0) {
     return null;
   }
 
   return (
     <figure className='rounded-[2rem] bg-white p-4 shadow-[0_18px_50px_rgba(15,23,42,0.18)] md:p-6'>
+      <div className='mb-4 flex flex-wrap items-center justify-between gap-3 px-3 pt-1'>
+        <div className='text-xs font-semibold uppercase tracking-[0.16em] text-slate-500'>{copy.filterLabel}</div>
+        <div className='inline-flex rounded-full border border-slate-200 bg-slate-50 p-1'>
+          {[
+            { value: 8 as TopFilter, label: copy.top8 },
+            { value: 12 as TopFilter, label: copy.top12 },
+            { value: 'all' as TopFilter, label: copy.all },
+          ].map((option) => {
+            const active = topFilter === option.value;
+            return (
+              <button
+                key={String(option.value)}
+                type='button'
+                onClick={() => setTopFilter(option.value)}
+                className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${
+                  active ? 'bg-slate-900 text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                {option.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
       {worldMap && modulesReady ? (
         <HighchartsReact highcharts={HighchartsMap} constructorType='mapChart' options={chartOptions} />
       ) : (
