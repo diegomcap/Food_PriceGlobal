@@ -22,12 +22,26 @@ import { getSupabaseAdmin } from '@/lib/supabase/server';
 
 const OBSERVED_DATASETS: PipelineDatasetKey[] = ['commodities', 'macro_drivers'];
 
-function isPremiumConfigured(dataset: PipelineDatasetKey) {
+export function isPremiumConfigured(dataset: PipelineDatasetKey) {
   if (dataset === 'commodities' || dataset === 'macro_drivers') {
     return Boolean(process.env.BARCHART_API_KEY) || Boolean(process.env.TRADING_ECONOMICS_API_KEY);
   }
 
   return false;
+}
+
+function getDatasetSourceSeverity(
+  datasetKey: PipelineDatasetKey,
+  source: string,
+  premiumConfigured: boolean
+) {
+  const severity = getMarketSourceSeverity(datasetKey, source);
+
+  if (!premiumConfigured && getMarketSourceTier(datasetKey, source) === 'tertiary') {
+    return 'healthy' as const;
+  }
+
+  return severity;
 }
 
 function mapRunRow(row: any): IngestionRunSummary {
@@ -95,17 +109,18 @@ async function buildDatasetSnapshot(
     const latest = await readLatestCommodityQuotes();
     const currentSource = latest?.source ?? latestRun?.sourceKey ?? 'unknown';
     const updatedAt = latest?.updatedAt ?? latestRun?.sourceUpdatedAt ?? undefined;
+    const premiumConfigured = isPremiumConfigured(datasetKey);
 
     return {
       datasetKey,
       currentSource,
       currentSourceTier: getMarketSourceTier(datasetKey, currentSource),
-      currentSourceSeverity: getMarketSourceSeverity(datasetKey, currentSource),
+      currentSourceSeverity: getDatasetSourceSeverity(datasetKey, currentSource, premiumConfigured),
       updatedAt,
       recordsAvailable: latest?.quotes.length ?? 0,
       freshnessStatus: getFreshnessStatus(datasetKey, updatedAt, currentSource),
       refreshDue: isRefreshDue(datasetKey, updatedAt),
-      premiumConfigured: isPremiumConfigured(datasetKey),
+      premiumConfigured,
       latestRun,
       runStats24h: getRunStats24h(datasetRuns),
     };
@@ -114,17 +129,18 @@ async function buildDatasetSnapshot(
   const latest = await readLatestMacroDrivers();
   const currentSource = latest?.source ?? latestRun?.sourceKey ?? 'unknown';
   const updatedAt = latest?.updatedAt ?? latestRun?.sourceUpdatedAt ?? undefined;
+  const premiumConfigured = isPremiumConfigured(datasetKey);
 
   return {
     datasetKey,
     currentSource,
     currentSourceTier: getMarketSourceTier(datasetKey, currentSource),
-    currentSourceSeverity: getMarketSourceSeverity(datasetKey, currentSource),
+    currentSourceSeverity: getDatasetSourceSeverity(datasetKey, currentSource, premiumConfigured),
     updatedAt,
     recordsAvailable: latest?.drivers.length ?? 0,
     freshnessStatus: getFreshnessStatus(datasetKey, updatedAt, currentSource),
     refreshDue: isRefreshDue(datasetKey, updatedAt),
-    premiumConfigured: isPremiumConfigured(datasetKey),
+    premiumConfigured,
     latestRun,
     runStats24h: getRunStats24h(datasetRuns),
   };
@@ -135,7 +151,7 @@ function buildAlerts(datasets: DatasetPipelineSnapshot[]) {
 
   for (const dataset of datasets) {
     if (
-      dataset.currentSourceTier === 'tertiary' ||
+      (dataset.currentSourceTier === 'tertiary' && dataset.premiumConfigured) ||
       dataset.currentSourceTier === 'persisted' ||
       dataset.currentSourceTier === 'fallback'
     ) {
@@ -222,7 +238,10 @@ function getPublicDatasetReliabilityStatus(dataset: DatasetPipelineSnapshot): Pi
     return 'critical';
   }
 
-  if (dataset.freshnessStatus === 'stale' || dataset.currentSourceTier === 'tertiary') {
+  if (
+    dataset.freshnessStatus === 'stale' ||
+    (dataset.currentSourceTier === 'tertiary' && dataset.premiumConfigured)
+  ) {
     return 'warning';
   }
 

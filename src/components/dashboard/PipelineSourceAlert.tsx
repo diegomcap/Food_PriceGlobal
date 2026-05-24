@@ -9,10 +9,11 @@ type Props = {
   dataset: PipelineDatasetKey;
   source?: string;
   language: SupportedLanguage;
+  premiumConfigured?: boolean;
 };
 
-export default function PipelineSourceAlert({ dataset, source, language }: Props) {
-  const alert = getPipelineSourceAlert(dataset, source, language);
+export default function PipelineSourceAlert({ dataset, source, language, premiumConfigured = true }: Props) {
+  const alert = getPipelineSourceAlert(dataset, source, language, premiumConfigured);
 
   if (!alert) {
     return null;

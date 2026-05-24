@@ -163,7 +163,8 @@ export function getPipelineAlertTone(severity: PipelineAlertSeverity) {
 export function getPipelineSourceAlert(
   dataset: PipelineDatasetKey,
   source: string | undefined,
-  language: SupportedLanguage
+  language: SupportedLanguage,
+  premiumConfigured = true
 ) {
   const tier = getMarketSourceTier(dataset, source);
   const sourceLabel = getSourceLabel(source ?? 'unknown', language);
@@ -171,6 +172,10 @@ export function getPipelineSourceAlert(
   const copy = ALERT_COPY[language] ?? ALERT_COPY.en;
 
   if (tier === 'tertiary') {
+    if (!premiumConfigured) {
+      return null;
+    }
+
     return {
       severity: 'warning' as const,
       tier,

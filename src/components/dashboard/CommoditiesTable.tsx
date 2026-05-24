@@ -25,6 +25,7 @@ interface CommoditiesApiResponse {
   quotes: CommodityQuote[];
   source: string;
   updatedAt: string;
+  premiumConfigured: boolean;
 }
 
 const SYMBOL_MAP: Record<string, { id: string; category: string }> = {
@@ -52,6 +53,7 @@ export default function CommoditiesTable() {
   const [error, setError] = useState<string | null>(null);
   const [lastUpdate, setLastUpdate] = useState<Date | null>(null);
   const [dataSource, setDataSource] = useState<string>('market-data');
+  const [premiumConfigured, setPremiumConfigured] = useState(false);
 
   const fetchCommodityData = async () => {
     setLoading(true);
@@ -94,6 +96,7 @@ export default function CommoditiesTable() {
         setCommodities(newCommodities);
         setLastUpdate(new Date(data.updatedAt || Date.now()));
         setDataSource(data.source || 'market-data');
+        setPremiumConfigured(data.premiumConfigured ?? false);
     } catch (error) {
       console.error('Failed to fetch commodity data:', error);
       setError(error instanceof Error ? error.message : 'Unknown error occurred');
@@ -180,6 +183,7 @@ export default function CommoditiesTable() {
                 dataset="commodities"
                 source={dataSource}
                 language={language as SupportedLanguage}
+                premiumConfigured={premiumConfigured}
               />
             </div>
           </div>

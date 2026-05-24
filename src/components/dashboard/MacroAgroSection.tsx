@@ -20,6 +20,7 @@ type MacroApiResponse = {
   drivers: MacroDriver[];
   source: string;
   updatedAt: string;
+  premiumConfigured: boolean;
 };
 
 const COPY = {
@@ -130,6 +131,7 @@ export default function MacroAgroSection() {
   const [source, setSource] = useState<string>('yahoo-finance');
   const [updatedAt, setUpdatedAt] = useState<string>('');
   const [loading, setLoading] = useState(true);
+  const [premiumConfigured, setPremiumConfigured] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -146,6 +148,7 @@ export default function MacroAgroSection() {
           setDrivers(data.drivers);
           setSource(data.source);
           setUpdatedAt(data.updatedAt);
+          setPremiumConfigured(data.premiumConfigured ?? false);
         }
       } catch (error) {
         console.error('Unable to load macro drivers:', error);
@@ -196,6 +199,7 @@ export default function MacroAgroSection() {
             dataset="macro_drivers"
             source={source}
             language={language as SupportedLanguage}
+            premiumConfigured={premiumConfigured}
           />
         </div>
 
