@@ -6,6 +6,7 @@ import { useTranslation } from '@/context/TranslationContext';
 import { formatDateTime, type SupportedLanguage } from '@/lib/marketTime';
 import { formatPercent, getSourceLabel } from '@/lib/marketOverview';
 import DataFreshnessBadge from '@/components/dashboard/DataFreshnessBadge';
+import MacroDriversGlobePie from '@/components/dashboard/MacroDriversGlobePie';
 import PipelineSourceAlert from '@/components/dashboard/PipelineSourceAlert';
 
 type MacroDriver = {
@@ -206,29 +207,36 @@ export default function MacroAgroSection() {
         {loading && drivers.length === 0 ? (
           <div className="rounded-3xl border border-white/10 bg-white/5 p-8 text-slate-300">{copy.loading}</div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
-            {drivers.map((driver) => {
-              const Icon = getIcon(driver.symbol);
-              const change = ((driver.price - driver.previousClose) / driver.previousClose) * 100;
-              return (
-                <article key={driver.symbol} className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
-                  <div className="flex items-start justify-between gap-4 mb-5">
-                    <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center">
-                      <Icon className="w-6 h-6 text-white" />
-                    </div>
-                    <div className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${change >= 0 ? 'bg-emerald-500/15 text-emerald-300' : 'bg-red-500/15 text-red-300'}`}>
-                      {change >= 0 ? <TrendingUp className="w-3.5 h-3.5 mr-1" /> : <TrendingDown className="w-3.5 h-3.5 mr-1" />}
-                      {formatPercent(change)}
-                    </div>
-                  </div>
+          <div className="space-y-6">
+            <MacroDriversGlobePie
+              drivers={drivers}
+              language={language as SupportedLanguage}
+            />
 
-                  <h3 className="text-xl font-semibold text-white mb-2">{driver.label}</h3>
-                  <div className="text-3xl font-black text-white mb-1">{driver.price.toFixed(2)}</div>
-                  <div className="text-sm text-slate-400 mb-4">{driver.unit}</div>
-                  <p className="text-sm leading-6 text-slate-300">{copy.notes[driver.symbol as keyof typeof copy.notes]}</p>
-                </article>
-              );
-            })}
+            <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
+              {drivers.map((driver) => {
+                const Icon = getIcon(driver.symbol);
+                const change = ((driver.price - driver.previousClose) / driver.previousClose) * 100;
+                return (
+                  <article key={driver.symbol} className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
+                    <div className="mb-5 flex items-start justify-between gap-4">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10">
+                        <Icon className="h-6 w-6 text-white" />
+                      </div>
+                      <div className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${change >= 0 ? 'bg-emerald-500/15 text-emerald-300' : 'bg-red-500/15 text-red-300'}`}>
+                        {change >= 0 ? <TrendingUp className="mr-1 h-3.5 w-3.5" /> : <TrendingDown className="mr-1 h-3.5 w-3.5" />}
+                        {formatPercent(change)}
+                      </div>
+                    </div>
+
+                    <h3 className="mb-2 text-xl font-semibold text-white">{driver.label}</h3>
+                    <div className="mb-1 text-3xl font-black text-white">{driver.price.toFixed(2)}</div>
+                    <div className="mb-4 text-sm text-slate-400">{driver.unit}</div>
+                    <p className="text-sm leading-6 text-slate-300">{copy.notes[driver.symbol as keyof typeof copy.notes]}</p>
+                  </article>
+                );
+              })}
+            </div>
           </div>
         )}
 

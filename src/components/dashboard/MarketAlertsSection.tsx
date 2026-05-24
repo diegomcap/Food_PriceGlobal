@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { AlertTriangle, ArrowDownRight, ArrowUpRight, Radar, ShieldAlert } from 'lucide-react';
 import { useTranslation } from '@/context/TranslationContext';
 import { formatDateTime, formatMonthYear, type SupportedLanguage } from '@/lib/marketTime';
+import AgroExportRichMap from '@/components/dashboard/AgroExportRichMap';
 import {
   formatPercent,
   getSourceLabel,
@@ -495,6 +496,14 @@ export default function MarketAlertsSection() {
                 </article>
               ))}
             </div>
+
+            {commodities.length > 0 && (
+              <AgroExportRichMap
+                commodities={commodities}
+                faoData={faoData}
+                language={language as SupportedLanguage}
+              />
+            )}
           </div>
         )}
       </div>
