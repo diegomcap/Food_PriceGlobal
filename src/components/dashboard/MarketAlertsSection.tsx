@@ -14,11 +14,27 @@ import {
   type MarketCommodity,
 } from '@/lib/marketOverview';
 
+type MacroDriver = {
+  symbol: string;
+  label: string;
+  price: number;
+  previousClose: number;
+  unit: string;
+};
+
+type MacroApiResponse = {
+  drivers: MacroDriver[];
+  source: string;
+  updatedAt: string;
+};
+
 type AlertCard = {
   id: string;
   tag: string;
   title: string;
   detail: string;
+  rule: string;
+  action: string;
   tone: 'emerald' | 'amber' | 'red' | 'blue';
 };
 
@@ -27,162 +43,59 @@ const COPY = {
     eyebrow: 'Mesa de Inteligencia',
     title: 'Alertas do Dia',
     subtitle: 'Leituras curtas e acionaveis para risco, timing e movimentos-chave do mercado.',
-    deskNote: 'Resumo editorial montado a partir da referencia FAO e da cesta monitorada de commodities.',
+    deskNote: 'Alertas acionados por regras que combinam FAO, futuros e drivers macro para margem, hedge e fluxo.',
     loading: 'Montando alertas com base nos dados mais recentes...',
     fallback: 'Operando em leitura de contingencia',
     lastUpdate: 'Ultima leitura',
+    ruleLabel: 'Regra',
+    actionLabel: 'Acao recomendada',
     faoTag: 'FAO',
     futuresTag: 'Futuros',
     riskTag: 'Risco',
     flowTag: 'Fluxo',
-    faoTitle: (direction: string, change: string, month: string) =>
-      `FAO: indice global de alimentos ${direction} ${change} em ${month}`,
-    faoDetail: (value: number, source: string) =>
-      `Leitura oficial em ${value.toFixed(1)} pontos; sinal consolidado para contratos e repasse internacional. Fonte ${source}.`,
-    moverTitle: (name: string, direction: string) => `${name} lidera os movimentos do dia e opera em ${direction}`,
-    moverDetail: (market: string, price: number, unit: string, change: string) =>
-      `${market} marca ${price.toFixed(2)} ${unit}, variando ${change}; acompanhar impacto em hedge, spread e origens.`,
-    cerealsTitle: (direction: string, month: string) => `Cereais entram em ${direction} na referencia oficial de ${month}`,
-    cerealsDetail: (value: number, change: string) =>
-      `Subindice FAO de cereais em ${value.toFixed(1)} pontos, com variacao mensal de ${change}; monitorar milho e trigo no fluxo global.`,
-    crossTitle: (label: string, direction: string) => `${label} concentra o ajuste mais sensivel da cesta monitorada`,
-    crossDetail: (label: string, value: number, change: string, month: string) =>
-      `${label} fecha ${month} em ${value.toFixed(1)} pontos, com movimento de ${change}; revisar margem e custo de reposicao.`,
   },
   en: {
     eyebrow: 'Market Desk',
     title: 'Today Alerts',
     subtitle: 'Short and actionable reads for risk, timing and key market moves.',
-    deskNote: 'Editorial brief assembled from the FAO reference and the monitored commodities basket.',
+    deskNote: 'Alerts are triggered by rules combining FAO, futures and macro drivers for margin, hedging and flow.',
     loading: 'Building alerts from the latest market inputs...',
     fallback: 'Running on contingency snapshot',
     lastUpdate: 'Last reading',
+    ruleLabel: 'Rule',
+    actionLabel: 'Recommended action',
     faoTag: 'FAO',
     futuresTag: 'Futures',
     riskTag: 'Risk',
     flowTag: 'Flow',
-    faoTitle: (direction: string, change: string, month: string) =>
-      `FAO: global food index ${direction} ${change} in ${month}`,
-    faoDetail: (value: number, source: string) =>
-      `Official print at ${value.toFixed(1)} points; a consolidated signal for contracts and international price pass-through. Source ${source}.`,
-    moverTitle: (name: string, direction: string) => `${name} leads today's monitored moves and trades ${direction}`,
-    moverDetail: (market: string, price: number, unit: string, change: string) =>
-      `${market} prints ${price.toFixed(2)} ${unit}, moving ${change}; track hedge, spread and origin risk.`,
-    cerealsTitle: (direction: string, month: string) => `Cereals move ${direction} in the official ${month} reference`,
-    cerealsDetail: (value: number, change: string) =>
-      `FAO cereals sub-index at ${value.toFixed(1)} points with a monthly move of ${change}; monitor corn and wheat flow.`,
-    crossTitle: (label: string, direction: string) => `${label} shows the sharpest adjustment inside the monitored basket`,
-    crossDetail: (label: string, value: number, change: string, month: string) =>
-      `${label} closes ${month} at ${value.toFixed(1)} points, moving ${change}; revisit margin and replacement cost.`,
   },
   es: {
     eyebrow: 'Mesa de Inteligencia',
     title: 'Alertas del Dia',
     subtitle: 'Lecturas cortas y accionables para riesgo, timing y movimientos clave del mercado.',
-    deskNote: 'Resumen editorial armado con la referencia FAO y la cesta monitoreada de commodities.',
+    deskNote: 'Alertas activadas por reglas que combinan FAO, futuros y drivers macro para margen, hedge y flujo.',
     loading: 'Armando alertas con base en los datos mas recientes...',
     fallback: 'Operando en modo de contingencia',
     lastUpdate: 'Ultima lectura',
+    ruleLabel: 'Regla',
+    actionLabel: 'Accion recomendada',
     faoTag: 'FAO',
     futuresTag: 'Futuros',
     riskTag: 'Riesgo',
     flowTag: 'Flujo',
-    faoTitle: (direction: string, change: string, month: string) =>
-      `FAO: el indice global de alimentos ${direction} ${change} en ${month}`,
-    faoDetail: (value: number, source: string) =>
-      `Lectura oficial en ${value.toFixed(1)} puntos; senal consolidada para contratos y traslado internacional de precios. Fuente ${source}.`,
-    moverTitle: (name: string, direction: string) => `${name} lidera los movimientos del dia y opera ${direction}`,
-    moverDetail: (market: string, price: number, unit: string, change: string) =>
-      `${market} marca ${price.toFixed(2)} ${unit}, variando ${change}; seguir impacto en hedge, spread y origenes.`,
-    cerealsTitle: (direction: string, month: string) => `Los cereales entran en ${direction} en la referencia oficial de ${month}`,
-    cerealsDetail: (value: number, change: string) =>
-      `Subindice FAO de cereales en ${value.toFixed(1)} puntos, con variacion mensual de ${change}; monitorear maiz y trigo en el flujo global.`,
-    crossTitle: (label: string, direction: string) => `${label} concentra el ajuste mas sensible de la cesta monitoreada`,
-    crossDetail: (label: string, value: number, change: string, month: string) =>
-      `${label} cierra ${month} en ${value.toFixed(1)} puntos, con movimiento de ${change}; revisar margen y costo de reposicion.`,
-  },
-  ru: {
-    eyebrow: 'Rynochnyy desk',
-    title: 'Alerty dnya',
-    subtitle: 'Korotkie i deystvennye chteniya po risku, taimingu i klyuchevym dvizheniyam rynka.',
-    deskNote: 'Redaktsionnyy brif, sobrannyy na osnove orientira FAO i otslezhivaemoy tovarnoy korziny.',
-    loading: 'Sobiraem alerty po poslednim rynochnym dannym...',
-    fallback: 'Rabota v rezervnom rezhime',
-    lastUpdate: 'Poslednee chtenie',
-    faoTag: 'FAO',
-    futuresTag: 'Fyuchersy',
-    riskTag: 'Riski',
-    flowTag: 'Potok',
-    faoTitle: (direction: string, change: string, month: string) =>
-      `FAO: globalnyy indeks prodovolstviya ${direction} na ${change} v ${month}`,
-    faoDetail: (value: number, source: string) =>
-      `Ofitsialnaya otsenka ${value.toFixed(1)} punkta; konsolidirovannyy signal dlya kontraktov i mezhdunarodnogo perenosa tsen. Istochnik ${source}.`,
-    moverTitle: (name: string, direction: string) => `${name} vozglavlyaet dvizheniya dnya i torguetsya ${direction}`,
-    moverDetail: (market: string, price: number, unit: string, change: string) =>
-      `${market} pokazyvaet ${price.toFixed(2)} ${unit}, izmenenie ${change}; otsenivat hedge, spread i risk proiskhozhdeniya.`,
-    cerealsTitle: (direction: string, month: string) => `Zernovye dvigayutsya ${direction} v ofitsialnoy ssylke za ${month}`,
-    cerealsDetail: (value: number, change: string) =>
-      `Subindeks FAO po zernovym na urovne ${value.toFixed(1)} punkta s mesyachnym izmeneniem ${change}; sledit za kukuruzoy i pshenitsey.`,
-    crossTitle: (label: string, direction: string) => `${label} pokazyvaet samuyu chuvstvitelnuyu korrektsiyu v otslezhivaemoy korzine`,
-    crossDetail: (label: string, value: number, change: string, month: string) =>
-      `${label} zakryvaet ${month} na urovne ${value.toFixed(1)} punkta, dvizhenie ${change}; pereotsenit marzhu i stoimost zameny.`,
-  },
-  ar: {
-    eyebrow: 'مكتب السوق',
-    title: 'تنبيهات اليوم',
-    subtitle: 'قراءات قصيرة وقابلة للتنفيذ للمخاطر والتوقيت والتحركات الرئيسية في السوق.',
-    deskNote: 'ملخص تحريري مبني على مرجع FAO وسلة السلع التي تتم مراقبتها.',
-    loading: 'جار بناء التنبيهات من احدث بيانات السوق...',
-    fallback: 'يعمل في وضع احتياطي',
-    lastUpdate: 'اخر قراءة',
-    faoTag: 'FAO',
-    futuresTag: 'العقود',
-    riskTag: 'مخاطر',
-    flowTag: 'تدفق',
-    faoTitle: (direction: string, change: string, month: string) =>
-      `FAO: مؤشر الغذاء العالمي ${direction} ${change} في ${month}`,
-    faoDetail: (value: number, source: string) =>
-      `القراءة الرسمية عند ${value.toFixed(1)} نقطة؛ اشارة موحدة للعقود وانتقال الاسعار دوليا. المصدر ${source}.`,
-    moverTitle: (name: string, direction: string) => `${name} يقود تحركات اليوم ويتداول ${direction}`,
-    moverDetail: (market: string, price: number, unit: string, change: string) =>
-      `${market} يسجل ${price.toFixed(2)} ${unit} مع تغير ${change}؛ راقب التحوط والفارق ومخاطر المنشا.`,
-    cerealsTitle: (direction: string, month: string) => `الحبوب تتحرك ${direction} في المرجع الرسمي لشهر ${month}`,
-    cerealsDetail: (value: number, change: string) =>
-      `المؤشر الفرعي للحبوب من FAO عند ${value.toFixed(1)} نقطة مع تغير شهري ${change}؛ راقب الذرة والقمح.`,
-    crossTitle: (label: string, direction: string) => `${label} يسجل اكثر تعديل حساسية داخل السلة المراقبة`,
-    crossDetail: (label: string, value: number, change: string, month: string) =>
-      `${label} يغلق ${month} عند ${value.toFixed(1)} نقطة مع حركة ${change}؛ اعد تقييم الهامش وتكلفة الاحلال.`,
-  },
-  zh: {
-    eyebrow: '市场情报台',
-    title: '今日预警',
-    subtitle: '围绕风险、时机和关键市场波动的短而可执行的读数。',
-    deskNote: '基于 FAO 参考读数和监控商品篮子生成的编辑简报。',
-    loading: '正在根据最新市场输入生成预警...',
-    fallback: '当前运行在后备模式',
-    lastUpdate: '最近读取',
-    faoTag: 'FAO',
-    futuresTag: '期货',
-    riskTag: '风险',
-    flowTag: '流向',
-    faoTitle: (direction: string, change: string, month: string) =>
-      `FAO：全球食品价格指数在 ${month} ${direction} ${change}`,
-    faoDetail: (value: number, source: string) =>
-      `官方读数为 ${value.toFixed(1)} 点；为合约和国际价格传导提供综合信号。来源 ${source}。`,
-    moverTitle: (name: string, direction: string) => `${name} 领涨今日监控波动并处于 ${direction}`,
-    moverDetail: (market: string, price: number, unit: string, change: string) =>
-      `${market} 报 ${price.toFixed(2)} ${unit}，变动 ${change}；需关注对套保、价差和产地风险的影响。`,
-    cerealsTitle: (direction: string, month: string) => `谷物在 ${month} 官方参考中呈现 ${direction}`,
-    cerealsDetail: (value: number, change: string) =>
-      `FAO 谷物子指数为 ${value.toFixed(1)} 点，月度变动 ${change}；应继续跟踪玉米和小麦流向。`,
-    crossTitle: (label: string, direction: string) => `${label} 在监控篮子中出现最敏感的 ${direction} 调整`,
-    crossDetail: (label: string, value: number, change: string, month: string) =>
-      `${label} 在 ${month} 收于 ${value.toFixed(1)} 点，变动 ${change}；需要重新评估利润率和替代成本。`,
   },
 } as const;
 
 function formatMagnitude(change: number) {
   return `${Math.abs(change).toFixed(2)}%`;
+}
+
+function getCopyLanguage(language: string) {
+  if (language === 'pt' || language === 'es') {
+    return language;
+  }
+
+  return 'en';
 }
 
 function toneClasses(tone: AlertCard['tone']) {
@@ -198,14 +111,44 @@ function toneClasses(tone: AlertCard['tone']) {
   }
 }
 
+function getChange(price: number, previousClose: number) {
+  if (!previousClose) {
+    return 0;
+  }
+
+  return ((price - previousClose) / previousClose) * 100;
+}
+
+function getDriverChange(drivers: MacroDriver[], symbol: string) {
+  const driver = drivers.find((item) => item.symbol === symbol);
+  return driver ? getChange(driver.price, driver.previousClose) : 0;
+}
+
+function getCommodityBySymbol(commodities: MarketCommodity[], symbol: string) {
+  return commodities.find((item) => item.symbol === symbol) ?? null;
+}
+
+function buildSourcesLabel(
+  commoditiesSource: string,
+  macroSource: string,
+  language: SupportedLanguage
+) {
+  return Array.from(new Set([getSourceLabel(commoditiesSource, language), getSourceLabel(macroSource, language), 'FAO'])).join(
+    ' / '
+  );
+}
+
 export default function MarketAlertsSection() {
   const { t, language } = useTranslation();
-  const activeLanguage = (['pt', 'en', 'es', 'ru', 'ar', 'zh'].includes(language) ? language : 'en') as keyof typeof COPY;
+  const activeLanguage = getCopyLanguage(language);
   const copy = COPY[activeLanguage];
   const [faoData, setFaoData] = useState<FaoApiResponse | null>(null);
   const [commoditiesSource, setCommoditiesSource] = useState<string>('yahoo-finance');
   const [commoditiesUpdatedAt, setCommoditiesUpdatedAt] = useState<string>('');
   const [commodities, setCommodities] = useState<MarketCommodity[]>([]);
+  const [macroDrivers, setMacroDrivers] = useState<MacroDriver[]>([]);
+  const [macroSource, setMacroSource] = useState<string>('yahoo-finance-macro');
+  const [macroUpdatedAt, setMacroUpdatedAt] = useState<string>('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -213,23 +156,28 @@ export default function MarketAlertsSection() {
 
     async function loadFeeds() {
       try {
-        const [faoResponse, commoditiesResponse] = await Promise.all([
+        const [faoResponse, commoditiesResponse, macroResponse] = await Promise.all([
           fetch('/api/fao-food-price-index'),
           fetch('/api/commodities'),
+          fetch('/api/macro-drivers'),
         ]);
 
-        if (!faoResponse.ok || !commoditiesResponse.ok) {
+        if (!faoResponse.ok || !commoditiesResponse.ok || !macroResponse.ok) {
           throw new Error('Unable to fetch one or more market feeds');
         }
 
         const faoJson = (await faoResponse.json()) as FaoApiResponse;
         const commoditiesJson = (await commoditiesResponse.json()) as CommoditiesApiResponse;
+        const macroJson = (await macroResponse.json()) as MacroApiResponse;
 
         if (!cancelled) {
           setFaoData(faoJson);
           setCommodities(mapCommodityQuotes(commoditiesJson.quotes));
           setCommoditiesSource(commoditiesJson.source);
           setCommoditiesUpdatedAt(commoditiesJson.updatedAt);
+          setMacroDrivers(macroJson.drivers);
+          setMacroSource(macroJson.source);
+          setMacroUpdatedAt(macroJson.updatedAt);
         }
       } catch (error) {
         console.error('Unable to build market alerts:', error);
@@ -249,158 +197,247 @@ export default function MarketAlertsSection() {
   }, []);
 
   const alerts = useMemo(() => {
-    if (!faoData || commodities.length === 0) {
+    if (!faoData || commodities.length === 0 || macroDrivers.length === 0) {
       return [] as AlertCard[];
     }
 
     const latestMonth = formatMonthYear(new Date(`${faoData.latest.date}-01T12:00:00Z`), language as SupportedLanguage);
-    const foodChange = ((faoData.latest.food - faoData.previous.food) / faoData.previous.food) * 100;
     const cerealsChange = ((faoData.latest.cereals - faoData.previous.cereals) / faoData.previous.cereals) * 100;
     const oilsChange = ((faoData.latest.oils - faoData.previous.oils) / faoData.previous.oils) * 100;
     const sugarChange = ((faoData.latest.sugar - faoData.previous.sugar) / faoData.previous.sugar) * 100;
     const biggestMover = [...commodities].sort((a, b) => Math.abs(b.change) - Math.abs(a.change))[0];
     const higherFaoMove =
       Math.abs(oilsChange) >= Math.abs(sugarChange)
-        ? { label: t('oils_tab'), value: faoData.latest.oils, change: oilsChange }
-        : { label: t('sugar_tab'), value: faoData.latest.sugar, change: sugarChange };
+        ? { label: t('oils_tab'), value: faoData.latest.oils, change: oilsChange, symbol: 'ZL=F' }
+        : { label: t('sugar_tab'), value: faoData.latest.sugar, change: sugarChange, symbol: 'SB=F' };
+    const correlatedContract = getCommodityBySymbol(commodities, higherFaoMove.symbol);
+    const corn = getCommodityBySymbol(commodities, 'ZC=F');
+    const wheat = getCommodityBySymbol(commodities, 'ZW=F');
+    const grainComplexChange = ((corn?.change ?? 0) + (wheat?.change ?? 0)) / 2;
+    const dollarChange = getDriverChange(macroDrivers, 'DX=F');
+    const crudeChange = getDriverChange(macroDrivers, 'CL=F');
+    const dieselChange = getDriverChange(macroDrivers, 'HO=F');
+    const freightChange = getDriverChange(macroDrivers, 'BDI');
+    const goldChange = getDriverChange(macroDrivers, 'GC=F');
+    const macroStress = dollarChange > 0.25 && (dieselChange > 1 || freightChange > 1 || crudeChange > 1);
+    const macroRelief = dollarChange < -0.2 && dieselChange < 0 && freightChange < 0;
+    const cerealsConfirmedUp = cerealsChange > 0 && grainComplexChange > 0;
+    const cerealsConfirmedDown = cerealsChange < 0 && grainComplexChange < 0;
+    const replacementStress = higherFaoMove.change > 2 || (correlatedContract?.change ?? 0) > 1 || goldChange > 0.4;
+
+    if (activeLanguage === 'pt') {
+      return [
+        {
+          id: 'macro-pressure',
+          tag: copy.riskTag,
+          title: macroStress
+            ? 'Dolar, diesel e frete comprimem a margem exportadora'
+            : macroRelief
+              ? 'Dolar e logistica aliviam o custo de escoamento'
+              : 'Pressao macro logistica segue em observacao taticamente',
+          detail: `DXY ${formatPercent(dollarChange)}, ULSD Diesel ${formatPercent(dieselChange)}, Baltic Dry ${formatPercent(freightChange)} e WTI ${formatPercent(crudeChange)}. O conjunto ${macroStress ? 'aumenta' : macroRelief ? 'devolve folego ao' : 'mantem em monitoramento o'} custo de hedge, frete e repasse internacional.`,
+          rule: 'DXY acima de +0.25% junto com diesel, frete ou WTI acima de +1.00%.',
+          action: macroStress
+            ? 'Revisar hedge cambial, frete e politica de repasse nas pontas exportadoras.'
+            : macroRelief
+              ? 'Avaliar janela para aliviar trava curta e recompor margem logistica.'
+              : 'Manter acompanhamento cruzado entre cambio, diesel e frete antes de reposicionar hedge.',
+          tone: macroStress ? 'red' : macroRelief ? 'emerald' : 'amber',
+        },
+        {
+          id: 'contract-breakout',
+          tag: copy.futuresTag,
+          title:
+            Math.abs(biggestMover.change) >= 2
+              ? `${t(biggestMover.id)} rompe faixa e acelera a volatilidade`
+              : `${t(biggestMover.id)} lidera o deslocamento tatico do dia`,
+          detail: `${biggestMover.market} marca ${biggestMover.price.toFixed(2)} ${biggestMover.unit}, com variacao de ${formatPercent(biggestMover.change)}. O contrato concentra o maior deslocamento intradiario da cesta monitorada.`,
+          rule: 'Maior contrato monitorado com deslocamento absoluto a partir de 2.00% no dia.',
+          action:
+            Math.abs(biggestMover.change) >= 2
+              ? 'Reavaliar hedge, spread e origem do ativo antes de ampliar exposicao.'
+              : 'Monitorar continuidade do movimento antes de ajustar travas ou compras.',
+          tone: Math.abs(biggestMover.change) >= 2.5 ? 'red' : Math.abs(biggestMover.change) >= 1.25 ? 'amber' : 'blue',
+        },
+        {
+          id: 'cereals-confirmation',
+          tag: copy.flowTag,
+          title: cerealsConfirmedUp
+            ? `FAO e futuros confirmam aperto em cereais em ${latestMonth}`
+            : cerealsConfirmedDown
+              ? `FAO e futuros sinalizam alivio em cereais em ${latestMonth}`
+              : `Cereais ainda pedem confirmacao adicional em ${latestMonth}`,
+          detail: `FAO Cereais ${formatPercent(cerealsChange)}, Milho ${formatPercent(corn?.change ?? 0)} e Trigo ${formatPercent(wheat?.change ?? 0)}. A leitura cruza referencia oficial e futuros para basis, racao e fluxo global.`,
+          rule: 'FAO Cereais e a media de milho e trigo precisam apontar na mesma direcao.',
+          action: cerealsConfirmedUp
+            ? 'Monitorar compra, basis e repasse em milho e trigo para proteger margem.'
+            : cerealsConfirmedDown
+              ? 'Avaliar compras escalonadas e cobertura mais leve se o alivio persistir.'
+              : 'Esperar confirmacao do complexo de graos antes de mexer no plano de cobertura.',
+          tone: cerealsConfirmedUp ? 'red' : cerealsConfirmedDown ? 'emerald' : 'blue',
+        },
+        {
+          id: 'replacement-cost',
+          tag: copy.faoTag,
+          title: replacementStress
+            ? `${higherFaoMove.label} entra em pressao de reposicao`
+            : `${higherFaoMove.label} segue sem gatilho forte de reposicao`,
+          detail: `${higherFaoMove.label} fecha ${latestMonth} em ${higherFaoMove.value.toFixed(1)} pontos com ${formatPercent(higherFaoMove.change)}. ${correlatedContract ? `${t(correlatedContract.id)} em ${formatPercent(correlatedContract.change)}.` : ''} Ouro em ${formatPercent(goldChange)} como termometro defensivo.`,
+          rule: 'Subindice FAO dominante acima de 2.00% ou confirmado pelo contrato correlato e pelo ouro.',
+          action: replacementStress
+            ? 'Revisar repasse, estoque curto e cobertura de insumos ou derivados correlatos.'
+            : 'Seguir monitorando custo de reposicao sem antecipar ajuste comercial forte.',
+          tone: replacementStress ? 'amber' : 'blue',
+        },
+      ] as AlertCard[];
+    }
+
+    if (activeLanguage === 'es') {
+      return [
+        {
+          id: 'macro-pressure',
+          tag: copy.riskTag,
+          title: macroStress
+            ? 'Dolar, diesel y flete comprimen el margen exportador'
+            : macroRelief
+              ? 'Dolar y logistica alivian el costo de salida'
+              : 'La presion macro logistica sigue bajo observacion tactica',
+          detail: `DXY ${formatPercent(dollarChange)}, ULSD Diesel ${formatPercent(dieselChange)}, Baltic Dry ${formatPercent(freightChange)} y WTI ${formatPercent(crudeChange)}. La mezcla ${macroStress ? 'eleva' : macroRelief ? 'alivia' : 'mantiene en vigilancia'} costo de hedge, flete y traslado internacional.`,
+          rule: 'DXY por encima de +0.25% junto con diesel, flete o WTI por encima de +1.00%.',
+          action: macroStress
+            ? 'Revisar hedge cambiario, flete y politica de traslado en las puntas exportadoras.'
+            : macroRelief
+              ? 'Evaluar ventana para aliviar coberturas cortas y recomponer margen logistico.'
+              : 'Mantener observacion cruzada entre FX, diesel y flete antes de mover coberturas.',
+          tone: macroStress ? 'red' : macroRelief ? 'emerald' : 'amber',
+        },
+        {
+          id: 'contract-breakout',
+          tag: copy.futuresTag,
+          title:
+            Math.abs(biggestMover.change) >= 2
+              ? `${t(biggestMover.id)} rompe rango y acelera la volatilidad`
+              : `${t(biggestMover.id)} lidera el movimiento tactico del dia`,
+          detail: `${biggestMover.market} marca ${biggestMover.price.toFixed(2)} ${biggestMover.unit}, con variacion de ${formatPercent(biggestMover.change)}. El contrato concentra el mayor desplazamiento intradiario de la cesta monitoreada.`,
+          rule: 'Mayor contrato monitoreado con desplazamiento absoluto desde 2.00% en el dia.',
+          action:
+            Math.abs(biggestMover.change) >= 2
+              ? 'Reevaluar hedge, spread y origen del activo antes de ampliar exposicion.'
+              : 'Monitorear continuidad del movimiento antes de ajustar coberturas o compras.',
+          tone: Math.abs(biggestMover.change) >= 2.5 ? 'red' : Math.abs(biggestMover.change) >= 1.25 ? 'amber' : 'blue',
+        },
+        {
+          id: 'cereals-confirmation',
+          tag: copy.flowTag,
+          title: cerealsConfirmedUp
+            ? `FAO y futuros confirman tension en cereales en ${latestMonth}`
+            : cerealsConfirmedDown
+              ? `FAO y futuros muestran alivio en cereales en ${latestMonth}`
+              : `Cereales aun piden confirmacion adicional en ${latestMonth}`,
+          detail: `FAO Cereales ${formatPercent(cerealsChange)}, Maiz ${formatPercent(corn?.change ?? 0)} y Trigo ${formatPercent(wheat?.change ?? 0)}. La lectura cruza referencia oficial y futuros para basis, alimento balanceado y flujo global.`,
+          rule: 'FAO Cereales y el promedio de maiz y trigo deben apuntar en la misma direccion.',
+          action: cerealsConfirmedUp
+            ? 'Monitorear compras, basis y traslado en maiz y trigo para proteger margen.'
+            : cerealsConfirmedDown
+              ? 'Evaluar compras escalonadas y coberturas mas livianas si el alivio persiste.'
+              : 'Esperar confirmacion del complejo de granos antes de mover el plan de cobertura.',
+          tone: cerealsConfirmedUp ? 'red' : cerealsConfirmedDown ? 'emerald' : 'blue',
+        },
+        {
+          id: 'replacement-cost',
+          tag: copy.faoTag,
+          title: replacementStress
+            ? `${higherFaoMove.label} entra en presion de reposicion`
+            : `${higherFaoMove.label} sigue sin gatillo fuerte de reposicion`,
+          detail: `${higherFaoMove.label} cierra ${latestMonth} en ${higherFaoMove.value.toFixed(1)} puntos con ${formatPercent(higherFaoMove.change)}. ${correlatedContract ? `${t(correlatedContract.id)} en ${formatPercent(correlatedContract.change)}.` : ''} Oro en ${formatPercent(goldChange)} como termometro defensivo.`,
+          rule: 'Subindice FAO dominante por encima de 2.00% o confirmado por contrato correlato y oro.',
+          action: replacementStress
+            ? 'Revisar traslado, inventario corto y cobertura de insumos o derivados correlatos.'
+            : 'Seguir monitoreando costo de reposicion sin adelantar un ajuste comercial fuerte.',
+          tone: replacementStress ? 'amber' : 'blue',
+        },
+      ] as AlertCard[];
+    }
 
     return [
       {
-        id: 'fao-food',
-        tag: copy.faoTag,
-        title: copy.faoTitle(
-          foodChange >= 0
-            ? activeLanguage === 'pt'
-              ? 'subiu'
-              : activeLanguage === 'es'
-                ? 'subio'
-                : activeLanguage === 'ru'
-                  ? 'vyros'
-                  : activeLanguage === 'ar'
-                    ? 'ارتفع'
-                    : activeLanguage === 'zh'
-                      ? '上涨'
-                      : 'rose'
-            : activeLanguage === 'pt'
-              ? 'caiu'
-              : activeLanguage === 'es'
-                ? 'cayo'
-                : activeLanguage === 'ru'
-                  ? 'snizilsya'
-                  : activeLanguage === 'ar'
-                    ? 'انخفض'
-                    : activeLanguage === 'zh'
-                      ? '下跌'
-                      : 'fell',
-          formatMagnitude(foodChange),
-          latestMonth
-        ),
-        detail: copy.faoDetail(faoData.latest.food, 'FAO'),
-        tone: Math.abs(foodChange) >= 1 ? 'red' : 'blue',
-      },
-      {
-        id: 'top-mover',
-        tag: copy.futuresTag,
-        title: copy.moverTitle(
-          t(biggestMover.id),
-          biggestMover.change >= 0
-            ? activeLanguage === 'pt'
-              ? 'em alta'
-              : activeLanguage === 'es'
-                ? 'al alza'
-                : activeLanguage === 'ru'
-                  ? 'vverkh'
-                  : activeLanguage === 'ar'
-                    ? 'على ارتفاع'
-                    : activeLanguage === 'zh'
-                      ? '上行'
-                      : 'higher'
-            : activeLanguage === 'pt'
-              ? 'em baixa'
-              : activeLanguage === 'es'
-                ? 'a la baja'
-                : activeLanguage === 'ru'
-                  ? 'vniz'
-                  : activeLanguage === 'ar'
-                    ? 'على تراجع'
-                    : activeLanguage === 'zh'
-                      ? '下行'
-                      : 'lower'
-        ),
-        detail: copy.moverDetail(biggestMover.market, biggestMover.price, biggestMover.unit, formatPercent(biggestMover.change)),
-        tone: Math.abs(biggestMover.change) >= 2 ? 'amber' : 'blue',
-      },
-      {
-        id: 'cereals',
-        tag: copy.flowTag,
-        title: copy.cerealsTitle(
-          cerealsChange >= 0
-            ? activeLanguage === 'pt'
-              ? 'alta'
-              : activeLanguage === 'es'
-                ? 'alza'
-                : activeLanguage === 'ru'
-                  ? 'rost'
-                  : activeLanguage === 'ar'
-                    ? 'في ارتفاع'
-                    : activeLanguage === 'zh'
-                      ? '上行'
-                      : 'higher'
-            : activeLanguage === 'pt'
-              ? 'queda'
-              : activeLanguage === 'es'
-                ? 'baja'
-                : activeLanguage === 'ru'
-                  ? 'snizhenie'
-                  : activeLanguage === 'ar'
-                    ? 'في انخفاض'
-                    : activeLanguage === 'zh'
-                      ? '下行'
-                      : 'lower',
-          latestMonth
-        ),
-        detail: copy.cerealsDetail(faoData.latest.cereals, formatPercent(cerealsChange)),
-        tone: cerealsChange >= 0 ? 'emerald' : 'amber',
-      },
-      {
-        id: 'cross-basket',
+        id: 'macro-pressure',
         tag: copy.riskTag,
-        title: copy.crossTitle(
-          higherFaoMove.label,
-          higherFaoMove.change >= 0
-            ? activeLanguage === 'pt'
-              ? 'alta'
-              : activeLanguage === 'es'
-                ? 'alza'
-                : activeLanguage === 'ru'
-                  ? 'rost'
-                  : activeLanguage === 'ar'
-                    ? 'ارتفاع'
-                    : activeLanguage === 'zh'
-                      ? '上行'
-                      : 'upside'
-            : activeLanguage === 'pt'
-              ? 'baixa'
-              : activeLanguage === 'es'
-                ? 'baja'
-                : activeLanguage === 'ru'
-                  ? 'snizhenie'
-                  : activeLanguage === 'ar'
-                    ? 'هبوط'
-                    : activeLanguage === 'zh'
-                      ? '下行'
-                      : 'downside'
-        ),
-        detail: copy.crossDetail(
-          higherFaoMove.label,
-          higherFaoMove.value,
-          formatPercent(higherFaoMove.change),
-          latestMonth
-        ),
-        tone: Math.abs(higherFaoMove.change) >= 3 ? 'red' : 'amber',
+        title: macroStress
+          ? 'Dollar, diesel and freight are compressing export margins'
+          : macroRelief
+            ? 'Dollar and logistics are easing outbound costs'
+            : 'Macro logistics pressure remains on tactical watch',
+        detail: `DXY ${formatPercent(dollarChange)}, ULSD Diesel ${formatPercent(dieselChange)}, Baltic Dry ${formatPercent(freightChange)} and WTI ${formatPercent(crudeChange)}. The mix ${macroStress ? 'raises' : macroRelief ? 'eases' : 'keeps under watch'} hedging, freight and pass-through costs.`,
+        rule: 'DXY above +0.25% together with diesel, freight or WTI above +1.00%.',
+        action: macroStress
+          ? 'Review FX hedges, freight cover and pass-through policy on export lanes.'
+          : macroRelief
+            ? 'Assess room to lighten short hedges and rebuild logistics margin.'
+            : 'Keep monitoring FX, diesel and freight before repositioning hedges.',
+        tone: macroStress ? 'red' : macroRelief ? 'emerald' : 'amber',
+      },
+      {
+        id: 'contract-breakout',
+        tag: copy.futuresTag,
+        title:
+          Math.abs(biggestMover.change) >= 2
+            ? `${t(biggestMover.id)} breaks range and accelerates volatility`
+            : `${t(biggestMover.id)} leads the tactical move of the session`,
+        detail: `${biggestMover.market} prints ${biggestMover.price.toFixed(2)} ${biggestMover.unit}, moving ${formatPercent(biggestMover.change)}. The contract holds the sharpest intraday displacement in the monitored basket.`,
+        rule: 'Largest monitored contract moving by an absolute 2.00% or more on the day.',
+        action:
+          Math.abs(biggestMover.change) >= 2
+            ? 'Reassess hedges, spreads and origin exposure before adding risk.'
+            : 'Monitor follow-through before adjusting covers or purchases.',
+        tone: Math.abs(biggestMover.change) >= 2.5 ? 'red' : Math.abs(biggestMover.change) >= 1.25 ? 'amber' : 'blue',
+      },
+      {
+        id: 'cereals-confirmation',
+        tag: copy.flowTag,
+        title: cerealsConfirmedUp
+          ? `FAO and futures confirm cereals stress in ${latestMonth}`
+          : cerealsConfirmedDown
+            ? `FAO and futures point to cereals relief in ${latestMonth}`
+            : `Cereals still need extra confirmation in ${latestMonth}`,
+        detail: `FAO Cereals ${formatPercent(cerealsChange)}, Corn ${formatPercent(corn?.change ?? 0)} and Wheat ${formatPercent(wheat?.change ?? 0)}. The read combines official reference and futures for basis, feed and global flow.`,
+        rule: 'FAO Cereals and the average of corn and wheat need to point in the same direction.',
+        action: cerealsConfirmedUp
+          ? 'Monitor purchases, basis and pass-through in corn and wheat to protect margin.'
+          : cerealsConfirmedDown
+            ? 'Assess staggered buying and lighter cover if relief persists.'
+            : 'Wait for confirmation from the grain complex before changing the hedge plan.',
+        tone: cerealsConfirmedUp ? 'red' : cerealsConfirmedDown ? 'emerald' : 'blue',
+      },
+      {
+        id: 'replacement-cost',
+        tag: copy.faoTag,
+        title: replacementStress
+          ? `${higherFaoMove.label} moves into replacement-cost pressure`
+          : `${higherFaoMove.label} still lacks a strong replacement trigger`,
+        detail: `${higherFaoMove.label} closes ${latestMonth} at ${higherFaoMove.value.toFixed(1)} points with ${formatPercent(higherFaoMove.change)}. ${correlatedContract ? `${t(correlatedContract.id)} at ${formatPercent(correlatedContract.change)}.` : ''} Gold at ${formatPercent(goldChange)} as the defensive thermometer.`,
+        rule: 'Leading FAO sub-index above 2.00% or confirmed by the correlated contract and gold.',
+        action: replacementStress
+          ? 'Review pass-through, short inventory and cover on correlated inputs or derivatives.'
+          : 'Keep monitoring replacement costs without forcing an aggressive commercial adjustment.',
+        tone: replacementStress ? 'amber' : 'blue',
       },
     ] as AlertCard[];
-  }, [activeLanguage, commodities, copy, faoData, language, t]);
+  }, [activeLanguage, commodities, copy, faoData, language, macroDrivers, t]);
+
+  const deskUpdatedAt = useMemo(() => {
+    const timestamps = [commoditiesUpdatedAt, macroUpdatedAt, faoData?.updatedAt].filter(Boolean) as string[];
+    if (timestamps.length === 0) {
+      return new Date().toISOString();
+    }
+
+    return timestamps.sort().reverse()[0];
+  }, [commoditiesUpdatedAt, faoData?.updatedAt, macroUpdatedAt]);
+
+  const sourcesLabel = useMemo(
+    () => buildSourcesLabel(commoditiesSource, macroSource, language as SupportedLanguage),
+    [commoditiesSource, language, macroSource]
+  );
 
   return (
     <section id="alertas-mercado" className="relative overflow-hidden bg-[linear-gradient(180deg,#f8fafc_0%,#ffffff_100%)] py-24 text-slate-900">
@@ -421,13 +458,11 @@ export default function MarketAlertsSection() {
           </div>
           <div className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-500 shadow-sm">
             {copy.lastUpdate}:{' '}
-            {commoditiesUpdatedAt
-              ? formatDateTime(new Date(commoditiesUpdatedAt), language as SupportedLanguage)
-              : formatDateTime(new Date(), language as SupportedLanguage)}
+            {formatDateTime(new Date(deskUpdatedAt), language as SupportedLanguage)}
           </div>
         </div>
 
-        {commoditiesSource === 'fallback' && (
+        {(commoditiesSource === 'fallback' || macroSource === 'fallback') && (
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-700">
             <ShieldAlert className="w-4 h-4" />
             {copy.fallback}
@@ -455,9 +490,19 @@ export default function MarketAlertsSection() {
                   <p className="max-w-2xl text-[15px] leading-7 text-slate-600">
                     {alerts[0].detail}
                   </p>
+                  <div className="mt-6 grid gap-4 border-t border-slate-200 pt-5 md:grid-cols-2">
+                    <div>
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">{copy.ruleLabel}</p>
+                      <p className="mt-2 text-sm leading-7 text-slate-600">{alerts[0].rule}</p>
+                    </div>
+                    <div>
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">{copy.actionLabel}</p>
+                      <p className="mt-2 text-sm leading-7 text-slate-900">{alerts[0].action}</p>
+                    </div>
+                  </div>
                 </div>
                 <div className="mt-6 flex items-center justify-between gap-4 border-t border-slate-200 pt-5 text-xs text-slate-500">
-                  {getSourceLabel(commoditiesSource, language as SupportedLanguage)} / FAO
+                  {sourcesLabel}
                   <span className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-[11px] uppercase tracking-[0.2em] text-slate-500">
                     01
                   </span>
@@ -486,9 +531,19 @@ export default function MarketAlertsSection() {
                     <p className="text-sm leading-7 text-slate-600">
                       {alert.detail}
                     </p>
+                    <div className="mt-5 space-y-4 border-t border-slate-200 pt-5">
+                      <div>
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">{copy.ruleLabel}</p>
+                        <p className="mt-2 text-sm leading-6 text-slate-600">{alert.rule}</p>
+                      </div>
+                      <div>
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">{copy.actionLabel}</p>
+                        <p className="mt-2 text-sm leading-6 text-slate-900">{alert.action}</p>
+                      </div>
+                    </div>
                   </div>
                   <div className="mt-6 flex items-center justify-between gap-4 border-t border-slate-200 pt-5 text-xs text-slate-500">
-                    {getSourceLabel(commoditiesSource, language as SupportedLanguage)} / FAO
+                    {sourcesLabel}
                     <span className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-[11px] uppercase tracking-[0.2em] text-slate-500">
                       0{index + 2}
                     </span>
