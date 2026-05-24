@@ -7,6 +7,29 @@ This project is ready to run the persisted market pipeline on Vercel with branch
 - `staging` -> Preview deployment
 - `main` -> Production deployment
 
+## GitHub Auto Deploy
+
+This repository now includes `.github/workflows/vercel-deploy.yml`.
+
+- `push` to `staging` -> Vercel Preview deploy
+- `push` to `main` -> Vercel Production deploy
+
+To make auto deploy work, add these GitHub repository secrets:
+
+```env
+VERCEL_TOKEN=
+VERCEL_ORG_ID=
+VERCEL_PROJECT_ID=
+```
+
+You can obtain them from:
+
+- `VERCEL_TOKEN`: Vercel account token
+- `VERCEL_ORG_ID`: Vercel team or personal scope ID
+- `VERCEL_PROJECT_ID`: Vercel project ID linked to this app
+
+If the Vercel project is also directly connected to GitHub imports, disable one of the two deploy paths to avoid duplicate deployments.
+
 ## Required Environment Variables
 
 Add these in Vercel Project Settings -> Environment Variables.
