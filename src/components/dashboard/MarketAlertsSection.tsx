@@ -187,13 +187,13 @@ function formatMagnitude(change: number) {
 function toneClasses(tone: AlertCard['tone']) {
   switch (tone) {
     case 'emerald':
-      return 'border-emerald-400/20 bg-emerald-500/10 text-emerald-200';
+      return 'border-emerald-200 bg-emerald-50 text-emerald-700';
     case 'amber':
-      return 'border-amber-400/20 bg-amber-500/10 text-amber-200';
+      return 'border-amber-200 bg-amber-50 text-amber-700';
     case 'red':
-      return 'border-rose-400/20 bg-rose-500/10 text-rose-200';
+      return 'border-rose-200 bg-rose-50 text-rose-700';
     default:
-      return 'border-sky-400/20 bg-sky-500/10 text-sky-200';
+      return 'border-sky-200 bg-sky-50 text-sky-700';
   }
 }
 
@@ -402,23 +402,23 @@ export default function MarketAlertsSection() {
   }, [activeLanguage, commodities, copy, faoData, language, t]);
 
   return (
-    <section id="alertas-mercado" className="relative overflow-hidden bg-slate-950 py-24 text-white">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(59,130,246,0.10),_transparent_22%),radial-gradient(circle_at_bottom_right,_rgba(16,185,129,0.10),_transparent_24%)]" />
+    <section id="alertas-mercado" className="relative overflow-hidden bg-[linear-gradient(180deg,#f8fafc_0%,#ffffff_100%)] py-24 text-slate-900">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(59,130,246,0.08),_transparent_22%),radial-gradient(circle_at_bottom_right,_rgba(16,185,129,0.08),_transparent_24%)]" />
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-12 flex flex-col gap-7 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 text-xs font-semibold uppercase tracking-[0.2em] text-slate-300 mb-4">
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-slate-600 shadow-sm">
               <Radar className="w-3.5 h-3.5" />
               {copy.eyebrow}
             </div>
-            <h2 className="mb-3 text-3xl font-bold text-white md:text-4xl">{copy.title}</h2>
-            <p className="max-w-3xl text-[1.02rem] leading-8 text-slate-300">{copy.subtitle}</p>
-            <div className="mt-5 inline-flex items-center gap-2 rounded-full border border-sky-400/20 bg-sky-500/10 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-sky-100">
+            <h2 className="mb-3 text-3xl font-bold tracking-[-0.02em] text-slate-900 md:text-4xl">{copy.title}</h2>
+            <p className="max-w-3xl text-[1.02rem] leading-8 text-slate-600">{copy.subtitle}</p>
+            <div className="mt-5 inline-flex items-center gap-2 rounded-full border border-sky-200 bg-sky-50 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-sky-700">
               <AlertTriangle className="h-3.5 w-3.5" />
               {copy.deskNote}
             </div>
           </div>
-          <div className="rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-slate-300 shadow-[0_10px_30px_rgba(2,6,23,0.18)]">
+          <div className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-500 shadow-sm">
             {copy.lastUpdate}:{' '}
             {commoditiesUpdatedAt
               ? formatDateTime(new Date(commoditiesUpdatedAt), language as SupportedLanguage)
@@ -427,20 +427,20 @@ export default function MarketAlertsSection() {
         </div>
 
         {commoditiesSource === 'fallback' && (
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-amber-500/20 bg-amber-500/10 px-4 py-2 text-sm text-amber-200">
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-700">
             <ShieldAlert className="w-4 h-4" />
             {copy.fallback}
           </div>
         )}
 
         {loading && alerts.length === 0 ? (
-          <div className="rounded-[2rem] border border-white/10 bg-white/5 p-8 text-slate-300">{copy.loading}</div>
+          <div className="rounded-[2rem] border border-slate-200 bg-white p-8 text-slate-500 shadow-sm">{copy.loading}</div>
         ) : (
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
             {alerts.map((alert, index) => (
               <article
                 key={alert.id}
-                className={`rounded-[2rem] border border-white/10 bg-white/[0.045] p-6 md:p-7 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/[0.07] ${
+                className={`rounded-[2rem] border border-slate-200 bg-white p-6 md:p-7 shadow-[0_10px_35px_rgba(15,23,42,0.05)] transition-all duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-[0_20px_45px_rgba(15,23,42,0.08)] ${
                   index === 0 ? 'xl:col-span-2 xl:min-h-[320px]' : ''
                 }`}
               >
@@ -448,15 +448,15 @@ export default function MarketAlertsSection() {
                   <span className={`inline-flex items-center rounded-full border px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] ${toneClasses(alert.tone)}`}>
                     {alert.tag}
                   </span>
-                  <span className="text-slate-500">
+                  <span className="text-slate-400">
                     {alert.tone === 'emerald' ? <ArrowUpRight className="w-5 h-5" /> : alert.tone === 'red' ? <AlertTriangle className="w-5 h-5" /> : <ArrowDownRight className="w-5 h-5" />}
                   </span>
                 </div>
-                <h3 className={`mb-3.5 font-semibold text-white leading-tight ${index === 0 ? 'max-w-xl text-[1.7rem]' : 'text-[1.08rem]'}`}>{alert.title}</h3>
-                <p className={`text-slate-300 ${index === 0 ? 'max-w-2xl text-[15px] leading-7' : 'text-sm leading-7'}`}>{alert.detail}</p>
-                <div className="mt-6 flex items-center justify-between gap-4 border-t border-white/10 pt-5 text-xs text-slate-400">
+                <h3 className={`mb-3.5 font-semibold leading-tight text-slate-900 ${index === 0 ? 'max-w-xl text-[1.7rem]' : 'text-[1.08rem]'}`}>{alert.title}</h3>
+                <p className={`text-slate-600 ${index === 0 ? 'max-w-2xl text-[15px] leading-7' : 'text-sm leading-7'}`}>{alert.detail}</p>
+                <div className="mt-6 flex items-center justify-between gap-4 border-t border-slate-200 pt-5 text-xs text-slate-500">
                   {getSourceLabel(commoditiesSource, language as SupportedLanguage)} / FAO
-                  <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-[11px] uppercase tracking-[0.2em] text-slate-400">
+                  <span className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-[11px] uppercase tracking-[0.2em] text-slate-500">
                     0{index + 1}
                   </span>
                 </div>

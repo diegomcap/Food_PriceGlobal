@@ -236,12 +236,12 @@ export function Hero() {
   const copy = COPY[activeLanguage];
 
   return (
-    <section className="relative overflow-hidden bg-slate-950 pt-32 pb-24 lg:pt-44 lg:pb-32">
+    <section className="relative overflow-hidden bg-[linear-gradient(180deg,#ffffff_0%,#f8fafc_34%,#eefbf7_100%)] pt-32 pb-20 lg:pt-40 lg:pb-24">
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_12%_18%,_rgba(16,185,129,0.22),_transparent_22%),radial-gradient(circle_at_82%_14%,_rgba(14,165,233,0.18),_transparent_20%),linear-gradient(135deg,_rgba(15,23,42,0.98),_rgba(2,6,23,0.98))]" />
-        <img src="/img/hero-bg.svg" alt="Agriculture Background" className="h-full w-full object-cover opacity-10 mix-blend-screen" />
-        <div className="absolute inset-x-0 top-24 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
-        <div className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-white/5 to-transparent" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_12%_18%,_rgba(16,185,129,0.14),_transparent_24%),radial-gradient(circle_at_82%_14%,_rgba(14,165,233,0.12),_transparent_22%)]" />
+        <img src="/img/hero-bg.svg" alt="Agriculture Background" className="h-full w-full object-cover opacity-[0.05]" />
+        <div className="absolute inset-x-0 top-24 h-px bg-gradient-to-r from-transparent via-slate-300/70 to-transparent" />
+        <div className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-slate-200/60 to-transparent" />
         <div className="absolute left-[8%] top-28 h-24 w-24 rounded-full bg-emerald-400/10 blur-2xl motion-safe:animate-[pulse_10s_ease-in-out_infinite]" />
         <div className="absolute right-[12%] top-36 h-28 w-28 rounded-full bg-cyan-400/10 blur-2xl motion-safe:animate-[pulse_12s_ease-in-out_infinite]" />
       </div>
@@ -249,11 +249,11 @@ export function Hero() {
       <div className="relative z-10 container mx-auto px-4">
         <div className="mx-auto max-w-7xl">
           <div className="mb-12 flex flex-wrap items-center gap-3">
-            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-400/10 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.28em] text-emerald-200">
+            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-50 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.28em] text-emerald-700">
               <Radar className="h-4 w-4" />
               {copy.eyebrow}
             </div>
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.28em] text-slate-300">
+            <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/80 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.28em] text-slate-600 backdrop-blur-sm">
               <Globe2 className="h-4 w-4" />
               {copy.kicker}
             </div>
@@ -261,40 +261,40 @@ export function Hero() {
 
           <div className="grid gap-12 xl:grid-cols-[1.04fr_0.96fr] xl:gap-14">
             <div className="relative">
-              <div className="absolute -left-4 top-2 hidden h-28 w-px bg-gradient-to-b from-emerald-300/0 via-emerald-300/70 to-emerald-300/0 xl:block" />
+              <div className="absolute -left-4 top-2 hidden h-28 w-px bg-gradient-to-b from-emerald-300/0 via-emerald-500/70 to-emerald-300/0 xl:block" />
               <div className="pl-0 xl:pl-8">
-                <h1 className="max-w-4xl text-4xl font-black leading-[0.98] tracking-[-0.035em] text-white md:text-6xl xl:text-[5.2rem]">
+                <h1 className="max-w-4xl text-4xl font-black leading-[0.98] tracking-[-0.04em] text-slate-950 md:text-6xl xl:text-[5.2rem]">
                   {copy.titleLead}
                   <br />
-                  <span className="bg-gradient-to-r from-emerald-300 via-lime-200 to-cyan-300 bg-clip-text text-transparent">
+                  <span className="bg-gradient-to-r from-emerald-500 via-lime-500 to-cyan-500 bg-clip-text text-transparent">
                     {copy.titleAccent}
                   </span>
                   <br />
-                  <span className="text-slate-200">{copy.titleTail}</span>
+                  <span className="text-slate-700">{copy.titleTail}</span>
                 </h1>
 
-                <p className="mt-9 max-w-[42rem] text-lg leading-8 text-slate-300 md:text-[1.28rem] md:leading-9">
+                <p className="mt-8 max-w-[42rem] text-lg leading-8 text-slate-600 md:text-[1.18rem] md:leading-9">
                   {copy.subtitle}
                 </p>
 
-                <div className="mt-9 flex flex-wrap gap-3">
+                <div className="mt-8 flex flex-wrap gap-3">
                   {copy.chips.map((chip) => (
                     <span
                       key={chip}
-                      className="inline-flex items-center rounded-full border border-white/10 bg-white/[0.045] px-4 py-2 text-[13px] font-medium tracking-[0.01em] text-slate-200 backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-white/20 hover:bg-white/10"
+                      className="inline-flex items-center rounded-full border border-slate-200 bg-white px-4 py-2 text-[13px] font-medium tracking-[0.01em] text-slate-700 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-emerald-200 hover:shadow-md"
                     >
                       {chip}
                     </span>
                   ))}
                 </div>
 
-                <div className="mt-11 grid gap-4 md:grid-cols-3">
+                <div className="mt-10 grid gap-4 md:grid-cols-3">
                   {copy.bullets.map((bullet, index) => (
-                    <div key={bullet} className="rounded-3xl border border-white/10 bg-white/[0.04] p-5 md:p-6 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-emerald-300/20 hover:bg-white/[0.06]">
-                      <div className="text-[10px] font-semibold uppercase tracking-[0.3em] text-emerald-200/90">
+                    <div key={bullet} className="rounded-3xl border border-slate-200 bg-white/85 p-5 md:p-6 shadow-[0_10px_35px_rgba(15,23,42,0.06)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-emerald-200 hover:shadow-[0_18px_45px_rgba(15,23,42,0.08)]">
+                      <div className="text-[10px] font-semibold uppercase tracking-[0.3em] text-emerald-600">
                         0{index + 1}
                       </div>
-                      <p className="mt-3.5 text-sm leading-7 text-slate-200/95">{bullet}</p>
+                      <p className="mt-3.5 text-sm leading-7 text-slate-600">{bullet}</p>
                     </div>
                   ))}
                 </div>
@@ -302,14 +302,14 @@ export function Hero() {
                 <div className="mt-11 flex flex-col gap-4 sm:flex-row sm:items-center">
                   <Link
                     href="#mercados"
-                    className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/8 px-8 py-4 text-[15px] font-bold text-white backdrop-blur-sm transition-all hover:bg-white/14"
+                    className="inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white px-8 py-4 text-[15px] font-bold text-slate-800 shadow-sm transition-all hover:-translate-y-0.5 hover:border-slate-400 hover:shadow-md"
                   >
                     <Workflow className="h-5 w-5" />
                     {copy.secondary}
                   </Link>
                   <Link
                     href="#alertas-mercado"
-                    className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-500 to-cyan-500 px-8 py-4 text-[15px] font-bold text-slate-950 shadow-[0_18px_60px_rgba(16,185,129,0.22)] transition-all hover:-translate-y-0.5 hover:from-emerald-400 hover:to-cyan-400"
+                    className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-500 to-cyan-500 px-8 py-4 text-[15px] font-bold text-white shadow-[0_20px_55px_rgba(16,185,129,0.28)] transition-all hover:-translate-y-0.5 hover:from-emerald-400 hover:to-cyan-400"
                   >
                     <ArrowUpRight className="h-5 w-5" />
                     {copy.primary}
@@ -319,34 +319,34 @@ export function Hero() {
             </div>
 
             <div className="relative">
-              <div className="absolute -inset-6 rounded-[2.4rem] bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.12),_transparent_40%),radial-gradient(circle_at_bottom_right,_rgba(14,165,233,0.12),_transparent_35%)] blur-2xl" />
-              <div className="relative overflow-hidden rounded-[2.2rem] border border-white/10 bg-white/[0.055] p-5 shadow-2xl backdrop-blur-xl transition-transform duration-500 hover:-translate-y-1">
-                <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:32px_32px] opacity-[0.12]" />
-                <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-white/[0.05] to-transparent" />
+              <div className="absolute -inset-6 rounded-[2.4rem] bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.10),_transparent_40%),radial-gradient(circle_at_bottom_right,_rgba(14,165,233,0.10),_transparent_35%)] blur-2xl" />
+              <div className="relative overflow-hidden rounded-[2.2rem] border border-slate-200 bg-white/95 p-5 shadow-[0_28px_90px_rgba(15,23,42,0.10)] backdrop-blur-xl transition-transform duration-500 hover:-translate-y-1">
+                <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(15,23,42,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(15,23,42,0.04)_1px,transparent_1px)] bg-[size:32px_32px] opacity-[0.3]" />
+                <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-emerald-50 to-transparent" />
                 <div className="relative grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
-                  <div className="rounded-[1.8rem] border border-white/10 bg-slate-950/55 p-6 md:p-7">
+                  <div className="rounded-[1.8rem] border border-slate-200 bg-slate-50 p-6 md:p-7">
                     <div className="flex items-start justify-between gap-4">
                       <div>
-                        <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-emerald-200">{copy.deckEyebrow}</p>
-                        <h2 className="mt-3 max-w-md text-[1.7rem] font-bold leading-tight text-white">{copy.deckTitle}</h2>
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-emerald-600">{copy.deckEyebrow}</p>
+                        <h2 className="mt-3 max-w-md text-[1.7rem] font-bold leading-tight text-slate-900">{copy.deckTitle}</h2>
                       </div>
-                      <div className="rounded-2xl border border-emerald-400/20 bg-emerald-400/10 p-3 text-emerald-200">
+                      <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-3 text-emerald-600">
                         <Radar className="h-5 w-5" />
                       </div>
                     </div>
 
-                    <p className="mt-5 max-w-lg text-sm leading-7 text-slate-300/95">{copy.deckBody}</p>
+                    <p className="mt-5 max-w-lg text-sm leading-7 text-slate-600">{copy.deckBody}</p>
 
                     <div className="mt-6 space-y-3">
                       {copy.deckBlocks.map((block) => (
-                        <div key={block.label} className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 md:p-5 transition-all duration-300 hover:border-white/20 hover:bg-white/[0.07]">
+                        <div key={block.label} className="rounded-2xl border border-slate-200 bg-white p-4 md:p-5 transition-all duration-300 hover:border-emerald-200 hover:shadow-sm">
                           <div className="flex items-start justify-between gap-4">
                             <div>
                               <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-400">{block.label}</p>
-                              <p className="mt-2 text-lg font-semibold text-white">{block.value}</p>
-                              <p className="mt-2.5 text-sm leading-6 text-slate-300/95">{block.note}</p>
+                              <p className="mt-2 text-lg font-semibold text-slate-900">{block.value}</p>
+                              <p className="mt-2.5 text-sm leading-6 text-slate-600">{block.note}</p>
                             </div>
-                            <Database className="mt-1 h-4 w-4 text-slate-500" />
+                            <Database className="mt-1 h-4 w-4 text-slate-400" />
                           </div>
                         </div>
                       ))}
@@ -354,39 +354,39 @@ export function Hero() {
                   </div>
 
                   <div className="grid gap-4">
-                    <div className="rounded-[1.8rem] border border-white/10 bg-white/[0.05] p-5 md:p-6">
-                      <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-400">{copy.useCasesLabel}</p>
+                    <div className="rounded-[1.8rem] border border-slate-200 bg-gradient-to-br from-white to-slate-50 p-5 md:p-6">
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-500">{copy.useCasesLabel}</p>
                       <div className="mt-4 flex flex-wrap gap-2.5">
                         {copy.useCases.map((item) => (
-                          <span key={item} className="rounded-full border border-white/10 bg-slate-950/50 px-3 py-2 text-xs font-medium text-slate-200 transition-colors duration-300 hover:border-emerald-300/30 hover:text-white">
+                          <span key={item} className="rounded-full border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-700 transition-colors duration-300 hover:border-emerald-200 hover:text-slate-900">
                             {item}
                           </span>
                         ))}
                       </div>
                     </div>
 
-                    <div className="rounded-[1.8rem] border border-white/10 bg-gradient-to-br from-white/[0.08] to-white/[0.03] p-5 md:p-6">
-                      <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-400">{copy.railLabel}</p>
+                    <div className="rounded-[1.8rem] border border-slate-200 bg-gradient-to-br from-emerald-50 via-white to-cyan-50 p-5 md:p-6">
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-500">{copy.railLabel}</p>
                       <div className="mt-5 space-y-4">
                         {copy.railStats.map((stat) => (
-                          <div key={stat.label} className="flex items-end justify-between gap-4 border-b border-white/10 pb-4 last:border-b-0 last:pb-0">
+                          <div key={stat.label} className="flex items-end justify-between gap-4 border-b border-slate-200 pb-4 last:border-b-0 last:pb-0">
                             <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-500">{stat.label}</p>
-                            <p className="text-right text-[1.65rem] font-black text-white">{stat.value}</p>
+                            <p className="text-right text-[1.65rem] font-black text-slate-900">{stat.value}</p>
                           </div>
                         ))}
                       </div>
                     </div>
 
-                    <div className="rounded-[1.8rem] border border-white/10 bg-slate-950/50 p-5 md:p-6">
-                      <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-400">{copy.pulseLabel}</p>
+                    <div className="rounded-[1.8rem] border border-slate-200 bg-white p-5 md:p-6">
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-500">{copy.pulseLabel}</p>
                       <div className="mt-4 space-y-3">
                         {copy.pulseItems.map((item, index) => (
                           <div key={item}>
-                            <div className="mb-2 flex items-center justify-between text-[11px] text-slate-300">
+                            <div className="mb-2 flex items-center justify-between text-[11px] text-slate-600">
                               <span>{item}</span>
-                              <span>0{index + 1}</span>
+                              <span className="font-semibold text-slate-500">0{index + 1}</span>
                             </div>
-                            <div className="h-2 overflow-hidden rounded-full bg-white/10">
+                            <div className="h-2 overflow-hidden rounded-full bg-slate-100">
                               <div
                                 className="h-full rounded-full bg-gradient-to-r from-emerald-400 via-lime-300 to-cyan-300 motion-safe:animate-[pulse_6s_ease-in-out_infinite]"
                                 style={{ width: `${78 - index * 11}%` }}
@@ -397,17 +397,17 @@ export function Hero() {
                       </div>
                     </div>
 
-                    <div className="rounded-[1.8rem] border border-emerald-400/15 bg-emerald-400/10 p-5 md:p-6 text-emerald-50">
+                    <div className="rounded-[1.8rem] border border-emerald-200 bg-emerald-50 p-5 md:p-6 text-emerald-900">
                       <div className="flex items-start gap-3">
-                        <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-emerald-200" />
-                        <p className="text-sm leading-7 text-emerald-50/95">{copy.footnote}</p>
+                        <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-emerald-600" />
+                        <p className="text-sm leading-7 text-emerald-900/85">{copy.footnote}</p>
                       </div>
                     </div>
                   </div>
                 </div>
 
                 <div className="relative mt-5 flex justify-end">
-                  <Link href="#mercados" className="inline-flex items-center gap-2 text-sm font-semibold text-slate-200 transition-colors hover:text-white">
+                  <Link href="#mercados" className="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 transition-colors hover:text-slate-900">
                     {copy.overview}
                     <ArrowRight className="h-4 w-4" />
                   </Link>
@@ -415,29 +415,10 @@ export function Hero() {
               </div>
             </div>
           </div>
-
-          <div className="mt-10 flex justify-center xl:hidden">
-            <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
-                <Link
-                  href="#alertas-mercado"
-                  className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-500 to-cyan-500 px-8 py-4 text-base font-bold text-slate-950 shadow-[0_18px_60px_rgba(16,185,129,0.22)] transition-all hover:-translate-y-0.5 hover:from-emerald-400 hover:to-cyan-400"
-                >
-                  <ArrowUpRight className="h-5 w-5" />
-                  {copy.primary}
-                </Link>
-                <Link
-                  href="#mercados"
-                  className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/8 px-8 py-4 text-base font-bold text-white backdrop-blur-sm transition-all hover:bg-white/14"
-                >
-                  <Workflow className="h-5 w-5" />
-                  {copy.secondary}
-                </Link>
-              </div>
-            </div>
         </div>
       </div>
 
-      <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-slate-50 to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-white to-transparent" />
     </section>
   );
 }
