@@ -57,15 +57,15 @@ export default function MacroDriversVariablePie({
       type: 'variablepie',
       backgroundColor: 'transparent',
       height: 540,
-      spacingTop: 16,
-      spacingBottom: 10,
+      spacingTop: 24,
+      spacingBottom: 0,
     },
     title: {
       text: title,
       align: 'center',
       style: {
         color: '#0f172a',
-        fontSize: '28px',
+        fontSize: '30px',
         fontWeight: '700',
       },
     },
@@ -74,7 +74,7 @@ export default function MacroDriversVariablePie({
       align: 'center',
       style: {
         color: '#475569',
-        fontSize: '13px',
+        fontSize: '14px',
       },
     },
     credits: { enabled: false },
@@ -97,8 +97,8 @@ export default function MacroDriversVariablePie({
     },
     plotOptions: {
       variablepie: {
-        minPointSize: 34,
-        innerSize: '18%',
+        minPointSize: 42,
+        innerSize: '20%',
         borderColor: '#ffffff',
         borderWidth: 2,
         crisp: true,

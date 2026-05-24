@@ -4,7 +4,6 @@ import dynamic from 'next/dynamic';
 import { useEffect, useMemo, useState } from 'react';
 import HighchartsMap from 'highcharts/highmaps';
 import { buildMacroHubPoints } from '@/lib/agroVisualData';
-import { formatPercent } from '@/lib/marketOverview';
 import type { SupportedLanguage } from '@/lib/marketTime';
 
 const HighchartsReact = dynamic(() => import('highcharts-react-official'), { ssr: false });
@@ -29,94 +28,96 @@ type Props = {
 type Copy = {
   title: string;
   subtitle: string;
-  measureLabel: string;
-  reserveLabel: string;
-  detailTitle: string;
   totalPressure: string;
   topDriver: string;
   corridor: string;
-  clickHint: string;
+  description: string;
+  pieTitle: string;
+  pieSubtitle: string;
+  dominantLabel: string;
+  totalLabel: string;
 };
 
 const COPY: Record<SupportedLanguage, Copy> = {
   pt: {
-    title: 'Top hubs macro do agronegocio',
-    subtitle:
-      'Variable pie com os principais desks do agro. Clique em uma fatia para girar o globe ate o hub correspondente.',
-    measureLabel: 'Pressao por driver dominante',
-    reserveLabel: 'Pressao total combinada',
-    detailTitle: 'Leitura do hub selecionado',
+    title: '2026 Top hubs macro por pressao composta',
+    subtitle: 'Em pontos compostos usando DXY, WTI, Natural Gas e Gold.',
     totalPressure: 'Pressao total',
     topDriver: 'Driver dominante',
     corridor: 'Corredor',
-    clickHint: 'Clique em uma fatia ou no globe',
+    description:
+      'Variable pie interativo mostrando os principais hubs macro do agronegocio. A altura da fatia acompanha a pressao por driver dominante. Clique em uma fatia para girar o globe ate o hub correspondente.',
+    pieTitle: '2026 Top hubs macro por pressao composta',
+    pieSubtitle: 'Em pontos compostos por hub agro.',
+    dominantLabel: 'Pressao dominante',
+    totalLabel: 'Pressao combinada',
   },
   en: {
-    title: 'Top agribusiness macro hubs',
-    subtitle:
-      'Variable pie of the main agribusiness desks. Click a slice to rotate the globe to the corresponding hub.',
-    measureLabel: 'Dominant-driver pressure',
-    reserveLabel: 'Combined total pressure',
-    detailTitle: 'Selected hub read',
+    title: '2026 Top macro hubs by composite pressure',
+    subtitle: 'In composite points using DXY, WTI, Natural Gas and Gold.',
     totalPressure: 'Total pressure',
     topDriver: 'Top driver',
     corridor: 'Corridor',
-    clickHint: 'Click a slice or the globe',
+    description:
+      'Interactive variable pie showing the leading agribusiness macro hubs. Slice height follows dominant-driver pressure. Click a slice to rotate the globe to the corresponding hub.',
+    pieTitle: '2026 Top macro hubs by composite pressure',
+    pieSubtitle: 'In composite points by agribusiness hub.',
+    dominantLabel: 'Dominant pressure',
+    totalLabel: 'Combined pressure',
   },
   es: {
-    title: 'Top hubs macro del agronegocio',
-    subtitle:
-      'Variable pie con los principales desks del agro. Haz clic en una porcion para girar el globo al hub correspondiente.',
-    measureLabel: 'Presion por driver dominante',
-    reserveLabel: 'Presion total combinada',
-    detailTitle: 'Lectura del hub seleccionado',
+    title: '2026 Top hubs macro por presion compuesta',
+    subtitle: 'En puntos compuestos usando DXY, WTI, Natural Gas y Gold.',
     totalPressure: 'Presion total',
     topDriver: 'Driver dominante',
     corridor: 'Corredor',
-    clickHint: 'Haz clic en una porcion o en el globo',
+    description:
+      'Variable pie interactivo que muestra los principales hubs macro del agronegocio. La altura de la porcion sigue la presion del driver dominante. Haz clic en una porcion para girar el globo al hub correspondiente.',
+    pieTitle: '2026 Top hubs macro por presion compuesta',
+    pieSubtitle: 'En puntos compuestos por hub agro.',
+    dominantLabel: 'Presion dominante',
+    totalLabel: 'Presion combinada',
   },
   ru: {
-    title: 'Top agribusiness macro hubs',
-    subtitle: 'Variable pie of the main agribusiness desks.',
-    measureLabel: 'Dominant-driver pressure',
-    reserveLabel: 'Combined total pressure',
-    detailTitle: 'Selected hub read',
+    title: '2026 Top macro hubs by composite pressure',
+    subtitle: 'In composite points using DXY, WTI, Natural Gas and Gold.',
     totalPressure: 'Total pressure',
     topDriver: 'Top driver',
     corridor: 'Corridor',
-    clickHint: 'Click a slice or the globe',
+    description:
+      'Interactive variable pie showing the leading agribusiness macro hubs. Click a slice to rotate the globe to the corresponding hub.',
+    pieTitle: '2026 Top macro hubs by composite pressure',
+    pieSubtitle: 'In composite points by agribusiness hub.',
+    dominantLabel: 'Dominant pressure',
+    totalLabel: 'Combined pressure',
   },
   ar: {
-    title: 'اهم المراكز الكلية للاعمال الزراعية',
-    subtitle:
-      'Variable pie لاهم desks الزراعية. اضغط على شريحة لتدوير الكرة نحو المركز المقابل.',
-    measureLabel: 'ضغط العامل المهيمن',
-    reserveLabel: 'الضغط الكلي المجمع',
-    detailTitle: 'قراءة المركز المحدد',
+    title: 'ابرز المراكز الكلية حسب الضغط المركب 2026',
+    subtitle: 'بنقاط مركبة باستخدام DXY وWTI وNatural Gas وGold.',
     totalPressure: 'الضغط الكلي',
     topDriver: 'العامل المهيمن',
     corridor: 'الممر',
-    clickHint: 'اضغط على الشريحة او الكرة',
+    description:
+      'Variable pie تفاعلي يعرض ابرز المراكز الكلية في الاعمال الزراعية. ارتفاع الشريحة يعكس ضغط العامل المهيمن. اضغط على الشريحة لتدوير الكرة نحو المركز المقابل.',
+    pieTitle: 'ابرز المراكز الكلية حسب الضغط المركب 2026',
+    pieSubtitle: 'بنقاط مركبة لكل مركز زراعي.',
+    dominantLabel: 'الضغط المهيمن',
+    totalLabel: 'الضغط المركب',
   },
   zh: {
-    title: '农业宏观枢纽排行',
-    subtitle:
-      '以 variable pie 展示主要农业交易 desk。点击任意扇区可将地球仪旋转到对应枢纽。',
-    measureLabel: '主导驱动压力',
-    reserveLabel: '综合总压力',
-    detailTitle: '当前枢纽读数',
+    title: '2026 宏观压力最高农业枢纽',
+    subtitle: '基于 DXY、WTI、Natural Gas 与 Gold 的综合点数。',
     totalPressure: '总压力',
     topDriver: '主导驱动',
     corridor: '通道',
-    clickHint: '点击扇区或地球仪',
+    description:
+      '交互式 variable pie 展示农业主要宏观枢纽。扇区高度跟随主导驱动压力。点击任意扇区可将地球仪旋转到对应枢纽。',
+    pieTitle: '2026 宏观压力最高农业枢纽',
+    pieSubtitle: '按农业枢纽的综合点数计算。',
+    dominantLabel: '主导压力',
+    totalLabel: '综合压力',
   },
 };
-
-function pressureTextColor(score: number) {
-  if (score >= 82) return 'text-emerald-600';
-  if (score >= 68) return 'text-amber-600';
-  return 'text-sky-600';
-}
 
 function driverColor(symbol: string) {
   switch (symbol) {
@@ -347,9 +348,9 @@ export default function MacroDriversGlobePie({ drivers, language }: Props) {
   }
 
   return (
-    <div className="rounded-[2rem] bg-white p-5 text-slate-900 shadow-[0_18px_50px_rgba(15,23,42,0.18)] md:p-8">
-      <div className="grid gap-8 xl:grid-cols-[1.02fr_0.98fr]">
-        <div className="overflow-hidden rounded-[1.5rem] border border-slate-200 bg-[radial-gradient(circle_at_center,_rgba(148,163,184,0.12),_transparent_62%),linear-gradient(180deg,#ffffff_0%,#f8fafc_100%)] p-2">
+    <div className="rounded-[2rem] bg-white p-6 text-slate-900 shadow-[0_18px_50px_rgba(15,23,42,0.18)] md:p-8">
+      <div className="grid items-center gap-8 xl:grid-cols-[1fr_1fr]">
+        <div className="overflow-hidden">
           {worldMap ? (
             <HighchartsReact highcharts={HighchartsMap} constructorType="mapChart" options={globeOptions} />
           ) : (
@@ -357,12 +358,12 @@ export default function MacroDriversGlobePie({ drivers, language }: Props) {
           )}
         </div>
 
-        <div className="overflow-hidden rounded-[1.5rem] border border-slate-200 bg-[linear-gradient(180deg,#ffffff_0%,#f8fafc_100%)] p-2">
+        <div className="overflow-hidden">
           <MacroDriversVariablePie
-            title={copy.title}
-            subtitle={copy.subtitle}
-            measureLabel={copy.measureLabel}
-            reserveLabel={copy.reserveLabel}
+            title={copy.pieTitle}
+            subtitle={copy.pieSubtitle}
+            measureLabel={copy.dominantLabel}
+            reserveLabel={copy.totalLabel}
             hubs={hubs}
             selectedCode={selectedHub.code3}
             onSelect={setSelectedCode}
@@ -370,51 +371,19 @@ export default function MacroDriversGlobePie({ drivers, language }: Props) {
         </div>
       </div>
 
-      <div className="mt-6 grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
-        <div className="rounded-[1.5rem] border border-slate-200 bg-slate-50 p-5">
-          <div className="mb-3 flex items-center justify-between gap-3">
-            <h4 className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">{copy.detailTitle}</h4>
-            <span className="rounded-full border border-slate-200 bg-white px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">
-              {copy.clickHint}
-            </span>
-          </div>
-          <div className="grid gap-3 sm:grid-cols-2">
-            <div className="rounded-2xl border border-slate-200 bg-white p-4">
-              <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">{copy.totalPressure}</p>
-              <p className={`mt-2 text-2xl font-black ${pressureTextColor(selectedHub.totalPressure)}`}>{selectedHub.totalPressure}</p>
-            </div>
-            <div className="rounded-2xl border border-slate-200 bg-white p-4">
-              <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">{copy.topDriver}</p>
-              <p className="mt-2 text-base font-semibold text-slate-900">{topSlice?.label ?? '--'}</p>
-            </div>
-            <div className="rounded-2xl border border-slate-200 bg-white p-4 sm:col-span-2">
-              <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">{copy.corridor}</p>
-              <p className="mt-2 text-base font-semibold text-slate-900">{selectedHub.corridor}</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-          {selectedHub.slices.map((slice) => (
-            <div key={slice.id} className="rounded-[1.4rem] border border-slate-200 bg-white p-4">
-              <div className="mb-2 flex items-center justify-between gap-3">
-                <span className="text-sm font-semibold text-slate-900">{slice.label}</span>
-                <span
-                  className="rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.18em]"
-                  style={{ backgroundColor: `${driverColor(slice.id)}22`, color: driverColor(slice.id) }}
-                >
-                  {slice.id}
-                </span>
-              </div>
-              <div className="text-xl font-black text-slate-900">{slice.price.toFixed(2)}</div>
-              <div className="mt-1 text-xs uppercase tracking-[0.18em] text-slate-500">{slice.unit}</div>
-              <div className="mt-3 flex items-center justify-between gap-3 text-sm">
-                <span className="text-slate-500">{copy.totalPressure}</span>
-                <span className="font-semibold text-slate-900">{slice.impact}</span>
-              </div>
-              <div className="mt-1 text-sm text-slate-600">{formatPercent(slice.change)}</div>
-            </div>
-          ))}
+      <div className="mt-4 rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 text-sm leading-7 text-slate-600">
+        <p>{copy.description}</p>
+        <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2 text-xs font-medium uppercase tracking-[0.16em] text-slate-500">
+          <span>{selectedHub.code3}</span>
+          <span>
+            {copy.totalPressure}: {selectedHub.totalPressure}
+          </span>
+          <span>
+            {copy.topDriver}: {topSlice?.label ?? '--'}
+          </span>
+          <span>
+            {copy.corridor}: {selectedHub.corridor}
+          </span>
         </div>
       </div>
     </div>
