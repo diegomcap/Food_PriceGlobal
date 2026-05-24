@@ -3,7 +3,7 @@
 import dynamic from 'next/dynamic';
 import { useEffect, useMemo, useState } from 'react';
 import HighchartsMap from 'highcharts/highmaps';
-import { buildMacroHubPoints } from '@/lib/agroVisualData';
+import { buildMacroHubPoints, MACRO_CORE_TOP10_CODES } from '@/lib/agroVisualData';
 import type { SupportedLanguage } from '@/lib/marketTime';
 
 const HighchartsReact = dynamic(() => import('highcharts-react-official'), { ssr: false });
@@ -223,6 +223,10 @@ export default function MacroDriversGlobePie({ drivers, language }: Props) {
   const visibleHubs = useMemo(() => {
     if (topFilter === 'all') {
       return hubs;
+    }
+    if (topFilter === 10) {
+      const coreTopTen = new Set<string>(MACRO_CORE_TOP10_CODES);
+      return hubs.filter((hub) => coreTopTen.has(hub.code3)).slice(0, 10);
     }
     return hubs.slice(0, topFilter);
   }, [hubs, topFilter]);

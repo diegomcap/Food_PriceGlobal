@@ -569,6 +569,8 @@ export const MACRO_HUBS: MacroHubProfile[] = [
   },
 ];
 
+export const MACRO_CORE_TOP10_CODES = ['BRA', 'USA', 'ARG', 'CHN', 'IND', 'CAN', 'AUS', 'UKR', 'THA', 'VNM'] as const;
+
 function clamp(value: number, min = 0, max = 100) {
   return Math.max(min, Math.min(max, Math.round(value)));
 }
