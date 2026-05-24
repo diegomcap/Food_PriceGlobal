@@ -17,6 +17,7 @@ import NewsSection from '@/components/dashboard/NewsSection';
 import CommodityLinks from '@/components/dashboard/CommodityLinks';
 import AboutSection from '@/components/dashboard/AboutSection';
 import ContactSection from '@/components/dashboard/ContactSection';
+import IntelligenceCTASection from '@/components/dashboard/IntelligenceCTASection';
 import { DivisionsSection } from '@/components/home/DivisionsSection';
 import { useTranslation } from '@/context/TranslationContext';
 
@@ -53,6 +54,8 @@ export default function Home() {
         <CommodityLinks />
 
         <FundsSection />
+
+        <IntelligenceCTASection />
         
         <DivisionsSection />
 
