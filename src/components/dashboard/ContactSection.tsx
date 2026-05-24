@@ -63,7 +63,7 @@ export default function ContactSection() {
   const demoHref = `mailto:${copy.emailValue}?subject=${encodeURIComponent('FoodPrice Global Demo Request')}`;
 
   return (
-    <section id="contato" className="bg-white py-20">
+    <section id="contato" className="bg-white py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">
           <div className="rounded-[2rem] border border-slate-200 bg-slate-950 p-8 text-white shadow-[0_24px_80px_rgba(15,23,42,0.16)] md:p-10">
@@ -71,31 +71,31 @@ export default function ContactSection() {
               <MessageSquareQuote className="h-4 w-4" />
               {copy.eyebrow}
             </div>
-            <h2 className="mt-6 text-3xl font-bold leading-tight md:text-4xl">{copy.title}</h2>
-            <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-300">{copy.subtitle}</p>
+            <h2 className="mt-6 max-w-2xl text-3xl font-bold leading-tight tracking-[-0.02em] md:text-4xl">{copy.title}</h2>
+            <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-300/95">{copy.subtitle}</p>
 
-            <div className="mt-8 grid gap-4 md:grid-cols-2">
-              <div className="rounded-[1.5rem] border border-white/10 bg-white/[0.04] p-5">
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">{copy.emailLabel}</p>
+            <div className="mt-9 grid gap-4 md:grid-cols-2">
+              <div className="rounded-[1.5rem] border border-white/10 bg-white/[0.04] p-5 md:p-6">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">{copy.emailLabel}</p>
                 <p className="mt-3 text-lg font-semibold text-white">{copy.emailValue}</p>
               </div>
-              <div className="rounded-[1.5rem] border border-white/10 bg-white/[0.04] p-5">
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">{copy.responseLabel}</p>
+              <div className="rounded-[1.5rem] border border-white/10 bg-white/[0.04] p-5 md:p-6">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">{copy.responseLabel}</p>
                 <p className="mt-3 text-lg font-semibold text-white">{copy.responseValue}</p>
               </div>
             </div>
 
-            <div className="mt-8 flex flex-col gap-4 sm:flex-row">
+            <div className="mt-9 flex flex-col gap-4 sm:flex-row">
               <Link
                 href={emailHref}
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-emerald-500 to-cyan-500 px-7 py-4 text-base font-bold text-slate-950 transition-all hover:-translate-y-0.5 hover:from-emerald-400 hover:to-cyan-400"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-emerald-500 to-cyan-500 px-7 py-4 text-[15px] font-bold text-slate-950 transition-all hover:-translate-y-0.5 hover:from-emerald-400 hover:to-cyan-400"
               >
                 <Mail className="h-5 w-5" />
                 {copy.primary}
               </Link>
               <Link
                 href={demoHref}
-                className="inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-white/8 px-7 py-4 text-base font-bold text-white backdrop-blur-sm transition-all hover:bg-white/14"
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-white/8 px-7 py-4 text-[15px] font-bold text-white backdrop-blur-sm transition-all hover:bg-white/14"
               >
                 <ArrowUpRight className="h-5 w-5" />
                 {copy.secondary}
@@ -104,16 +104,16 @@ export default function ContactSection() {
           </div>
 
           <div className="grid gap-5">
-            <div className="rounded-[2rem] border border-slate-200 bg-slate-50 p-8">
+            <div className="rounded-[2rem] border border-slate-200 bg-slate-50 p-8 md:p-9">
               <div className="flex items-start gap-4">
                 <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-600">
                   <Radar className="h-5 w-5" />
                 </div>
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">{copy.coverageLabel}</p>
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-500">{copy.coverageLabel}</p>
                   <div className="mt-4 flex flex-wrap gap-3">
                     {copy.coverageItems.map((item) => (
-                      <span key={item} className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700">
+                      <span key={item} className="rounded-full border border-slate-200 bg-white px-4 py-2 text-[13px] font-medium text-slate-700">
                         {item}
                       </span>
                     ))}
@@ -122,27 +122,27 @@ export default function ContactSection() {
               </div>
             </div>
 
-            <div className="rounded-[2rem] border border-slate-200 bg-white p-8 shadow-sm">
+            <div className="rounded-[2rem] border border-slate-200 bg-white p-8 md:p-9 shadow-sm">
               <div className="flex items-start gap-4">
                 <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-sky-500/10 text-sky-600">
                   <Sparkles className="h-5 w-5" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold text-slate-900">{copy.noteTitle}</h3>
+                  <h3 className="text-xl font-semibold tracking-[-0.01em] text-slate-900">{copy.noteTitle}</h3>
                   <p className="mt-3 text-sm leading-7 text-slate-600">{copy.noteBody}</p>
                 </div>
               </div>
             </div>
 
-            <div className="rounded-[2rem] border border-slate-200 bg-gradient-to-br from-slate-950 to-slate-900 p-8 text-white">
+            <div className="rounded-[2rem] border border-slate-200 bg-gradient-to-br from-slate-950 to-slate-900 p-8 md:p-9 text-white">
               <div className="flex items-start gap-4">
                 <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white/10 text-emerald-300">
                   <ShieldCheck className="h-5 w-5" />
                 </div>
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">{copy.responseLabel}</p>
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">{copy.responseLabel}</p>
                   <p className="mt-3 text-lg font-semibold text-white">{copy.responseValue}</p>
-                  <p className="mt-3 text-sm leading-7 text-slate-300">{copy.subtitle}</p>
+                  <p className="mt-3 text-sm leading-7 text-slate-300/95">{copy.subtitle}</p>
                 </div>
               </div>
             </div>

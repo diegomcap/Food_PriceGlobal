@@ -236,7 +236,7 @@ export function Hero() {
   const copy = COPY[activeLanguage];
 
   return (
-    <section className="relative overflow-hidden bg-slate-950 pt-32 pb-20 lg:pt-44 lg:pb-28">
+    <section className="relative overflow-hidden bg-slate-950 pt-32 pb-24 lg:pt-44 lg:pb-32">
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_12%_18%,_rgba(16,185,129,0.22),_transparent_22%),radial-gradient(circle_at_82%_14%,_rgba(14,165,233,0.18),_transparent_20%),linear-gradient(135deg,_rgba(15,23,42,0.98),_rgba(2,6,23,0.98))]" />
         <img src="/img/hero-bg.svg" alt="Agriculture Background" className="h-full w-full object-cover opacity-10 mix-blend-screen" />
@@ -248,7 +248,7 @@ export function Hero() {
 
       <div className="relative z-10 container mx-auto px-4">
         <div className="mx-auto max-w-7xl">
-          <div className="mb-10 flex flex-wrap items-center gap-3">
+          <div className="mb-12 flex flex-wrap items-center gap-3">
             <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-400/10 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.28em] text-emerald-200">
               <Radar className="h-4 w-4" />
               {copy.eyebrow}
@@ -259,11 +259,11 @@ export function Hero() {
             </div>
           </div>
 
-          <div className="grid gap-10 xl:grid-cols-[1.04fr_0.96fr]">
+          <div className="grid gap-12 xl:grid-cols-[1.04fr_0.96fr] xl:gap-14">
             <div className="relative">
               <div className="absolute -left-4 top-2 hidden h-28 w-px bg-gradient-to-b from-emerald-300/0 via-emerald-300/70 to-emerald-300/0 xl:block" />
               <div className="pl-0 xl:pl-8">
-                <h1 className="max-w-4xl text-4xl font-black leading-[1.02] tracking-[-0.03em] text-white md:text-6xl xl:text-[5.2rem]">
+                <h1 className="max-w-4xl text-4xl font-black leading-[0.98] tracking-[-0.035em] text-white md:text-6xl xl:text-[5.2rem]">
                   {copy.titleLead}
                   <br />
                   <span className="bg-gradient-to-r from-emerald-300 via-lime-200 to-cyan-300 bg-clip-text text-transparent">
@@ -273,43 +273,43 @@ export function Hero() {
                   <span className="text-slate-200">{copy.titleTail}</span>
                 </h1>
 
-                <p className="mt-8 max-w-2xl text-lg leading-8 text-slate-300 md:text-xl">
+                <p className="mt-9 max-w-[42rem] text-lg leading-8 text-slate-300 md:text-[1.28rem] md:leading-9">
                   {copy.subtitle}
                 </p>
 
-                <div className="mt-8 flex flex-wrap gap-3">
+                <div className="mt-9 flex flex-wrap gap-3">
                   {copy.chips.map((chip) => (
                     <span
                       key={chip}
-                      className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-slate-200 backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-white/20 hover:bg-white/10"
+                      className="inline-flex items-center rounded-full border border-white/10 bg-white/[0.045] px-4 py-2 text-[13px] font-medium tracking-[0.01em] text-slate-200 backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-white/20 hover:bg-white/10"
                     >
                       {chip}
                     </span>
                   ))}
                 </div>
 
-                <div className="mt-10 grid gap-4 md:grid-cols-3">
+                <div className="mt-11 grid gap-4 md:grid-cols-3">
                   {copy.bullets.map((bullet, index) => (
-                    <div key={bullet} className="rounded-3xl border border-white/10 bg-white/[0.04] p-5 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-emerald-300/20 hover:bg-white/[0.06]">
-                      <div className="text-[11px] font-semibold uppercase tracking-[0.26em] text-emerald-200">
+                    <div key={bullet} className="rounded-3xl border border-white/10 bg-white/[0.04] p-5 md:p-6 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-emerald-300/20 hover:bg-white/[0.06]">
+                      <div className="text-[10px] font-semibold uppercase tracking-[0.3em] text-emerald-200/90">
                         0{index + 1}
                       </div>
-                      <p className="mt-3 text-sm leading-7 text-slate-200">{bullet}</p>
+                      <p className="mt-3.5 text-sm leading-7 text-slate-200/95">{bullet}</p>
                     </div>
                   ))}
                 </div>
 
-                <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
+                <div className="mt-11 flex flex-col gap-4 sm:flex-row sm:items-center">
                   <Link
                     href="#mercados"
-                    className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/8 px-8 py-4 text-base font-bold text-white backdrop-blur-sm transition-all hover:bg-white/14"
+                    className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/8 px-8 py-4 text-[15px] font-bold text-white backdrop-blur-sm transition-all hover:bg-white/14"
                   >
                     <Workflow className="h-5 w-5" />
                     {copy.secondary}
                   </Link>
                   <Link
                     href="#alertas-mercado"
-                    className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-500 to-cyan-500 px-8 py-4 text-base font-bold text-slate-950 shadow-[0_18px_60px_rgba(16,185,129,0.22)] transition-all hover:-translate-y-0.5 hover:from-emerald-400 hover:to-cyan-400"
+                    className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-500 to-cyan-500 px-8 py-4 text-[15px] font-bold text-slate-950 shadow-[0_18px_60px_rgba(16,185,129,0.22)] transition-all hover:-translate-y-0.5 hover:from-emerald-400 hover:to-cyan-400"
                   >
                     <ArrowUpRight className="h-5 w-5" />
                     {copy.primary}
@@ -320,31 +320,31 @@ export function Hero() {
 
             <div className="relative">
               <div className="absolute -inset-6 rounded-[2.4rem] bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.12),_transparent_40%),radial-gradient(circle_at_bottom_right,_rgba(14,165,233,0.12),_transparent_35%)] blur-2xl" />
-              <div className="relative overflow-hidden rounded-[2.2rem] border border-white/10 bg-white/[0.06] p-5 shadow-2xl backdrop-blur-xl transition-transform duration-500 hover:-translate-y-1">
+              <div className="relative overflow-hidden rounded-[2.2rem] border border-white/10 bg-white/[0.055] p-5 shadow-2xl backdrop-blur-xl transition-transform duration-500 hover:-translate-y-1">
                 <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:32px_32px] opacity-[0.12]" />
                 <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-white/[0.05] to-transparent" />
                 <div className="relative grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
-                  <div className="rounded-[1.8rem] border border-white/10 bg-slate-950/55 p-6">
+                  <div className="rounded-[1.8rem] border border-white/10 bg-slate-950/55 p-6 md:p-7">
                     <div className="flex items-start justify-between gap-4">
                       <div>
                         <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-emerald-200">{copy.deckEyebrow}</p>
-                        <h2 className="mt-3 max-w-md text-2xl font-bold leading-tight text-white">{copy.deckTitle}</h2>
+                        <h2 className="mt-3 max-w-md text-[1.7rem] font-bold leading-tight text-white">{copy.deckTitle}</h2>
                       </div>
                       <div className="rounded-2xl border border-emerald-400/20 bg-emerald-400/10 p-3 text-emerald-200">
                         <Radar className="h-5 w-5" />
                       </div>
                     </div>
 
-                    <p className="mt-5 max-w-lg text-sm leading-7 text-slate-300">{copy.deckBody}</p>
+                    <p className="mt-5 max-w-lg text-sm leading-7 text-slate-300/95">{copy.deckBody}</p>
 
                     <div className="mt-6 space-y-3">
                       {copy.deckBlocks.map((block) => (
-                        <div key={block.label} className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 transition-all duration-300 hover:border-white/20 hover:bg-white/[0.07]">
+                        <div key={block.label} className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 md:p-5 transition-all duration-300 hover:border-white/20 hover:bg-white/[0.07]">
                           <div className="flex items-start justify-between gap-4">
                             <div>
-                              <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">{block.label}</p>
+                              <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-400">{block.label}</p>
                               <p className="mt-2 text-lg font-semibold text-white">{block.value}</p>
-                              <p className="mt-2 text-sm leading-6 text-slate-300">{block.note}</p>
+                              <p className="mt-2.5 text-sm leading-6 text-slate-300/95">{block.note}</p>
                             </div>
                             <Database className="mt-1 h-4 w-4 text-slate-500" />
                           </div>
@@ -354,9 +354,9 @@ export function Hero() {
                   </div>
 
                   <div className="grid gap-4">
-                    <div className="rounded-[1.8rem] border border-white/10 bg-white/[0.05] p-5">
-                      <p className="text-[11px] font-semibold uppercase tracking-[0.26em] text-slate-400">{copy.useCasesLabel}</p>
-                      <div className="mt-4 flex flex-wrap gap-2">
+                    <div className="rounded-[1.8rem] border border-white/10 bg-white/[0.05] p-5 md:p-6">
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-400">{copy.useCasesLabel}</p>
+                      <div className="mt-4 flex flex-wrap gap-2.5">
                         {copy.useCases.map((item) => (
                           <span key={item} className="rounded-full border border-white/10 bg-slate-950/50 px-3 py-2 text-xs font-medium text-slate-200 transition-colors duration-300 hover:border-emerald-300/30 hover:text-white">
                             {item}
@@ -365,24 +365,24 @@ export function Hero() {
                       </div>
                     </div>
 
-                    <div className="rounded-[1.8rem] border border-white/10 bg-gradient-to-br from-white/[0.08] to-white/[0.03] p-5">
-                      <p className="text-[11px] font-semibold uppercase tracking-[0.26em] text-slate-400">{copy.railLabel}</p>
+                    <div className="rounded-[1.8rem] border border-white/10 bg-gradient-to-br from-white/[0.08] to-white/[0.03] p-5 md:p-6">
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-400">{copy.railLabel}</p>
                       <div className="mt-5 space-y-4">
                         {copy.railStats.map((stat) => (
                           <div key={stat.label} className="flex items-end justify-between gap-4 border-b border-white/10 pb-4 last:border-b-0 last:pb-0">
-                            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">{stat.label}</p>
-                            <p className="text-right text-2xl font-black text-white">{stat.value}</p>
+                            <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-500">{stat.label}</p>
+                            <p className="text-right text-[1.65rem] font-black text-white">{stat.value}</p>
                           </div>
                         ))}
                       </div>
                     </div>
 
-                    <div className="rounded-[1.8rem] border border-white/10 bg-slate-950/50 p-5">
-                      <p className="text-[11px] font-semibold uppercase tracking-[0.26em] text-slate-400">{copy.pulseLabel}</p>
+                    <div className="rounded-[1.8rem] border border-white/10 bg-slate-950/50 p-5 md:p-6">
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-400">{copy.pulseLabel}</p>
                       <div className="mt-4 space-y-3">
                         {copy.pulseItems.map((item, index) => (
                           <div key={item}>
-                            <div className="mb-2 flex items-center justify-between text-xs text-slate-300">
+                            <div className="mb-2 flex items-center justify-between text-[11px] text-slate-300">
                               <span>{item}</span>
                               <span>0{index + 1}</span>
                             </div>
@@ -397,10 +397,10 @@ export function Hero() {
                       </div>
                     </div>
 
-                    <div className="rounded-[1.8rem] border border-emerald-400/15 bg-emerald-400/10 p-5 text-emerald-50">
+                    <div className="rounded-[1.8rem] border border-emerald-400/15 bg-emerald-400/10 p-5 md:p-6 text-emerald-50">
                       <div className="flex items-start gap-3">
                         <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-emerald-200" />
-                        <p className="text-sm leading-7">{copy.footnote}</p>
+                        <p className="text-sm leading-7 text-emerald-50/95">{copy.footnote}</p>
                       </div>
                     </div>
                   </div>

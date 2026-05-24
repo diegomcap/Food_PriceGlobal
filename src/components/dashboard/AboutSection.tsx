@@ -188,33 +188,33 @@ export default function AboutSection() {
   const currentFeed = MONITORING_FEEDS[currentFeedIndex];
 
   return (
-    <section id="sobre" className="relative overflow-hidden bg-slate-900 py-20 text-white">
+    <section id="sobre" className="relative overflow-hidden bg-slate-900 py-24 text-white">
       <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)', backgroundSize: '30px 30px' }} />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(59,130,246,0.12),_transparent_24%),radial-gradient(circle_at_bottom_right,_rgba(16,185,129,0.10),_transparent_24%)]" />
 
       <div className="container relative z-10 mx-auto px-4">
-        <div className="grid items-center gap-12 lg:grid-cols-[0.95fr_1.05fr]">
+        <div className="grid items-center gap-12 lg:grid-cols-[0.95fr_1.05fr] lg:gap-16">
           <div>
             <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-300">
               <Layers3 className="h-4 w-4" />
               {copy.eyebrow}
             </div>
-            <h2 className="mb-6 text-3xl font-bold md:text-4xl">{copy.title}</h2>
-            <p className="max-w-2xl text-lg leading-8 text-slate-300">{copy.intro}</p>
+            <h2 className="mb-6 max-w-2xl text-3xl font-bold tracking-[-0.02em] md:text-4xl">{copy.title}</h2>
+            <p className="max-w-2xl text-lg leading-8 text-slate-300/95">{copy.intro}</p>
 
-            <div className="mt-8 space-y-4">
+            <div className="mt-9 space-y-4">
               {copy.pillars.map((pillar, index) => (
                 <article
                   key={pillar.title}
-                  className="rounded-[1.75rem] border border-white/10 bg-white/[0.04] p-5 transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/[0.06]"
+                  className="rounded-[1.75rem] border border-white/10 bg-white/[0.04] p-5 md:p-6 transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/[0.06]"
                 >
                   <div className="flex items-start gap-4">
                     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-emerald-400/20 bg-emerald-400/10 text-sm font-bold text-emerald-200">
                       0{index + 1}
                     </div>
                     <div>
-                      <h3 className="text-lg font-semibold text-white">{pillar.title}</h3>
-                      <p className="mt-2 text-sm leading-7 text-slate-300">{pillar.detail}</p>
+                      <h3 className="text-lg font-semibold tracking-[-0.01em] text-white">{pillar.title}</h3>
+                      <p className="mt-2.5 text-sm leading-7 text-slate-300/95">{pillar.detail}</p>
                     </div>
                   </div>
                 </article>
@@ -226,12 +226,12 @@ export default function AboutSection() {
             <div className="absolute -inset-4 rounded-full bg-gradient-to-r from-blue-500 to-green-500 blur-3xl opacity-20 transition-opacity duration-1000 group-hover:opacity-40 motion-safe:animate-[pulse_10s_ease-in-out_infinite]" />
 
             <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-slate-950/65 shadow-2xl backdrop-blur-sm">
-              <div className="border-b border-white/10 p-5">
+              <div className="border-b border-white/10 p-5 md:p-6">
                 <div className="flex flex-wrap items-center justify-between gap-4">
                   <div>
                     <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-emerald-200">{copy.mediaEyebrow}</p>
-                    <h3 className="mt-2 text-2xl font-semibold text-white">{copy.mediaTitle}</h3>
-                    <p className="mt-2 max-w-xl text-sm leading-7 text-slate-300">{copy.mediaNote}</p>
+                    <h3 className="mt-2 text-[1.65rem] font-semibold tracking-[-0.01em] text-white">{copy.mediaTitle}</h3>
+                    <p className="mt-2.5 max-w-xl text-sm leading-7 text-slate-300/95">{copy.mediaNote}</p>
                   </div>
                   <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold text-slate-300">
                     <Play className="h-3.5 w-3.5 text-emerald-300" />
@@ -268,7 +268,7 @@ export default function AboutSection() {
                 </div>
 
                 <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between gap-4">
-                  <div className="space-y-2 rounded-2xl border border-white/10 bg-black/35 px-4 py-3 backdrop-blur-md">
+                  <div className="space-y-2 rounded-2xl border border-white/10 bg-black/35 px-4 py-3.5 backdrop-blur-md">
                     <div className="flex items-center gap-2 text-sm font-medium text-white">
                       <Activity className="h-4 w-4 text-emerald-300" />
                       {t(currentFeed.labelKey)}
