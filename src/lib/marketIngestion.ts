@@ -2,6 +2,7 @@ import 'server-only';
 
 import { COMMODITY_META } from '@/lib/marketOverview';
 import { isRefreshDue } from '@/lib/dataFreshness';
+import { MARKET_SOURCE_STACK } from '@/lib/marketSources';
 import { getSupabaseAdmin } from '@/lib/supabase/server';
 
 export type CommoditySnapshot = {
@@ -69,28 +70,6 @@ export const FALLBACK_MACRO_DRIVERS: MacroDriverSnapshot[] = [
   { symbol: 'NG=F', label: 'Natural Gas', price: 2.67, previousClose: 2.61, unit: 'USD/mmbtu' },
   { symbol: 'GC=F', label: 'Gold', price: 2384.1, previousClose: 2371.4, unit: 'USD/oz' },
 ];
-
-export const MARKET_SOURCE_STACK = {
-  commodities: {
-    primary: 'barchart-commodities',
-    secondary: 'trading-economics-commodities',
-    tertiary: 'yahoo-finance',
-    persisted: 'supabase-snapshot',
-    fallback: 'fallback',
-  },
-  macro_drivers: {
-    primary: 'trading-economics-macro',
-    secondary: 'barchart-macro',
-    tertiary: 'yahoo-finance-macro',
-    persisted: 'supabase-snapshot',
-    fallback: 'fallback',
-  },
-} as const;
-
-export const MARKET_SOURCE_PRIORITY = {
-  commodities: ['barchart-commodities', 'trading-economics-commodities', 'yahoo-finance', 'supabase-snapshot', 'fallback'],
-  macro_drivers: ['trading-economics-macro', 'barchart-macro', 'yahoo-finance-macro', 'supabase-snapshot', 'fallback'],
-} as const;
 
 const COMMODITY_BARCHART_SYMBOLS: Record<string, string> = {
   'ZW=F': 'ZW*0',
@@ -292,7 +271,7 @@ export async function fetchMacroDriversFromYahoo(): Promise<ProviderResult<Macro
 
   return {
     items,
-    source: 'yahoo-finance',
+    source: 'yahoo-finance-macro',
     updatedAt: new Date().toISOString(),
   };
 }

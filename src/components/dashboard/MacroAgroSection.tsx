@@ -6,6 +6,7 @@ import { useTranslation } from '@/context/TranslationContext';
 import { formatDateTime, type SupportedLanguage } from '@/lib/marketTime';
 import { formatPercent, getSourceLabel } from '@/lib/marketOverview';
 import DataFreshnessBadge from '@/components/dashboard/DataFreshnessBadge';
+import PipelineSourceAlert from '@/components/dashboard/PipelineSourceAlert';
 
 type MacroDriver = {
   symbol: string;
@@ -183,13 +184,18 @@ export default function MacroAgroSection() {
           </div>
         </div>
 
-        <div className="mb-6">
+        <div className="mb-6 space-y-3">
           <DataFreshnessBadge
             dataset="macro_drivers"
             updatedAt={updatedAt}
             source={source}
             language={language as SupportedLanguage}
             theme="dark"
+          />
+          <PipelineSourceAlert
+            dataset="macro_drivers"
+            source={source}
+            language={language as SupportedLanguage}
           />
         </div>
 

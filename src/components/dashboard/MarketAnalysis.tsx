@@ -1,6 +1,6 @@
 'use client';
 
-import { FileText, Activity, Calendar, Share2, ArrowRight } from 'lucide-react';
+import { FileText, Activity, Calendar, Share2, ArrowRight, ShieldAlert } from 'lucide-react';
 import Link from 'next/link';
 import { useTranslation } from '@/context/TranslationContext';
 
@@ -39,6 +39,14 @@ export default function MarketAnalysis() {
       color: 'purple',
       action: t('view_correlations_button'),
       href: '/market-analysis/correlations'
+    },
+    {
+      title: 'Pipeline Status',
+      description: 'Observability for ingestion runs, current source tier, freshness and degraded-source alerts.',
+      icon: ShieldAlert,
+      color: 'amber',
+      action: 'View status',
+      href: '/market-analysis/pipeline-status'
     }
   ];
 
@@ -49,7 +57,7 @@ export default function MarketAnalysis() {
           {t('market_analysis_title')}
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
           {analysisCards.map((card, index) => (
             <div key={index} className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 border border-slate-100 group flex flex-col">
               <div className={`w-14 h-14 rounded-2xl bg-${card.color}-50 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>

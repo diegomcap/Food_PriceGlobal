@@ -5,6 +5,7 @@ import { Search, ArrowUp, ArrowDown, Loader2, RefreshCw } from 'lucide-react';
 import { useTranslation } from '@/context/TranslationContext';
 import { type SupportedLanguage } from '@/lib/marketTime';
 import DataFreshnessBadge from '@/components/dashboard/DataFreshnessBadge';
+import PipelineSourceAlert from '@/components/dashboard/PipelineSourceAlert';
 
 interface CommodityData {
   id: string;
@@ -168,10 +169,15 @@ export default function CommoditiesTable() {
                 </div>
               </div>
             </div>
-            <div className="mt-4">
+            <div className="mt-4 space-y-3">
               <DataFreshnessBadge
                 dataset="commodities"
                 updatedAt={lastUpdate?.toISOString()}
+                source={dataSource}
+                language={language as SupportedLanguage}
+              />
+              <PipelineSourceAlert
+                dataset="commodities"
                 source={dataSource}
                 language={language as SupportedLanguage}
               />
