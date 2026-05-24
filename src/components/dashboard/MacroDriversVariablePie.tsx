@@ -8,9 +8,10 @@ import type { Options } from 'highcharts';
 import type { MacroHubPoint } from '@/lib/agroVisualData';
 
 type Props = {
-  titlePressure: string;
-  titleTopDriver: string;
-  titleCorridor: string;
+  title: string;
+  subtitle: string;
+  measureLabel: string;
+  reserveLabel: string;
   hubs: MacroHubPoint[];
   selectedCode: string;
   onSelect: (code3: string) => void;
@@ -22,25 +23,60 @@ function sliceColor(rank: number) {
 }
 
 export default function MacroDriversVariablePie({
-  titlePressure,
-  titleTopDriver,
-  titleCorridor,
+  title,
+  subtitle,
+  measureLabel,
+  reserveLabel,
   hubs,
   selectedCode,
   onSelect,
 }: Props) {
-  const selectedIndex = Math.max(
-    hubs.findIndex((hub) => hub.code3 === selectedCode),
-    0
-  );
+  const pieData = hubs.map((hub, index) => {
+    const topDriver = hub.slices.slice().sort((a, b) => b.impact - a.impact)[0];
+    const dominantPressure = topDriver?.impact ?? hub.totalPressure;
+
+    return {
+      name: hub.country,
+      y: dominantPressure,
+      z: hub.totalPressure,
+      sliced: hub.code3 === selectedCode,
+      selected: hub.code3 === selectedCode,
+      color: sliceColor(index),
+      custom: {
+        code3: hub.code3,
+        short: hub.code3,
+        corridor: hub.corridor,
+        topDriver: topDriver?.label ?? '--',
+        totalPressure: hub.totalPressure,
+      },
+    };
+  });
 
   const options: Options = {
     chart: {
       type: 'variablepie',
       backgroundColor: 'transparent',
-      height: 500,
+      height: 540,
+      spacingTop: 16,
+      spacingBottom: 10,
     },
-    title: undefined,
+    title: {
+      text: title,
+      align: 'center',
+      style: {
+        color: '#0f172a',
+        fontSize: '28px',
+        fontWeight: '700',
+      },
+    },
+    subtitle: {
+      text: subtitle,
+      align: 'center',
+      style: {
+        color: '#475569',
+        fontSize: '13px',
+      },
+    },
     credits: { enabled: false },
     exporting: { enabled: false },
     legend: { enabled: false },
@@ -51,9 +87,9 @@ export default function MacroDriversVariablePie({
           <div style="min-width:220px;color:#0f172a">
             <div style="font-size:13px;font-weight:700;margin-bottom:8px">${this.name}</div>
             <div style="font-size:12px;line-height:1.7">
-              <div>${titlePressure}: <b>${this.y}</b></div>
-              <div>${titleTopDriver}: <b>${this.custom.topDriver}</b></div>
-              <div>${titleCorridor}: <b>${this.custom.corridor}</b></div>
+              <div>${measureLabel}: <b>${this.y}</b></div>
+              <div>${reserveLabel}: <b>${this.custom.totalPressure}</b></div>
+              <div>Driver: <b>${this.custom.topDriver}</b></div>
             </div>
           </div>
         `;
@@ -61,19 +97,21 @@ export default function MacroDriversVariablePie({
     },
     plotOptions: {
       variablepie: {
-        minPointSize: 18,
-        innerSize: '12%',
-        borderColor: 'rgba(255,255,255,0.95)',
+        minPointSize: 34,
+        innerSize: '18%',
+        borderColor: '#ffffff',
         borderWidth: 2,
-        slicedOffset: 10,
+        crisp: true,
+        slicedOffset: 12,
+        sizeBy: 'area',
         dataLabels: {
           enabled: true,
           format: '{point.custom.short}',
-          distance: 14,
+          distance: 12,
           style: {
             color: '#334155',
             textOutline: 'none',
-            fontSize: '11px',
+            fontSize: '12px',
             fontWeight: '700',
           },
         },
@@ -97,24 +135,7 @@ export default function MacroDriversVariablePie({
     series: [
       {
         type: 'variablepie',
-        data: hubs.map((hub, index) => {
-          const topDriver = hub.slices.slice().sort((a, b) => b.impact - a.impact)[0];
-
-          return {
-            name: hub.country,
-            y: hub.totalPressure,
-            z: topDriver?.impact ?? hub.totalPressure,
-            sliced: index === selectedIndex,
-            selected: index === selectedIndex,
-            color: sliceColor(index),
-          custom: {
-              code3: hub.code3,
-              corridor: hub.corridor,
-              topDriver: topDriver?.label ?? '--',
-              short: hub.code3,
-            },
-          };
-        }),
+        data: pieData,
       },
     ],
   };
