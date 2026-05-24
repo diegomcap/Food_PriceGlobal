@@ -23,7 +23,7 @@ const COPY = {
     updatedAt: 'Atualizado em',
     datasets: 'Datasets monitorados',
     records: 'Registros disponiveis',
-    freshness: 'Freshness',
+    freshness: 'Atualizacao',
     liveMode: 'Modo de operacao',
     monitored: 'Monitoramento continuo ativo',
     health: {
