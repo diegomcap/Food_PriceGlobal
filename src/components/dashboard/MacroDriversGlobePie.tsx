@@ -27,6 +27,7 @@ type Copy = {
   description: string;
   clickHint: string;
   filterLabel: string;
+  top10: string;
   top30: string;
   top100: string;
   all: string;
@@ -42,6 +43,7 @@ const COPY: Record<SupportedLanguage, Copy> = {
       'Variable pie interativo indicando os principais hubs macro do agronegocio. O score combina cambio, energia, diesel e frete maritimo e e recalculado a cada atualizacao periodica do feed macro.',
     clickHint: 'Clique em uma fatia para girar o globe ate o pais correspondente.',
     filterLabel: 'Filtro',
+    top10: 'Top 10',
     top30: 'Top 30',
     top100: 'Top 100',
     all: 'All',
@@ -55,6 +57,7 @@ const COPY: Record<SupportedLanguage, Copy> = {
       'Interactive variable pie showing the leading agribusiness macro hubs. The score combines FX, energy, diesel and ocean freight on every periodic macro-feed refresh.',
     clickHint: 'Click a slice to rotate the globe to the corresponding country.',
     filterLabel: 'Filter',
+    top10: 'Top 10',
     top30: 'Top 30',
     top100: 'Top 100',
     all: 'All',
@@ -68,6 +71,7 @@ const COPY: Record<SupportedLanguage, Copy> = {
       'Variable pie interactivo que muestra los principales hubs macro del agronegocio. El score combina FX, energia, diesel y flete maritimo en cada actualizacion periodica del feed macro.',
     clickHint: 'Haz clic en una porcion para girar el globo al pais correspondiente.',
     filterLabel: 'Filtro',
+    top10: 'Top 10',
     top30: 'Top 30',
     top100: 'Top 100',
     all: 'All',
@@ -81,6 +85,7 @@ const COPY: Record<SupportedLanguage, Copy> = {
       'Interactive variable pie showing the leading agribusiness macro hubs. The score combines FX, energy, diesel and ocean freight on every periodic macro-feed refresh.',
     clickHint: 'Click a slice to rotate the globe to the corresponding country.',
     filterLabel: 'Filter',
+    top10: 'Top 10',
     top30: 'Top 30',
     top100: 'Top 100',
     all: 'All',
@@ -94,6 +99,7 @@ const COPY: Record<SupportedLanguage, Copy> = {
       'Interactive variable pie showing the leading agribusiness macro hubs. The score combines FX, energy, diesel and ocean freight on every periodic macro-feed refresh.',
     clickHint: 'Click a slice to rotate the globe to the corresponding country.',
     filterLabel: 'Filter',
+    top10: 'Top 10',
     top30: 'Top 30',
     top100: 'Top 100',
     all: 'All',
@@ -107,6 +113,7 @@ const COPY: Record<SupportedLanguage, Copy> = {
       'Interactive variable pie showing the leading agribusiness macro hubs. The score combines FX, energy, diesel and ocean freight on every periodic macro-feed refresh.',
     clickHint: 'Click a slice to rotate the globe to the corresponding country.',
     filterLabel: 'Filter',
+    top10: 'Top 10',
     top30: 'Top 30',
     top100: 'Top 100',
     all: 'All',
@@ -115,7 +122,7 @@ const COPY: Record<SupportedLanguage, Copy> = {
   },
 };
 
-type TopFilter = 30 | 100 | 'all';
+type TopFilter = 10 | 30 | 100 | 'all';
 
 function getRotationForHub(lon: number, lat: number): [number, number, number] {
   return [-lon, -lat, 0];
@@ -184,7 +191,7 @@ export default function MacroDriversGlobePie({ drivers, language }: Props) {
   const [worldMap, setWorldMap] = useState<any | null>(null);
   const [modulesReady, setModulesReady] = useState(false);
   const [selectedCode, setSelectedCode] = useState('BRA');
-  const [topFilter, setTopFilter] = useState<TopFilter>(30);
+  const [topFilter, setTopFilter] = useState<TopFilter>(10);
   const hubs = useMemo(() => buildMacroHubPoints(drivers), [drivers]);
   const graticule = useMemo(() => getGraticule(), []);
   const countryCenters = useMemo(() => getCountryCenters(worldMap), [worldMap]);
@@ -291,7 +298,7 @@ export default function MacroDriversGlobePie({ drivers, language }: Props) {
           backgroundColor: 'transparent',
           height: 730,
           spacingTop: 28,
-          spacingRight: 24,
+          spacingRight: 56,
           spacingBottom: 8,
           spacingLeft: 24,
           style: {
@@ -376,7 +383,7 @@ export default function MacroDriversGlobePie({ drivers, language }: Props) {
             borderWidth: 1,
             dataLabels: {
               connectorWidth: 0,
-              distance: 20,
+              distance: 26,
               format: '{point.custom.code3}',
               style: {
                 color: '#374151',
@@ -416,8 +423,8 @@ export default function MacroDriversGlobePie({ drivers, language }: Props) {
           },
           {
             type: 'variablepie',
-            size: '43%',
-            center: ['78%', '50%'],
+            size: '39%',
+            center: ['83%', '50%'],
             data: pieData,
           },
         ],
@@ -435,6 +442,7 @@ export default function MacroDriversGlobePie({ drivers, language }: Props) {
         <div className='text-xs font-semibold uppercase tracking-[0.16em] text-slate-500'>{copy.filterLabel}</div>
         <div className='inline-flex rounded-full border border-slate-200 bg-slate-50 p-1'>
           {[
+            { value: 10 as TopFilter, label: copy.top10 },
             { value: 30 as TopFilter, label: copy.top30 },
             { value: 100 as TopFilter, label: copy.top100 },
             { value: 'all' as TopFilter, label: copy.all },
