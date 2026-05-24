@@ -62,6 +62,27 @@ const fallbackSeries: FaoRecord[] = [
   { date: '2026-05', food: 130.7, meat: 129.4, dairy: 119.6, cereals: 111.3, oils: 193.9, sugar: 88.5 },
 ];
 
+const HEADER_COPY = {
+  pt: {
+    subtitle: 'Serie oficial mensal da FAO para leitura estrutural de preco e repasse global.',
+  },
+  en: {
+    subtitle: 'Official monthly FAO series for structural food price and pass-through reading.',
+  },
+  es: {
+    subtitle: 'Serie oficial mensual de la FAO para lectura estructural de precios y traspaso global.',
+  },
+  ru: {
+    subtitle: 'Official monthly FAO series for structural food price reading.',
+  },
+  ar: {
+    subtitle: 'سلسلة شهرية رسمية من FAO لقراءة هيكلية للاسعار وانتقالها عالميا.',
+  },
+  zh: {
+    subtitle: '用于观察全球食品价格结构变化与传导的 FAO 官方月度序列。',
+  },
+} as const;
+
 function parseRecordDate(value: string) {
   return new Date(`${value}-01T12:00:00Z`);
 }
@@ -70,6 +91,7 @@ export function FoodPriceIndex() {
   const { t, language } = useTranslation();
   const [faoData, setFaoData] = useState<FaoApiResponse | null>(null);
   const [loading, setLoading] = useState(true);
+  const activeLanguage = (['pt', 'en', 'es', 'ru', 'ar', 'zh'].includes(language) ? language : 'en') as keyof typeof HEADER_COPY;
 
   useEffect(() => {
     let cancelled = false;
@@ -207,7 +229,7 @@ export function FoodPriceIndex() {
         <div className="flex flex-col md:flex-row justify-between items-center mb-8">
           <div className="text-left mb-6 md:mb-0">
             <h3 className="text-2xl font-bold text-slate-800 mb-2">{t('food_price_index_title')}</h3>
-            <p className="text-slate-500 text-sm">{t('fao_index_subtitle')}</p>
+            <p className="text-slate-500 text-sm">{HEADER_COPY[activeLanguage].subtitle}</p>
           </div>
           
           <div className="flex items-center gap-6">

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Activity, ArrowRight, Database, Globe2, Newspaper, Radar, ShieldCheck, TrendingUp } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, Database, Globe2, Newspaper, Radar, ShieldCheck, TrendingUp, Workflow } from 'lucide-react';
 import { useTranslation } from '@/context/TranslationContext';
 
 const COPY = {
@@ -20,20 +20,22 @@ const COPY = {
       'Leitura pronta para trading, exportacao, compras, sourcing e cobertura de risco.',
       'Mais contexto entre preco, energia, dolar, ouro e fluxo editorial.',
     ],
-    panelEyebrow: 'Painel ao vivo',
-    panelTitle: 'Camadas de sinal que ajudam a decidir mais cedo.',
-    panelBody:
-      'Unimos dados oficiais, futuros e observabilidade operacional em um fluxo unico, pensado para uso diario e nao para prototipos.',
-    signalCards: [
-      { icon: Database, label: 'Base', value: 'FAO + mercado', note: 'indices oficiais e futuros monitorados' },
-      { icon: Activity, label: 'Leitura', value: 'Macro + risco', note: 'energia, ouro, dolar e sentimento' },
-      { icon: Newspaper, label: 'Contexto', value: 'Editorial', note: 'alertas curtos com foco comercial' },
+    deckEyebrow: 'Mesa de decisao',
+    deckTitle: 'Um cockpit editorial para sinais de mercado.',
+    deckBody:
+      'Menos homepage de template e mais painel de leitura: sinais oficiais, mercado monitorado e contexto comercial no mesmo enquadramento.',
+    deckBlocks: [
+      { label: 'Base', value: 'FAO + futuros', note: 'estrutura de preco e contratos monitorados' },
+      { label: 'Risco', value: 'Macro + energia', note: 'dolar, ouro, crude e leitura cross-market' },
+      { label: 'Acao', value: 'Fluxo editorial', note: 'alertas curtos para decisao comercial' },
     ],
-    bottomStats: [
-      { label: 'Cobertura', value: '6 cadeias', note: 'graos, proteina, softs e oleos' },
-      { label: 'Operacao', value: 'Dados reais', note: 'sem copy de tracker antigo ou prototipo' },
-      { label: 'Foco', value: 'Acao diaria', note: 'leitura rapida para timing comercial' },
+    railStats: [
+      { label: 'Cobertura', value: '6 cadeias' },
+      { label: 'Operacao', value: 'Dados reais' },
+      { label: 'Foco', value: 'Timing diario' },
     ],
+    useCases: ['trading', 'exportacao', 'origination', 'sourcing'],
+    footnote: 'Leitura desenhada para margem, repasse e timing. Nao para parecer igual a qualquer site de dashboard.',
   },
   en: {
     eyebrow: 'Global Food Market Intelligence',
@@ -52,20 +54,22 @@ const COPY = {
       'Built for trading, exports, procurement, sourcing and hedge timing.',
       'More context between price, energy, dollar, gold and editorial flow.',
     ],
-    panelEyebrow: 'Live panel',
-    panelTitle: 'Signal layers built for earlier decisions.',
-    panelBody:
-      'We combine official data, futures and operational observability in one flow designed for daily decisions, not for prototype copy.',
-    signalCards: [
-      { icon: Database, label: 'Base', value: 'FAO + market', note: 'official indices and futures coverage' },
-      { icon: Activity, label: 'Read', value: 'Macro + risk', note: 'energy, gold, dollar and sentiment' },
-      { icon: Newspaper, label: 'Context', value: 'Editorial', note: 'short alerts with commercial focus' },
+    deckEyebrow: 'Decision desk',
+    deckTitle: 'An editorial cockpit for market signals.',
+    deckBody:
+      'Less template homepage and more market-reading surface: official references, monitored market feeds and commercial context in one frame.',
+    deckBlocks: [
+      { label: 'Base', value: 'FAO + futures', note: 'price structure and monitored contracts' },
+      { label: 'Risk', value: 'Macro + energy', note: 'dollar, gold, crude and cross-market read' },
+      { label: 'Action', value: 'Editorial flow', note: 'short alerts for commercial decisions' },
     ],
-    bottomStats: [
-      { label: 'Coverage', value: '6 chains', note: 'grains, protein, softs and oils' },
-      { label: 'Operation', value: 'Real data', note: 'no leftover tracker or prototype copy' },
-      { label: 'Focus', value: 'Daily action', note: 'fast read for commercial timing' },
+    railStats: [
+      { label: 'Coverage', value: '6 chains' },
+      { label: 'Operation', value: 'Real data' },
+      { label: 'Focus', value: 'Daily timing' },
     ],
+    useCases: ['trading', 'exports', 'origination', 'sourcing'],
+    footnote: 'Built for margin, pass-through and timing decisions. Not to look like every other dashboard site.',
   },
   es: {
     eyebrow: 'Global Food Market Intelligence',
@@ -84,20 +88,22 @@ const COPY = {
       'Pensado para trading, exportacion, compras, sourcing y cobertura de riesgo.',
       'Mas contexto entre precio, energia, dolar, oro y flujo editorial.',
     ],
-    panelEyebrow: 'Panel en vivo',
-    panelTitle: 'Capas de senal para decidir antes.',
-    panelBody:
-      'Unimos datos oficiales, futuros y observabilidad operativa en un solo flujo pensado para uso diario y no para textos de prototipo.',
-    signalCards: [
-      { icon: Database, label: 'Base', value: 'FAO + mercado', note: 'indices oficiales y futuros monitoreados' },
-      { icon: Activity, label: 'Lectura', value: 'Macro + riesgo', note: 'energia, oro, dolar y sentimiento' },
-      { icon: Newspaper, label: 'Contexto', value: 'Editorial', note: 'alertas cortas con foco comercial' },
+    deckEyebrow: 'Mesa de decision',
+    deckTitle: 'Un cockpit editorial para senales de mercado.',
+    deckBody:
+      'Menos homepage de plantilla y mas superficie de lectura: referencias oficiales, mercado monitoreado y contexto comercial en un mismo cuadro.',
+    deckBlocks: [
+      { label: 'Base', value: 'FAO + futuros', note: 'estructura de precios y contratos monitoreados' },
+      { label: 'Riesgo', value: 'Macro + energia', note: 'dolar, oro, crude y lectura cross-market' },
+      { label: 'Accion', value: 'Flujo editorial', note: 'alertas cortas para decisiones comerciales' },
     ],
-    bottomStats: [
-      { label: 'Cobertura', value: '6 cadenas', note: 'granos, proteina, softs y aceites' },
-      { label: 'Operacion', value: 'Datos reales', note: 'sin restos de tracker antiguo o prototipo' },
-      { label: 'Foco', value: 'Accion diaria', note: 'lectura rapida para timing comercial' },
+    railStats: [
+      { label: 'Cobertura', value: '6 cadenas' },
+      { label: 'Operacion', value: 'Datos reales' },
+      { label: 'Foco', value: 'Timing diario' },
     ],
+    useCases: ['trading', 'exportacion', 'origination', 'sourcing'],
+    footnote: 'Pensado para margen, traslado de precios y timing. No para verse como cualquier dashboard comun.',
   },
   ru: {
     eyebrow: 'Global Food Market Intelligence',
@@ -116,19 +122,21 @@ const COPY = {
       'Built for trading, exports, sourcing and hedge timing.',
       'More context between price, energy, dollar, gold and editorial flow.',
     ],
-    panelEyebrow: 'Live panel',
-    panelTitle: 'Signal layers for earlier decisions.',
-    panelBody: 'Official data, futures and observability connected in one daily operating flow.',
-    signalCards: [
-      { icon: Database, label: 'Base', value: 'FAO + market', note: 'official indices and futures' },
-      { icon: Activity, label: 'Read', value: 'Macro + risk', note: 'energy, gold, dollar and sentiment' },
-      { icon: Newspaper, label: 'Context', value: 'Editorial', note: 'short alerts for commercial use' },
+    deckEyebrow: 'Decision desk',
+    deckTitle: 'An editorial cockpit for market signals.',
+    deckBody: 'Official references, monitored feeds and commercial context arranged as one operating surface.',
+    deckBlocks: [
+      { label: 'Base', value: 'FAO + futures', note: 'price structure and monitored contracts' },
+      { label: 'Risk', value: 'Macro + energy', note: 'dollar, gold, crude and cross-market read' },
+      { label: 'Action', value: 'Editorial flow', note: 'short alerts for decisions' },
     ],
-    bottomStats: [
-      { label: 'Coverage', value: '6 chains', note: 'grains, protein, softs and oils' },
-      { label: 'Operation', value: 'Real data', note: 'cleaner product positioning' },
-      { label: 'Focus', value: 'Daily action', note: 'fast commercial read' },
+    railStats: [
+      { label: 'Coverage', value: '6 chains' },
+      { label: 'Operation', value: 'Real data' },
+      { label: 'Focus', value: 'Daily timing' },
     ],
+    useCases: ['trading', 'exports', 'origination', 'sourcing'],
+    footnote: 'Built for margin and timing decisions, not generic dashboard aesthetics.',
   },
   ar: {
     eyebrow: 'Global Food Market Intelligence',
@@ -147,19 +155,21 @@ const COPY = {
       'مصمم للتداول والتصدير والمشتريات والتوريد وتوقيت التحوط.',
       'سياق اوسع بين السعر والطاقة والدولار والذهب والتدفق التحريري.',
     ],
-    panelEyebrow: 'لوحة حية',
-    panelTitle: 'طبقات اشارات تساعد على القرار المبكر.',
-    panelBody: 'نجمع البيانات الرسمية والعقود المستقبلية ومراقبة التشغيل في تدفق واحد للاستخدام اليومي.',
-    signalCards: [
-      { icon: Database, label: 'الاساس', value: 'FAO + السوق', note: 'مؤشرات رسمية وعقود مستقبلية' },
-      { icon: Activity, label: 'القراءة', value: 'ماكرو + مخاطر', note: 'طاقة وذهب ودولار ومعنويات' },
-      { icon: Newspaper, label: 'السياق', value: 'تحريري', note: 'تنبيهات قصيرة بتركيز تجاري' },
+    deckEyebrow: 'مكتب القرار',
+    deckTitle: 'مقصورة تحريرية لاشارات السوق.',
+    deckBody: 'ترتيب مختلف يجمع المرجع الرسمي والمصادر المراقبة والسياق التجاري في سطح واحد للقراءة اليومية.',
+    deckBlocks: [
+      { label: 'الاساس', value: 'FAO + العقود', note: 'بنية السعر والعقود المراقبة' },
+      { label: 'المخاطر', value: 'ماكرو + طاقة', note: 'دولار وذهب ونفط وقراءة مترابطة' },
+      { label: 'الفعل', value: 'تدفق تحريري', note: 'تنبيهات قصيرة لقرار تجاري' },
     ],
-    bottomStats: [
-      { label: 'التغطية', value: '6 سلاسل', note: 'حبوب وبروتين وسلع لينة وزيوت' },
-      { label: 'التشغيل', value: 'بيانات حقيقية', note: 'تموضع اوضح للمنتج' },
-      { label: 'التركيز', value: 'قرار يومي', note: 'قراءة سريعة للتوقيت التجاري' },
+    railStats: [
+      { label: 'التغطية', value: '6 سلاسل' },
+      { label: 'التشغيل', value: 'بيانات حقيقية' },
+      { label: 'التركيز', value: 'توقيت يومي' },
     ],
+    useCases: ['trading', 'exports', 'origination', 'sourcing'],
+    footnote: 'مصمم للهامش والتوقيت ونقل السعر. ليس نسخة من شكل داشبورد شائع.',
   },
   zh: {
     eyebrow: 'Global Food Market Intelligence',
@@ -178,19 +188,21 @@ const COPY = {
       '面向交易、出口、采购、sourcing 与套保节奏。',
       '把价格、能源、美元、黄金与编辑流放进同一上下文。',
     ],
-    panelEyebrow: '实时面板',
-    panelTitle: '为更早决策设计的信号层。',
-    panelBody: '把官方数据、期货与运行可观测性组合成适合日常使用的统一流程。',
-    signalCards: [
-      { icon: Database, label: '基础', value: 'FAO + 市场', note: '官方指数与期货覆盖' },
-      { icon: Activity, label: '读取', value: '宏观 + 风险', note: '能源、黄金、美元与情绪' },
-      { icon: Newspaper, label: '上下文', value: '编辑', note: '偏商业决策的短预警' },
+    deckEyebrow: '决策台',
+    deckTitle: '一个更像市场编辑台的信号驾驶舱。',
+    deckBody: '把官方参考、持续监控的数据源与商业上下文放进同一个阅读界面，而不是常见模板化首页。',
+    deckBlocks: [
+      { label: '基础', value: 'FAO + 期货', note: '价格结构与监控合约' },
+      { label: '风险', value: '宏观 + 能源', note: '美元、黄金、原油与联动读取' },
+      { label: '动作', value: '编辑流', note: '面向商业决策的短预警' },
     ],
-    bottomStats: [
-      { label: '覆盖', value: '6 条链路', note: '谷物、蛋白、软商品和油脂' },
-      { label: '运行', value: '真实数据', note: '更干净的产品定位' },
-      { label: '重点', value: '日常动作', note: '更快把握商业时机' },
+    railStats: [
+      { label: '覆盖', value: '6 条链路' },
+      { label: '运行', value: '真实数据' },
+      { label: '重点', value: '日常时机' },
     ],
+    useCases: ['trading', 'exports', 'origination', 'sourcing'],
+    footnote: '为利润、传导与时机判断而设计，不做千篇一律的 dashboard 首页。',
   },
 } as const;
 
@@ -202,133 +214,179 @@ export function Hero() {
   return (
     <section className="relative overflow-hidden bg-slate-950 pt-32 pb-20 lg:pt-44 lg:pb-28">
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(16,185,129,0.20),_transparent_28%),radial-gradient(circle_at_85%_20%,_rgba(59,130,246,0.18),_transparent_24%),linear-gradient(135deg,_rgba(15,23,42,0.96),_rgba(2,6,23,0.96))]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_12%_18%,_rgba(16,185,129,0.22),_transparent_22%),radial-gradient(circle_at_82%_14%,_rgba(14,165,233,0.18),_transparent_20%),linear-gradient(135deg,_rgba(15,23,42,0.98),_rgba(2,6,23,0.98))]" />
         <img src="/img/hero-bg.svg" alt="Agriculture Background" className="h-full w-full object-cover opacity-10 mix-blend-screen" />
+        <div className="absolute inset-x-0 top-24 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
+        <div className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-white/5 to-transparent" />
       </div>
 
       <div className="relative z-10 container mx-auto px-4">
         <div className="mx-auto max-w-7xl">
-          <div className="mb-8 flex flex-wrap items-center gap-3">
-            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-400/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-emerald-200">
+          <div className="mb-10 flex flex-wrap items-center gap-3">
+            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-400/10 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.28em] text-emerald-200">
               <Radar className="h-4 w-4" />
               {copy.eyebrow}
             </div>
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-slate-300">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.28em] text-slate-300">
               <Globe2 className="h-4 w-4" />
               {copy.kicker}
             </div>
           </div>
 
-          <div className="grid items-center gap-12 xl:grid-cols-[1.08fr_0.92fr]">
-            <div>
-              <h1 className="max-w-4xl text-4xl font-black leading-tight tracking-tight text-white md:text-6xl">
-                {copy.titleLead}{' '}
-                <span className="bg-gradient-to-r from-emerald-300 via-green-300 to-cyan-300 bg-clip-text text-transparent">
-                  {copy.titleAccent}
-                </span>{' '}
-                {copy.titleTail}
-              </h1>
-
-              <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-200 md:text-xl">
-                {copy.subtitle}
-              </p>
-
-              <div className="mt-6 flex flex-wrap gap-3">
-                {copy.chips.map((chip) => (
-                  <span
-                    key={chip}
-                    className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-slate-200 backdrop-blur-sm"
-                  >
-                    {chip}
+          <div className="grid gap-10 xl:grid-cols-[1.04fr_0.96fr]">
+            <div className="relative">
+              <div className="absolute -left-4 top-2 hidden h-28 w-px bg-gradient-to-b from-emerald-300/0 via-emerald-300/70 to-emerald-300/0 xl:block" />
+              <div className="pl-0 xl:pl-8">
+                <h1 className="max-w-4xl text-4xl font-black leading-[1.02] tracking-[-0.03em] text-white md:text-6xl xl:text-[5.2rem]">
+                  {copy.titleLead}
+                  <br />
+                  <span className="bg-gradient-to-r from-emerald-300 via-lime-200 to-cyan-300 bg-clip-text text-transparent">
+                    {copy.titleAccent}
                   </span>
-                ))}
-              </div>
+                  <br />
+                  <span className="text-slate-200">{copy.titleTail}</span>
+                </h1>
 
-              <div className="mt-8 space-y-4">
-                {copy.bullets.map((bullet) => (
-                  <div key={bullet} className="flex items-start gap-3 text-slate-200">
-                    <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-emerald-300" />
-                    <span className="leading-7">{bullet}</span>
-                  </div>
-                ))}
-              </div>
+                <p className="mt-8 max-w-2xl text-lg leading-8 text-slate-300 md:text-xl">
+                  {copy.subtitle}
+                </p>
 
-              <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
-                <Link
-                  href="#alertas-mercado"
-                  className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-500 to-green-600 px-8 py-4 text-base font-bold text-white shadow-lg shadow-emerald-950/40 transition-all hover:-translate-y-0.5 hover:from-emerald-400 hover:to-green-500"
-                >
-                  <Radar className="h-5 w-5" />
-                  {copy.primary}
-                </Link>
+                <div className="mt-8 flex flex-wrap gap-3">
+                  {copy.chips.map((chip) => (
+                    <span
+                      key={chip}
+                      className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-slate-200 backdrop-blur-sm"
+                    >
+                      {chip}
+                    </span>
+                  ))}
+                </div>
 
-                <Link
-                  href="#watchlist-critica"
-                  className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/8 px-8 py-4 text-base font-bold text-white backdrop-blur-sm transition-all hover:bg-white/14"
-                >
-                  <TrendingUp className="h-5 w-5" />
-                  {copy.secondary}
-                </Link>
+                <div className="mt-10 grid gap-4 md:grid-cols-3">
+                  {copy.bullets.map((bullet, index) => (
+                    <div key={bullet} className="rounded-3xl border border-white/10 bg-white/[0.04] p-5 backdrop-blur-sm">
+                      <div className="text-[11px] font-semibold uppercase tracking-[0.26em] text-emerald-200">
+                        0{index + 1}
+                      </div>
+                      <p className="mt-3 text-sm leading-7 text-slate-200">{bullet}</p>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
+                  <Link
+                    href="#mercados"
+                    className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/8 px-8 py-4 text-base font-bold text-white backdrop-blur-sm transition-all hover:bg-white/14"
+                  >
+                    <Workflow className="h-5 w-5" />
+                    {copy.secondary}
+                  </Link>
+                  <Link
+                    href="#alertas-mercado"
+                    className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-500 to-cyan-500 px-8 py-4 text-base font-bold text-slate-950 shadow-[0_18px_60px_rgba(16,185,129,0.22)] transition-all hover:-translate-y-0.5 hover:from-emerald-400 hover:to-cyan-400"
+                  >
+                    <ArrowUpRight className="h-5 w-5" />
+                    {copy.primary}
+                  </Link>
+                </div>
               </div>
             </div>
 
             <div className="relative">
-              <div className="absolute -inset-4 rounded-[2rem] bg-gradient-to-br from-emerald-500/15 via-cyan-400/10 to-transparent blur-2xl" />
-              <div className="relative rounded-[2rem] border border-white/10 bg-white/8 p-6 shadow-2xl backdrop-blur-xl">
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-200">{copy.panelEyebrow}</p>
-                    <h2 className="mt-3 text-2xl font-bold text-white">{copy.panelTitle}</h2>
-                  </div>
-                  <div className="rounded-2xl border border-emerald-400/20 bg-emerald-400/10 p-3 text-emerald-200">
-                    <Radar className="h-5 w-5" />
-                  </div>
-                </div>
+              <div className="absolute -inset-6 rounded-[2.4rem] bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.12),_transparent_40%),radial-gradient(circle_at_bottom_right,_rgba(14,165,233,0.12),_transparent_35%)] blur-2xl" />
+              <div className="relative overflow-hidden rounded-[2.2rem] border border-white/10 bg-white/[0.06] p-5 shadow-2xl backdrop-blur-xl">
+                <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:32px_32px] opacity-[0.12]" />
+                <div className="relative grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
+                  <div className="rounded-[1.8rem] border border-white/10 bg-slate-950/55 p-6">
+                    <div className="flex items-start justify-between gap-4">
+                      <div>
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-emerald-200">{copy.deckEyebrow}</p>
+                        <h2 className="mt-3 max-w-md text-2xl font-bold leading-tight text-white">{copy.deckTitle}</h2>
+                      </div>
+                      <div className="rounded-2xl border border-emerald-400/20 bg-emerald-400/10 p-3 text-emerald-200">
+                        <Radar className="h-5 w-5" />
+                      </div>
+                    </div>
 
-                <p className="mt-4 text-sm leading-7 text-slate-300">{copy.panelBody}</p>
+                    <p className="mt-5 max-w-lg text-sm leading-7 text-slate-300">{copy.deckBody}</p>
 
-                <div className="mt-6 grid gap-4">
-                  {copy.signalCards.map((card) => {
-                    const Icon = card.icon;
-                    return (
-                      <div
-                        key={`${card.label}-${card.value}`}
-                        className="rounded-3xl border border-white/10 bg-slate-950/35 p-5"
-                      >
-                        <div className="flex items-start gap-4">
-                          <div className="rounded-2xl bg-white/10 p-3 text-emerald-200">
-                            <Icon className="h-5 w-5" />
-                          </div>
-                          <div>
-                            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">{card.label}</p>
-                            <p className="mt-2 text-xl font-bold text-white">{card.value}</p>
-                            <p className="mt-2 text-sm leading-6 text-slate-300">{card.note}</p>
+                    <div className="mt-6 space-y-3">
+                      {copy.deckBlocks.map((block) => (
+                        <div key={block.label} className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+                          <div className="flex items-start justify-between gap-4">
+                            <div>
+                              <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">{block.label}</p>
+                              <p className="mt-2 text-lg font-semibold text-white">{block.value}</p>
+                              <p className="mt-2 text-sm leading-6 text-slate-300">{block.note}</p>
+                            </div>
+                            <Database className="mt-1 h-4 w-4 text-slate-500" />
                           </div>
                         </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="grid gap-4">
+                    <div className="rounded-[1.8rem] border border-white/10 bg-white/[0.05] p-5">
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.26em] text-slate-400">Use cases</p>
+                      <div className="mt-4 flex flex-wrap gap-2">
+                        {copy.useCases.map((item) => (
+                          <span key={item} className="rounded-full border border-white/10 bg-slate-950/50 px-3 py-2 text-xs font-medium text-slate-200">
+                            {item}
+                          </span>
+                        ))}
                       </div>
-                    );
-                  })}
+                    </div>
+
+                    <div className="rounded-[1.8rem] border border-white/10 bg-gradient-to-br from-white/[0.08] to-white/[0.03] p-5">
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.26em] text-slate-400">Signal rail</p>
+                      <div className="mt-5 space-y-4">
+                        {copy.railStats.map((stat) => (
+                          <div key={stat.label} className="flex items-end justify-between gap-4 border-b border-white/10 pb-4 last:border-b-0 last:pb-0">
+                            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">{stat.label}</p>
+                            <p className="text-right text-2xl font-black text-white">{stat.value}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="rounded-[1.8rem] border border-emerald-400/15 bg-emerald-400/10 p-5 text-emerald-50">
+                      <div className="flex items-start gap-3">
+                        <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-emerald-200" />
+                        <p className="text-sm leading-7">{copy.footnote}</p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
-                <div className="mt-6 grid gap-4 md:grid-cols-3">
-                  {copy.bottomStats.map((stat) => (
-                    <div key={stat.label} className="rounded-3xl border border-white/10 bg-white/5 p-5">
-                      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">{stat.label}</p>
-                      <p className="mt-3 text-2xl font-black text-white">{stat.value}</p>
-                      <p className="mt-2 text-sm leading-6 text-slate-300">{stat.note}</p>
-                    </div>
-                  ))}
+                <div className="relative mt-5 flex justify-end">
+                  <Link href="#mercados" className="inline-flex items-center gap-2 text-sm font-semibold text-slate-200 transition-colors hover:text-white">
+                    {copy.overview}
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="mt-10 flex justify-center">
-            <Link href="#mercados" className="inline-flex items-center gap-2 text-sm font-semibold text-slate-200 transition-colors hover:text-white">
-              {copy.overview}
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
+          <div className="mt-10 flex justify-center xl:hidden">
+            <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
+                <Link
+                  href="#alertas-mercado"
+                  className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-500 to-cyan-500 px-8 py-4 text-base font-bold text-slate-950 shadow-[0_18px_60px_rgba(16,185,129,0.22)] transition-all hover:-translate-y-0.5 hover:from-emerald-400 hover:to-cyan-400"
+                >
+                  <ArrowUpRight className="h-5 w-5" />
+                  {copy.primary}
+                </Link>
+                <Link
+                  href="#mercados"
+                  className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/8 px-8 py-4 text-base font-bold text-white backdrop-blur-sm transition-all hover:bg-white/14"
+                >
+                  <Workflow className="h-5 w-5" />
+                  {copy.secondary}
+                </Link>
+              </div>
+            </div>
         </div>
       </div>
 
