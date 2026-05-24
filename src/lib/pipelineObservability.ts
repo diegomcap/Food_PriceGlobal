@@ -16,6 +16,7 @@ import type {
   PipelineAlert,
   PipelineHealth,
   PipelineObservabilityPayload,
+  PublicPipelineStatusPayload,
 } from '@/lib/pipelineObservabilityTypes';
 import { getSupabaseAdmin } from '@/lib/supabase/server';
 
@@ -201,5 +202,46 @@ export async function getPipelineObservabilityPayload(): Promise<PipelineObserva
     datasets,
     alerts,
     recentRuns,
+  };
+}
+
+function getPublicLiveMode(dataset: DatasetPipelineSnapshot): 'primary' | 'secondary' | 'tertiary' | 'backup' {
+  if (
+    dataset.currentSourceTier === 'primary' ||
+    dataset.currentSourceTier === 'secondary' ||
+    dataset.currentSourceTier === 'tertiary'
+  ) {
+    return dataset.currentSourceTier;
+  }
+
+  return 'backup';
+}
+
+function getPublicDatasetReliabilityStatus(dataset: DatasetPipelineSnapshot): PipelineHealth {
+  if (dataset.freshnessStatus === 'delayed' || dataset.currentSourceTier === 'persisted' || dataset.currentSourceTier === 'fallback') {
+    return 'critical';
+  }
+
+  if (dataset.freshnessStatus === 'stale' || dataset.currentSourceTier === 'tertiary') {
+    return 'warning';
+  }
+
+  return 'healthy';
+}
+
+export async function getPublicPipelineStatusPayload(): Promise<PublicPipelineStatusPayload> {
+  const payload = await getPipelineObservabilityPayload();
+
+  return {
+    generatedAt: payload.generatedAt,
+    overallStatus: payload.overallStatus,
+    datasets: payload.datasets.map((dataset) => ({
+      datasetKey: dataset.datasetKey,
+      reliabilityStatus: getPublicDatasetReliabilityStatus(dataset),
+      freshnessStatus: dataset.freshnessStatus,
+      updatedAt: dataset.updatedAt,
+      recordsAvailable: dataset.recordsAvailable,
+      liveMode: getPublicLiveMode(dataset),
+    })),
   };
 }

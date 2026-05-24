@@ -54,3 +54,18 @@ export type PipelineObservabilityPayload = {
   alerts: PipelineAlert[];
   recentRuns: IngestionRunSummary[];
 };
+
+export type PublicDatasetReliabilitySnapshot = {
+  datasetKey: PipelineDatasetKey;
+  reliabilityStatus: PipelineHealth;
+  freshnessStatus: FreshnessStatus;
+  updatedAt?: string;
+  recordsAvailable: number;
+  liveMode: 'primary' | 'secondary' | 'tertiary' | 'backup';
+};
+
+export type PublicPipelineStatusPayload = {
+  generatedAt: string;
+  overallStatus: PipelineHealth;
+  datasets: PublicDatasetReliabilitySnapshot[];
+};

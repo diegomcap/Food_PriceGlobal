@@ -41,11 +41,11 @@ export default function MarketAnalysis() {
       href: '/market-analysis/correlations'
     },
     {
-      title: 'Pipeline Status',
-      description: 'Observability for ingestion runs, current source tier, freshness and degraded-source alerts.',
+      title: 'Data Reliability',
+      description: 'Public summary of freshness, update cadence and continuity monitoring for the market datasets shown in the product.',
       icon: ShieldAlert,
       color: 'amber',
-      action: 'View status',
+      action: 'View reliability',
       href: '/market-analysis/pipeline-status'
     }
   ];
