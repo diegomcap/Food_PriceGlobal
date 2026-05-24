@@ -75,7 +75,7 @@ const COPY = {
     updatedAt: 'Actualizado en',
     datasets: 'Datasets monitoreados',
     records: 'Registros disponibles',
-    freshness: 'Freshness',
+    freshness: 'Actualizacion',
     liveMode: 'Modo de operacion',
     monitored: 'Monitoreo continuo activo',
     health: {
@@ -88,6 +88,84 @@ const COPY = {
       secondary: 'Feed redundante activo',
       tertiary: 'Feed alternativo activo',
       backup: 'Capa de continuidad activa',
+    },
+  },
+  ru: {
+    back: '← Nazad',
+    title: 'Nadezhnost Dannykh',
+    subtitle: 'My nepreryvno monitorim aktualnost i dostupnost klyuchevykh rynochnykh dannykh, pokazyvaemykh v produkte.',
+    loading: 'Zagruzhaem publichnyy status nadezhnosti...',
+    fetchError: 'Ne udalos zagruzit publichnyy status nadezhnosti.',
+    retry: 'Povtorit',
+    overall: 'Obshchiy status',
+    updatedAt: 'Obnovleno',
+    datasets: 'Monitorimye datasety',
+    records: 'Dostupnye zapisi',
+    freshness: 'Aktualnost',
+    liveMode: 'Rezhim raboty',
+    monitored: 'Nepreryvnyy monitoring aktiven',
+    health: {
+      healthy: 'Zdorovo',
+      warning: 'Pod nablyudeniem',
+      critical: 'Vnimanie',
+    },
+    mode: {
+      primary: 'Osnovnoy feed aktiven',
+      secondary: 'Rezervnyy feed aktiven',
+      tertiary: 'Alternativnyy rynochnyy feed aktiven',
+      backup: 'Sloy nepreryvnosti aktiven',
+    },
+  },
+  ar: {
+    back: '← رجوع',
+    title: 'موثوقية البيانات',
+    subtitle: 'نراقب بشكل مستمر حداثة البيانات وتوافر القراءات السوقية الرئيسية المعروضة في المنتج.',
+    loading: 'جار تحميل حالة الموثوقية العامة...',
+    fetchError: 'تعذر تحميل حالة الموثوقية العامة.',
+    retry: 'إعادة المحاولة',
+    overall: 'الحالة العامة',
+    updatedAt: 'آخر تحديث',
+    datasets: 'مجموعات البيانات المراقبة',
+    records: 'السجلات المتاحة',
+    freshness: 'حداثة البيانات',
+    liveMode: 'وضع التشغيل',
+    monitored: 'المراقبة المستمرة مفعلة',
+    health: {
+      healthy: 'سليم',
+      warning: 'تحت المراقبة',
+      critical: 'انتباه',
+    },
+    mode: {
+      primary: 'المصدر الرئيسي نشط',
+      secondary: 'المصدر الاحتياطي نشط',
+      tertiary: 'مصدر سوق بديل نشط',
+      backup: 'طبقة الاستمرارية نشطة',
+    },
+  },
+  zh: {
+    back: '← 返回',
+    title: '数据可靠性',
+    subtitle: '我们持续监控产品中核心市场数据的更新频率、时效性与可用性。',
+    loading: '正在加载公开可靠性状态...',
+    fetchError: '无法加载公开可靠性状态。',
+    retry: '重试',
+    overall: '总体状态',
+    updatedAt: '更新时间',
+    datasets: '监控中的数据集',
+    records: '可用记录',
+    freshness: '数据时效',
+    liveMode: '运行模式',
+    monitored: '持续监控已启用',
+    health: {
+      healthy: '健康',
+      warning: '监控中',
+      critical: '注意',
+    },
+    mode: {
+      primary: '主数据源运行中',
+      secondary: '冗余数据源运行中',
+      tertiary: '替代市场数据源运行中',
+      backup: '连续性保障层运行中',
     },
   },
 } as const;
@@ -116,7 +194,7 @@ function getHealthIcon(status: PipelineHealth) {
 
 export default function PipelineStatusPage() {
   const { language } = useTranslation();
-  const activeLanguage = (['pt', 'en', 'es'].includes(language) ? language : 'en') as keyof typeof COPY;
+  const activeLanguage = (['pt', 'en', 'es', 'ru', 'ar', 'zh'].includes(language) ? language : 'en') as keyof typeof COPY;
   const copy = COPY[activeLanguage];
   const [payload, setPayload] = useState<PublicPipelineStatusPayload | null>(null);
   const [loading, setLoading] = useState(true);

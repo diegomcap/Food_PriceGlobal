@@ -2,12 +2,7 @@ import Link from 'next/link';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import PipelineAdminStatusPage from '@/components/admin/PipelineAdminStatusPage';
-import {
-  getPipelineAdminSecretName,
-  hasPipelineAdminAccess,
-  hasPipelineAdminSecret,
-  isValidPipelineAdminToken,
-} from '@/lib/adminAccess';
+import { hasPipelineAdminAccess, hasPipelineAdminSecret, isValidPipelineAdminToken } from '@/lib/adminAccess';
 
 export const dynamic = 'force-dynamic';
 
@@ -40,14 +35,12 @@ export default async function AdminPipelineStatusPage({
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Admin Only</p>
         <h1 className="mt-4 text-3xl font-bold">Observabilidade Completa Da Pipeline</h1>
         <p className="mt-4 text-sm leading-6 text-slate-300">
-          Esta tela admin nao fica aberta ao publico. Para acessar, abra a URL com
-          <code className="mx-1 rounded bg-white/10 px-2 py-1">?token=SEU_SEGREDO_ADMIN</code>
-          usando o segredo configurado no servidor.
+          Esta tela nao fica aberta ao publico. O acesso depende de autenticacao administrativa valida
+          e deve ser feito apenas pelo fluxo seguro compartilhado com operadores autorizados.
         </p>
         <p className="mt-4 text-sm leading-6 text-slate-400">
-          Esta area exige a env dedicada
-          <code className="mx-1 rounded bg-white/10 px-2 py-1">{getPipelineAdminSecretName()}</code>
-          configurada no servidor. Nao existe mais fallback para outros segredos.
+          Se voce nao estiver autenticado, solicite um link seguro ao responsavel pela operacao.
+          Nao compartilhe credenciais, tokens ou capturas desta area.
         </p>
         <Link href="/market-analysis/pipeline-status" className="mt-6 inline-flex rounded-full border border-white/10 px-4 py-2 text-sm font-semibold text-slate-200 hover:bg-white/10">
           Abrir Versao Publica Resumida
