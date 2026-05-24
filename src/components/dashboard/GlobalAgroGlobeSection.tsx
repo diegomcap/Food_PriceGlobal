@@ -753,22 +753,72 @@ export function GlobalAgroGlobeSection() {
         </div>
 
         <div className="grid gap-6 xl:grid-cols-[1.3fr_0.7fr]">
-          <div className="rounded-[2rem] border border-white/10 bg-[linear-gradient(180deg,rgba(15,23,42,0.94)_0%,rgba(2,6,23,0.98)_100%)] p-4 shadow-[0_24px_70px_rgba(2,6,23,0.45)] md:p-5">
-            <div className="mb-4 flex flex-wrap items-center justify-between gap-3 px-2">
-              <div className="text-sm text-slate-300">{copy.dragHint}</div>
-              <div className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] uppercase tracking-[0.18em] text-slate-300">
-                {commodityLabel}
+          <div className="space-y-6">
+            <div className="rounded-[2rem] border border-white/10 bg-[linear-gradient(180deg,rgba(15,23,42,0.94)_0%,rgba(2,6,23,0.98)_100%)] p-4 shadow-[0_24px_70px_rgba(2,6,23,0.45)] md:p-5">
+              <div className="mb-4 flex flex-wrap items-center justify-between gap-3 px-2">
+                <div className="text-sm text-slate-300">{copy.dragHint}</div>
+                <div className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] uppercase tracking-[0.18em] text-slate-300">
+                  {commodityLabel}
+                </div>
+              </div>
+
+              <div className="overflow-hidden rounded-[1.6rem] border border-white/5 bg-[radial-gradient(circle_at_center,_rgba(14,165,233,0.18),_transparent_55%),linear-gradient(180deg,rgba(15,23,42,0.9)_0%,rgba(2,6,23,1)_100%)]">
+                {loading || !worldMap ? (
+                  <div className="flex h-[560px] items-center justify-center text-slate-300">{copy.loading}</div>
+                ) : loadError || !payload ? (
+                  <div className="flex h-[560px] items-center justify-center px-6 text-center text-slate-300">{copy.error}</div>
+                ) : (
+                  <HighchartsReact highcharts={Highcharts} constructorType="mapChart" options={chartOptions} />
+                )}
               </div>
             </div>
 
-            <div className="overflow-hidden rounded-[1.6rem] border border-white/5 bg-[radial-gradient(circle_at_center,_rgba(14,165,233,0.18),_transparent_55%),linear-gradient(180deg,rgba(15,23,42,0.9)_0%,rgba(2,6,23,1)_100%)]">
-              {loading || !worldMap ? (
-                <div className="flex h-[560px] items-center justify-center text-slate-300">{copy.loading}</div>
-              ) : loadError || !payload ? (
-                <div className="flex h-[560px] items-center justify-center px-6 text-center text-slate-300">{copy.error}</div>
-              ) : (
-                <HighchartsReact highcharts={Highcharts} constructorType="mapChart" options={chartOptions} />
-              )}
+            <div className="rounded-[2rem] border border-white/10 bg-white/5 p-6 shadow-[0_16px_40px_rgba(2,6,23,0.22)] backdrop-blur">
+              <div className="mb-5">
+                <h3 className="text-xl font-bold text-white">{copy.topListTitle}</h3>
+                <p className="mt-2 text-sm leading-7 text-slate-300">{copy.summary}</p>
+              </div>
+
+              <div className="mb-5 grid gap-3 sm:grid-cols-3">
+                <div className="rounded-2xl border border-white/10 bg-slate-900/55 p-4">
+                  <p className="text-[11px] uppercase tracking-[0.18em] text-slate-400">{copy.leaderLabel}</p>
+                  <p className="mt-2 text-base font-semibold text-white">{dataset[0]?.country ?? '--'}</p>
+                </div>
+                <div className="rounded-2xl border border-white/10 bg-slate-900/55 p-4">
+                  <p className="text-[11px] uppercase tracking-[0.18em] text-slate-400">{copy.coverageLabel}</p>
+                  <p className="mt-2 text-base font-semibold text-white">{dataset.length}</p>
+                </div>
+                <div className="rounded-2xl border border-white/10 bg-slate-900/55 p-4">
+                  <p className="text-[11px] uppercase tracking-[0.18em] text-slate-400">{copy.averageLabel}</p>
+                  <p className="mt-2 text-base font-semibold text-white">{averageScore}</p>
+                </div>
+              </div>
+
+              <div className="grid gap-3 lg:grid-cols-2">
+                {dataset.slice(0, 6).map((item, index) => (
+                  <button
+                    key={item.code3}
+                    type="button"
+                    onClick={() => setSelectedCountryCode(item.code3)}
+                    className={`flex w-full items-center justify-between gap-4 rounded-[1.35rem] border px-4 py-4 text-left transition-all ${
+                      item.code3 === selectedCountry?.code3
+                        ? 'border-emerald-400/40 bg-emerald-400/10'
+                        : 'border-white/10 bg-slate-900/50 hover:border-white/20 hover:bg-slate-900/70'
+                    }`}
+                  >
+                    <div className="flex min-w-0 items-center gap-3">
+                      <div className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-xs font-bold text-slate-200">
+                        0{index + 1}
+                      </div>
+                      <div className="min-w-0">
+                        <p className="truncate font-semibold text-white">{item.country}</p>
+                        <p className="truncate text-xs uppercase tracking-[0.18em] text-slate-400">{item.focus}</p>
+                      </div>
+                    </div>
+                    <div className={`text-lg font-bold ${scoreTone(item.score)}`}>{item.score}</div>
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
 
@@ -840,54 +890,8 @@ export function GlobalAgroGlobeSection() {
             </div>
 
             <div className="rounded-[2rem] border border-white/10 bg-white/5 p-6 shadow-[0_16px_40px_rgba(2,6,23,0.22)] backdrop-blur">
-              <div className="mb-5">
-                <h3 className="text-xl font-bold text-white">{copy.topListTitle}</h3>
-                <p className="mt-2 text-sm leading-7 text-slate-300">{copy.summary}</p>
-              </div>
-
-              <div className="mb-5 grid grid-cols-3 gap-3">
-                <div className="rounded-2xl border border-white/10 bg-slate-900/55 p-4">
-                  <p className="text-[11px] uppercase tracking-[0.18em] text-slate-400">{copy.leaderLabel}</p>
-                  <p className="mt-2 text-base font-semibold text-white">{dataset[0]?.country ?? '--'}</p>
-                </div>
-                <div className="rounded-2xl border border-white/10 bg-slate-900/55 p-4">
-                  <p className="text-[11px] uppercase tracking-[0.18em] text-slate-400">{copy.coverageLabel}</p>
-                  <p className="mt-2 text-base font-semibold text-white">{dataset.length}</p>
-                </div>
-                <div className="rounded-2xl border border-white/10 bg-slate-900/55 p-4">
-                  <p className="text-[11px] uppercase tracking-[0.18em] text-slate-400">{copy.averageLabel}</p>
-                  <p className="mt-2 text-base font-semibold text-white">{averageScore}</p>
-                </div>
-              </div>
-
-              <div className="space-y-3">
-                {dataset.slice(0, 5).map((item, index) => (
-                  <button
-                    key={item.code3}
-                    type="button"
-                    onClick={() => setSelectedCountryCode(item.code3)}
-                    className={`flex w-full items-center justify-between gap-4 rounded-[1.35rem] border px-4 py-4 text-left transition-all ${
-                      item.code3 === selectedCountry?.code3
-                        ? 'border-emerald-400/40 bg-emerald-400/10'
-                        : 'border-white/10 bg-slate-900/50 hover:border-white/20 hover:bg-slate-900/70'
-                    }`}
-                  >
-                    <div className="flex min-w-0 items-center gap-3">
-                      <div className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-xs font-bold text-slate-200">
-                        0{index + 1}
-                      </div>
-                      <div className="min-w-0">
-                        <p className="truncate font-semibold text-white">{item.country}</p>
-                        <p className="truncate text-xs uppercase tracking-[0.18em] text-slate-400">{item.focus}</p>
-                      </div>
-                    </div>
-                    <div className={`text-lg font-bold ${scoreTone(item.score)}`}>{item.score}</div>
-                  </button>
-                ))}
-              </div>
-
               {signal && (
-                <div className="mt-6 rounded-2xl border border-white/10 bg-slate-900/55 p-4">
+                <div className="rounded-2xl border border-white/10 bg-slate-900/55 p-4">
                   <div className="mb-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">{copy.signalTitle}</div>
                   <div className="grid gap-3 sm:grid-cols-2">
                     <div className="rounded-2xl border border-white/10 bg-white/5 p-3">
