@@ -436,42 +436,65 @@ export default function MarketAlertsSection() {
         {loading && alerts.length === 0 ? (
           <div className="rounded-[2rem] border border-slate-200 bg-white p-8 text-slate-500 shadow-sm">{copy.loading}</div>
         ) : (
-          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
-            {alerts.map((alert, index) => (
-              <article
-                key={alert.id}
-                className={`flex h-full flex-col rounded-[2rem] border border-slate-200 bg-white p-6 md:p-7 shadow-[0_10px_35px_rgba(15,23,42,0.05)] transition-all duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-[0_20px_45px_rgba(15,23,42,0.08)] ${
-                  index === 0 ? 'xl:col-span-2 xl:min-h-[320px]' : 'min-h-[290px]'
-                }`}
-              >
+          <div className="space-y-5">
+            {alerts[0] && (
+              <article className="flex min-h-[320px] flex-col rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_10px_35px_rgba(15,23,42,0.05)] transition-all duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-[0_20px_45px_rgba(15,23,42,0.08)] md:p-7">
                 <div className="mb-6 flex items-start justify-between gap-4">
-                  <span className={`inline-flex items-center rounded-full border px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] ${toneClasses(alert.tone)}`}>
-                    {alert.tag}
+                  <span className={`inline-flex items-center rounded-full border px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] ${toneClasses(alerts[0].tone)}`}>
+                    {alerts[0].tag}
                   </span>
                   <span className="text-slate-400">
-                    {alert.tone === 'emerald' ? <ArrowUpRight className="w-5 h-5" /> : alert.tone === 'red' ? <AlertTriangle className="w-5 h-5" /> : <ArrowDownRight className="w-5 h-5" />}
+                    {alerts[0].tone === 'emerald' ? <ArrowUpRight className="w-5 h-5" /> : alerts[0].tone === 'red' ? <AlertTriangle className="w-5 h-5" /> : <ArrowDownRight className="w-5 h-5" />}
                   </span>
                 </div>
                 <div className="flex flex-1 flex-col">
-                  <h3
-                    className={`mb-3.5 font-semibold leading-tight text-slate-900 ${
-                      index === 0 ? 'max-w-xl text-[1.7rem]' : 'min-h-[4.75rem] text-[1.08rem]'
-                    }`}
-                  >
-                    {alert.title}
+                  <h3 className="mb-3.5 max-w-xl text-[1.7rem] font-semibold leading-tight text-slate-900">
+                    {alerts[0].title}
                   </h3>
-                  <p className={`text-slate-600 ${index === 0 ? 'max-w-2xl text-[15px] leading-7' : 'text-sm leading-7'}`}>
-                    {alert.detail}
+                  <p className="max-w-2xl text-[15px] leading-7 text-slate-600">
+                    {alerts[0].detail}
                   </p>
                 </div>
                 <div className="mt-6 flex items-center justify-between gap-4 border-t border-slate-200 pt-5 text-xs text-slate-500">
                   {getSourceLabel(commoditiesSource, language as SupportedLanguage)} / FAO
                   <span className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-[11px] uppercase tracking-[0.2em] text-slate-500">
-                    0{index + 1}
+                    01
                   </span>
                 </div>
               </article>
-            ))}
+            )}
+
+            <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+              {alerts.slice(1).map((alert, index) => (
+                <article
+                  key={alert.id}
+                  className="flex min-h-[320px] h-full flex-col rounded-[2rem] border border-slate-200 bg-white p-6 md:p-7 shadow-[0_10px_35px_rgba(15,23,42,0.05)] transition-all duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-[0_20px_45px_rgba(15,23,42,0.08)]"
+                >
+                  <div className="mb-6 flex items-start justify-between gap-4">
+                    <span className={`inline-flex items-center rounded-full border px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] ${toneClasses(alert.tone)}`}>
+                      {alert.tag}
+                    </span>
+                    <span className="text-slate-400">
+                      {alert.tone === 'emerald' ? <ArrowUpRight className="w-5 h-5" /> : alert.tone === 'red' ? <AlertTriangle className="w-5 h-5" /> : <ArrowDownRight className="w-5 h-5" />}
+                    </span>
+                  </div>
+                  <div className="flex flex-1 flex-col">
+                    <h3 className="mb-3.5 min-h-[4.75rem] text-[1.08rem] font-semibold leading-tight text-slate-900">
+                      {alert.title}
+                    </h3>
+                    <p className="text-sm leading-7 text-slate-600">
+                      {alert.detail}
+                    </p>
+                  </div>
+                  <div className="mt-6 flex items-center justify-between gap-4 border-t border-slate-200 pt-5 text-xs text-slate-500">
+                    {getSourceLabel(commoditiesSource, language as SupportedLanguage)} / FAO
+                    <span className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-[11px] uppercase tracking-[0.2em] text-slate-500">
+                      0{index + 2}
+                    </span>
+                  </div>
+                </article>
+              ))}
+            </div>
           </div>
         )}
       </div>
