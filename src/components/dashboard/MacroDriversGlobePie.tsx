@@ -27,8 +27,8 @@ type Copy = {
   description: string;
   clickHint: string;
   filterLabel: string;
-  top8: string;
-  top12: string;
+  top30: string;
+  top100: string;
   all: string;
   totalLabel: string;
   dominantLabel: string;
@@ -39,11 +39,11 @@ const COPY: Record<SupportedLanguage, Copy> = {
     title: '2026 Top hubs macro por pressao composta',
     subtitle: 'Em pontos compostos usando DXY, WTI, Natural Gas e Gold.',
     description:
-      'Variable pie interativo indicando os principais hubs macro do agronegocio. As fatias seguem a pressao dominante por hub.',
+      'Variable pie interativo indicando os principais hubs macro do agronegocio. O ranking e recalculado a cada atualizacao periodica do feed macro.',
     clickHint: 'Clique em uma fatia para girar o globe ate o pais correspondente.',
     filterLabel: 'Filtro',
-    top8: 'Top 8',
-    top12: 'Top 12',
+    top30: 'Top 30',
+    top100: 'Top 100',
     all: 'All',
     totalLabel: 'Pressao combinada',
     dominantLabel: 'Pressao dominante',
@@ -52,11 +52,11 @@ const COPY: Record<SupportedLanguage, Copy> = {
     title: '2026 Top macro hubs by composite pressure',
     subtitle: 'In composite points using DXY, WTI, Natural Gas and Gold.',
     description:
-      'Interactive variable pie showing the leading agribusiness macro hubs. Slice height follows dominant-driver pressure.',
+      'Interactive variable pie showing the leading agribusiness macro hubs. Rankings are recalculated on every periodic macro-feed refresh.',
     clickHint: 'Click a slice to rotate the globe to the corresponding country.',
     filterLabel: 'Filter',
-    top8: 'Top 8',
-    top12: 'Top 12',
+    top30: 'Top 30',
+    top100: 'Top 100',
     all: 'All',
     totalLabel: 'Combined pressure',
     dominantLabel: 'Dominant pressure',
@@ -65,11 +65,11 @@ const COPY: Record<SupportedLanguage, Copy> = {
     title: '2026 Top hubs macro por presion compuesta',
     subtitle: 'En puntos compuestos usando DXY, WTI, Natural Gas y Gold.',
     description:
-      'Variable pie interactivo que muestra los principales hubs macro del agronegocio. La altura de la porcion sigue la presion dominante.',
+      'Variable pie interactivo que muestra los principales hubs macro del agronegocio. El ranking se recalcula en cada actualizacion periodica del feed macro.',
     clickHint: 'Haz clic en una porcion para girar el globo al pais correspondiente.',
     filterLabel: 'Filtro',
-    top8: 'Top 8',
-    top12: 'Top 12',
+    top30: 'Top 30',
+    top100: 'Top 100',
     all: 'All',
     totalLabel: 'Presion combinada',
     dominantLabel: 'Presion dominante',
@@ -78,11 +78,11 @@ const COPY: Record<SupportedLanguage, Copy> = {
     title: '2026 Top macro hubs by composite pressure',
     subtitle: 'In composite points using DXY, WTI, Natural Gas and Gold.',
     description:
-      'Interactive variable pie showing the leading agribusiness macro hubs. Slice height follows dominant-driver pressure.',
+      'Interactive variable pie showing the leading agribusiness macro hubs. Rankings are recalculated on every periodic macro-feed refresh.',
     clickHint: 'Click a slice to rotate the globe to the corresponding country.',
     filterLabel: 'Filter',
-    top8: 'Top 8',
-    top12: 'Top 12',
+    top30: 'Top 30',
+    top100: 'Top 100',
     all: 'All',
     totalLabel: 'Combined pressure',
     dominantLabel: 'Dominant pressure',
@@ -91,11 +91,11 @@ const COPY: Record<SupportedLanguage, Copy> = {
     title: '2026 Top macro hubs by composite pressure',
     subtitle: 'In composite points using DXY, WTI, Natural Gas and Gold.',
     description:
-      'Interactive variable pie showing the leading agribusiness macro hubs. Slice height follows dominant-driver pressure.',
+      'Interactive variable pie showing the leading agribusiness macro hubs. Rankings are recalculated on every periodic macro-feed refresh.',
     clickHint: 'Click a slice to rotate the globe to the corresponding country.',
     filterLabel: 'Filter',
-    top8: 'Top 8',
-    top12: 'Top 12',
+    top30: 'Top 30',
+    top100: 'Top 100',
     all: 'All',
     totalLabel: 'Combined pressure',
     dominantLabel: 'Dominant pressure',
@@ -104,18 +104,18 @@ const COPY: Record<SupportedLanguage, Copy> = {
     title: '2026 Top macro hubs by composite pressure',
     subtitle: 'In composite points using DXY, WTI, Natural Gas and Gold.',
     description:
-      'Interactive variable pie showing the leading agribusiness macro hubs. Slice height follows dominant-driver pressure.',
+      'Interactive variable pie showing the leading agribusiness macro hubs. Rankings are recalculated on every periodic macro-feed refresh.',
     clickHint: 'Click a slice to rotate the globe to the corresponding country.',
     filterLabel: 'Filter',
-    top8: 'Top 8',
-    top12: 'Top 12',
+    top30: 'Top 30',
+    top100: 'Top 100',
     all: 'All',
     totalLabel: 'Combined pressure',
     dominantLabel: 'Dominant pressure',
   },
 };
 
-type TopFilter = 8 | 12 | 'all';
+type TopFilter = 30 | 100 | 'all';
 
 function getRotationForHub(lon: number, lat: number): [number, number, number] {
   return [-lon, -lat, 0];
@@ -151,6 +151,29 @@ function getGraticule() {
   return data;
 }
 
+function getCountryCenters(topology: any) {
+  const centers = new Map<string, { lat: number; lon: number; name: string }>();
+  const geometries = topology?.objects?.default?.geometries;
+
+  if (!Array.isArray(geometries)) {
+    return centers;
+  }
+
+  for (const geometry of geometries) {
+    const properties = geometry?.properties;
+    const code3 = properties?.['iso-a3'];
+    const lat = properties?.['hc-middle-lat'];
+    const lon = properties?.['hc-middle-lon'];
+    const name = properties?.name;
+
+    if (typeof code3 === 'string' && typeof lat === 'number' && typeof lon === 'number') {
+      centers.set(code3, { lat, lon, name: typeof name === 'string' ? name : code3 });
+    }
+  }
+
+  return centers;
+}
+
 function pieColor(index: number) {
   const colors = ['#2caffe', '#544fc5', '#00e272', '#fe6a35', '#6b8abc', '#d568fb', '#2ee0ca', '#fa4b42', '#feb56a', '#91e8e1'];
   return colors[index % colors.length];
@@ -161,9 +184,10 @@ export default function MacroDriversGlobePie({ drivers, language }: Props) {
   const [worldMap, setWorldMap] = useState<any | null>(null);
   const [modulesReady, setModulesReady] = useState(false);
   const [selectedCode, setSelectedCode] = useState('BRA');
-  const [topFilter, setTopFilter] = useState<TopFilter>(8);
+  const [topFilter, setTopFilter] = useState<TopFilter>(30);
   const hubs = useMemo(() => buildMacroHubPoints(drivers), [drivers]);
   const graticule = useMemo(() => getGraticule(), []);
+  const countryCenters = useMemo(() => getCountryCenters(worldMap), [worldMap]);
 
   useEffect(() => {
     let cancelled = false;
@@ -202,12 +226,27 @@ export default function MacroDriversGlobePie({ drivers, language }: Props) {
     }
   }, [selectedCode, visibleHubs]);
 
-  const selectedHub = visibleHubs.find((hub) => hub.code3 === selectedCode) ?? visibleHubs[0] ?? null;
-  const rotation = selectedHub ? getRotationForHub(selectedHub.lon, selectedHub.lat) : [20, -18, 0];
+  const centeredVisibleHubs = useMemo(
+    () =>
+      visibleHubs.map((hub) => {
+        const center = countryCenters.get(hub.code3);
+
+        return {
+          ...hub,
+          lat: center?.lat ?? hub.lat,
+          lon: center?.lon ?? hub.lon,
+          country: center?.name ?? hub.country,
+        };
+      }),
+    [countryCenters, visibleHubs]
+  );
+  const centeredSelectedHub =
+    centeredVisibleHubs.find((hub) => hub.code3 === selectedCode) ?? centeredVisibleHubs[0] ?? null;
+  const rotation = centeredSelectedHub ? getRotationForHub(centeredSelectedHub.lon, centeredSelectedHub.lat) : [20, -18, 0];
 
   const mapData = useMemo(
     () =>
-      visibleHubs.map((hub, index) => {
+      centeredVisibleHubs.map((hub, index) => {
         const topSlice = hub.slices.slice().sort((a, b) => b.impact - a.impact)[0];
 
         return {
@@ -221,7 +260,7 @@ export default function MacroDriversGlobePie({ drivers, language }: Props) {
           color: pieColor(index),
         };
       }),
-    [visibleHubs]
+    [centeredVisibleHubs]
   );
 
   const pieData = useMemo(
@@ -312,7 +351,7 @@ export default function MacroDriversGlobePie({ drivers, language }: Props) {
             },
           },
           map: {
-            joinBy: ['name', 'name'],
+            joinBy: ['iso-a3', 'code3'],
             borderColor: '#d6d6d6',
             nullColor: '#f1f1f1',
             states: {
@@ -386,7 +425,7 @@ export default function MacroDriversGlobePie({ drivers, language }: Props) {
     [copy, graticule, mapData, pieData, rotation, selectedCode, worldMap]
   );
 
-  if (!selectedHub || visibleHubs.length === 0) {
+  if (!centeredSelectedHub || visibleHubs.length === 0) {
     return null;
   }
 
@@ -396,8 +435,8 @@ export default function MacroDriversGlobePie({ drivers, language }: Props) {
         <div className='text-xs font-semibold uppercase tracking-[0.16em] text-slate-500'>{copy.filterLabel}</div>
         <div className='inline-flex rounded-full border border-slate-200 bg-slate-50 p-1'>
           {[
-            { value: 8 as TopFilter, label: copy.top8 },
-            { value: 12 as TopFilter, label: copy.top12 },
+            { value: 30 as TopFilter, label: copy.top30 },
+            { value: 100 as TopFilter, label: copy.top100 },
             { value: 'all' as TopFilter, label: copy.all },
           ].map((option) => {
             const active = topFilter === option.value;

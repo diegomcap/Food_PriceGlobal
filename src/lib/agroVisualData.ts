@@ -33,6 +33,7 @@ export type MacroHubProfile = {
   lat: number;
   lon: number;
   corridor: string;
+  rankBias?: number;
   weights: {
     'DX=F': number;
     'CL=F': number;
@@ -64,7 +65,240 @@ export type MacroDriverInput = {
   unit: string;
 };
 
+type MacroCountryArchetype =
+  | 'agro-exporter'
+  | 'balanced'
+  | 'demand-center'
+  | 'energy-linked'
+  | 'fertilizer-sensitive'
+  | 'processing-hub'
+  | 'safe-haven';
+
+type MacroCountryTier = 'core' | 'major' | 'standard' | 'emerging';
+
+type MacroCountrySeed = {
+  code3: string;
+  country: string;
+  archetype: MacroCountryArchetype;
+  tier: MacroCountryTier;
+};
+
 const MAX_EXPORT_VALUE = 190;
+
+const DRIVER_LEVEL_RANGES = {
+  'DX=F': 120,
+  'CL=F': 120,
+  'NG=F': 8,
+  'GC=F': 3000,
+} as const;
+
+const MACRO_ARCHETYPE_PRESETS: Record<
+  MacroCountryArchetype,
+  {
+    corridor: string;
+    rankBias: number;
+    weights: MacroHubProfile['weights'];
+  }
+> = {
+  'agro-exporter': {
+    corridor: 'Agro export corridor',
+    rankBias: 1.08,
+    weights: { 'DX=F': 1.08, 'CL=F': 1.02, 'NG=F': 0.92, 'GC=F': 0.66 },
+  },
+  balanced: {
+    corridor: 'Regional food and logistics corridor',
+    rankBias: 1,
+    weights: { 'DX=F': 1, 'CL=F': 1, 'NG=F': 1, 'GC=F': 0.72 },
+  },
+  'demand-center': {
+    corridor: 'Demand and import corridor',
+    rankBias: 1.04,
+    weights: { 'DX=F': 0.96, 'CL=F': 1.05, 'NG=F': 1.02, 'GC=F': 0.7 },
+  },
+  'energy-linked': {
+    corridor: 'Energy-linked pricing corridor',
+    rankBias: 1.03,
+    weights: { 'DX=F': 0.92, 'CL=F': 1.18, 'NG=F': 1.2, 'GC=F': 0.72 },
+  },
+  'fertilizer-sensitive': {
+    corridor: 'Fertilizer-sensitive food corridor',
+    rankBias: 1.01,
+    weights: { 'DX=F': 1.04, 'CL=F': 1.06, 'NG=F': 1.18, 'GC=F': 0.68 },
+  },
+  'processing-hub': {
+    corridor: 'Processing and trading corridor',
+    rankBias: 1.02,
+    weights: { 'DX=F': 0.94, 'CL=F': 1, 'NG=F': 1.14, 'GC=F': 0.64 },
+  },
+  'safe-haven': {
+    corridor: 'Defensive capital corridor',
+    rankBias: 0.98,
+    weights: { 'DX=F': 0.88, 'CL=F': 0.9, 'NG=F': 0.94, 'GC=F': 1.2 },
+  },
+};
+
+const MACRO_TIER_FACTORS: Record<MacroCountryTier, number> = {
+  core: 1.14,
+  major: 1.08,
+  standard: 1,
+  emerging: 0.94,
+};
+
+function seedCountries(
+  archetype: MacroCountryArchetype,
+  tier: MacroCountryTier,
+  countries: Array<[string, string]>
+): MacroCountrySeed[] {
+  return countries.map(([code3, country]) => ({ code3, country, archetype, tier }));
+}
+
+const HYBRID_MACRO_COUNTRY_SEEDS: MacroCountrySeed[] = [
+  ...seedCountries('agro-exporter', 'major', [
+    ['RUS', 'Russia'],
+    ['KAZ', 'Kazakhstan'],
+    ['NZL', 'New Zealand'],
+    ['COL', 'Colombia'],
+    ['PER', 'Peru'],
+    ['CHL', 'Chile'],
+    ['PRY', 'Paraguay'],
+    ['URY', 'Uruguay'],
+    ['ZAF', 'South Africa'],
+    ['ETH', 'Ethiopia'],
+    ['KEN', 'Kenya'],
+    ['CIV', "Cote d'Ivoire"],
+    ['GHA', 'Ghana'],
+    ['ROU', 'Romania'],
+    ['POL', 'Poland'],
+    ['IDN', 'Indonesia'],
+    ['MYS', 'Malaysia'],
+  ]),
+  ...seedCountries('demand-center', 'core', [
+    ['JPN', 'Japan'],
+    ['KOR', 'South Korea'],
+    ['MEX', 'Mexico'],
+    ['EGY', 'Egypt'],
+    ['TUR', 'Turkey'],
+    ['ARE', 'United Arab Emirates'],
+  ]),
+  ...seedCountries('demand-center', 'major', [
+    ['PAK', 'Pakistan'],
+    ['BGD', 'Bangladesh'],
+    ['PHL', 'Philippines'],
+    ['DZA', 'Algeria'],
+    ['MAR', 'Morocco'],
+    ['NGA', 'Nigeria'],
+    ['IRN', 'Iran'],
+    ['IRQ', 'Iraq'],
+    ['JOR', 'Jordan'],
+    ['LBN', 'Lebanon'],
+    ['NPL', 'Nepal'],
+    ['LKA', 'Sri Lanka'],
+  ]),
+  ...seedCountries('processing-hub', 'major', [
+    ['FRA', 'France'],
+    ['DEU', 'Germany'],
+    ['ESP', 'Spain'],
+    ['ITA', 'Italy'],
+    ['GBR', 'United Kingdom'],
+    ['BEL', 'Belgium'],
+    ['DNK', 'Denmark'],
+    ['SGP', 'Singapore'],
+  ]),
+  ...seedCountries('processing-hub', 'standard', [
+    ['PRT', 'Portugal'],
+    ['GRC', 'Greece'],
+    ['IRL', 'Ireland'],
+    ['AUT', 'Austria'],
+    ['SWE', 'Sweden'],
+    ['FIN', 'Finland'],
+    ['CZE', 'Czechia'],
+    ['SVK', 'Slovakia'],
+    ['HUN', 'Hungary'],
+    ['BGR', 'Bulgaria'],
+    ['HRV', 'Croatia'],
+    ['SVN', 'Slovenia'],
+    ['LTU', 'Lithuania'],
+    ['LVA', 'Latvia'],
+    ['EST', 'Estonia'],
+    ['SRB', 'Serbia'],
+    ['BIH', 'Bosnia and Herzegovina'],
+    ['ALB', 'Albania'],
+    ['MKD', 'North Macedonia'],
+    ['MDA', 'Moldova'],
+    ['GEO', 'Georgia'],
+    ['ARM', 'Armenia'],
+    ['AZE', 'Azerbaijan'],
+  ]),
+  ...seedCountries('energy-linked', 'major', [
+    ['NOR', 'Norway'],
+    ['QAT', 'Qatar'],
+    ['KWT', 'Kuwait'],
+    ['OMN', 'Oman'],
+    ['AZE', 'Azerbaijan'],
+    ['DZA', 'Algeria'],
+    ['NGA', 'Nigeria'],
+  ]),
+  ...seedCountries('energy-linked', 'standard', [
+    ['AGO', 'Angola'],
+    ['TKM', 'Turkmenistan'],
+    ['MNG', 'Mongolia'],
+    ['PNG', 'Papua New Guinea'],
+  ]),
+  ...seedCountries('fertilizer-sensitive', 'major', [
+    ['SAU', 'Saudi Arabia'],
+    ['IND', 'India'],
+    ['CHN', 'China'],
+    ['EGY', 'Egypt'],
+  ]),
+  ...seedCountries('fertilizer-sensitive', 'standard', [
+    ['UZB', 'Uzbekistan'],
+    ['MMR', 'Myanmar'],
+    ['KHM', 'Cambodia'],
+    ['LAO', 'Laos'],
+    ['TZA', 'Tanzania'],
+    ['UGA', 'Uganda'],
+    ['CMR', 'Cameroon'],
+    ['SEN', 'Senegal'],
+    ['MLI', 'Mali'],
+    ['BFA', 'Burkina Faso'],
+    ['SDN', 'Sudan'],
+    ['MOZ', 'Mozambique'],
+    ['ZMB', 'Zambia'],
+    ['ZWE', 'Zimbabwe'],
+    ['MAD', 'Madagascar'],
+  ]),
+  ...seedCountries('balanced', 'major', [
+    ['CHE', 'Switzerland'],
+    ['ISR', 'Israel'],
+    ['BLR', 'Belarus'],
+    ['ECU', 'Ecuador'],
+  ]),
+  ...seedCountries('balanced', 'standard', [
+    ['BOL', 'Bolivia'],
+    ['GTM', 'Guatemala'],
+    ['HND', 'Honduras'],
+    ['NIC', 'Nicaragua'],
+    ['CRI', 'Costa Rica'],
+    ['PAN', 'Panama'],
+    ['DOM', 'Dominican Republic'],
+    ['CUB', 'Cuba'],
+    ['JAM', 'Jamaica'],
+    ['FJI', 'Fiji'],
+    ['NAM', 'Namibia'],
+    ['BWA', 'Botswana'],
+    ['COD', 'Democratic Republic of the Congo'],
+    ['COG', 'Republic of the Congo'],
+  ]),
+  ...seedCountries('safe-haven', 'major', [
+    ['CHE', 'Switzerland'],
+    ['SWE', 'Sweden'],
+  ]),
+  ...seedCountries('safe-haven', 'standard', [
+    ['JPN', 'Japan'],
+    ['NOR', 'Norway'],
+    ['FIN', 'Finland'],
+  ]),
+];
 
 export const AGRO_EXPORT_HUBS: ExportHubProfile[] = [
   {
@@ -410,10 +644,52 @@ function driverChange(driver: MacroDriverInput) {
   return ((driver.price - driver.previousClose) / driver.previousClose) * 100;
 }
 
+function getCodeSeed(code3: string, salt: number) {
+  return code3.split('').reduce((sum, letter, index) => sum + letter.charCodeAt(0) * (index + salt), 0);
+}
+
+function getVariation(code3: string, salt: number, min = 0.92, max = 1.1) {
+  const raw = getCodeSeed(code3, salt) % 1000;
+  return min + (raw / 1000) * (max - min);
+}
+
+function createHybridMacroProfile(seed: MacroCountrySeed): MacroHubProfile {
+  const preset = MACRO_ARCHETYPE_PRESETS[seed.archetype];
+  const tierFactor = MACRO_TIER_FACTORS[seed.tier];
+
+  return {
+    code3: seed.code3,
+    country: seed.country,
+    lat: 0,
+    lon: 0,
+    corridor: preset.corridor,
+    rankBias: preset.rankBias * tierFactor * getVariation(seed.code3, 7, 0.96, 1.08),
+    weights: {
+      'DX=F': Number((preset.weights['DX=F'] * tierFactor * getVariation(seed.code3, 3)).toFixed(3)),
+      'CL=F': Number((preset.weights['CL=F'] * tierFactor * getVariation(seed.code3, 5)).toFixed(3)),
+      'NG=F': Number((preset.weights['NG=F'] * tierFactor * getVariation(seed.code3, 9)).toFixed(3)),
+      'GC=F': Number((preset.weights['GC=F'] * tierFactor * getVariation(seed.code3, 11)).toFixed(3)),
+    },
+  };
+}
+
+function buildHybridMacroProfiles() {
+  const deduped = new Map<string, MacroHubProfile>(MACRO_HUBS.map((hub) => [hub.code3, hub]));
+
+  for (const seed of HYBRID_MACRO_COUNTRY_SEEDS) {
+    if (!deduped.has(seed.code3)) {
+      deduped.set(seed.code3, createHybridMacroProfile(seed));
+    }
+  }
+
+  return Array.from(deduped.values());
+}
+
 export function buildMacroHubPoints(drivers: MacroDriverInput[]): MacroHubPoint[] {
   const driverMap = new Map(drivers.map((item) => [item.symbol, item]));
+  const macroProfiles = buildHybridMacroProfiles();
 
-  return MACRO_HUBS.map((hub) => {
+  return macroProfiles.map((hub) => {
     const slices: DriverSlice[] = (['DX=F', 'CL=F', 'NG=F', 'GC=F'] as const)
       .map((symbol) => {
         const driver = driverMap.get(symbol);
@@ -423,7 +699,13 @@ export function buildMacroHubPoints(drivers: MacroDriverInput[]): MacroHubPoint[
 
         const change = driverChange(driver);
         const weight = hub.weights[symbol];
-        const impact = clamp(40 + Math.abs(change) * 16 * weight + driver.price * 0.02 * weight);
+        const normalizedLevel = Math.min(driver.price / DRIVER_LEVEL_RANGES[symbol], 1.4);
+        const impact = clamp(
+          28 +
+            Math.abs(change) * 20 * weight +
+            normalizedLevel * 24 * weight +
+            ((hub.rankBias ?? 1) - 1) * 18
+        );
 
         return {
           id: symbol,
@@ -432,13 +714,13 @@ export function buildMacroHubPoints(drivers: MacroDriverInput[]): MacroHubPoint[
           unit: driver.unit,
           change: Number(change.toFixed(2)),
           impact,
-          z: Math.max(8, Math.round(Math.abs(change) * 22 + weight * 18)),
+          z: Math.max(8, Math.round(impact * 0.34 + Math.abs(change) * 4)),
         };
       })
       .filter((slice): slice is DriverSlice => Boolean(slice));
 
     const totalPressure = clamp(
-      slices.reduce((sum, slice) => sum + slice.impact, 0) / Math.max(slices.length, 1)
+      (slices.reduce((sum, slice) => sum + slice.impact, 0) / Math.max(slices.length, 1)) * (hub.rankBias ?? 1)
     );
 
     return {
