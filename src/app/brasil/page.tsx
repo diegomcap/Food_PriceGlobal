@@ -11,8 +11,8 @@ const COPY = {
     brand: 'Brasil Food Transport',
     login: 'Login',
     register: 'Cadastrar',
-    title: 'O futuro da logistica agroalimentar brasileira',
-    accent: 'Agroalimentar Brasileira',
+    titleLine1: 'O futuro da logistica',
+    titleLine2: 'agroalimentar brasileira',
     subtitle:
       'Conectamos produtores, transportadores e exportadores em uma unica plataforma integrada com compliance total ANVISA e MAPA.',
     primary: 'Acessar plataforma',
@@ -37,8 +37,8 @@ const COPY = {
     brand: 'Brazil Food Transport',
     login: 'Login',
     register: 'Sign up',
-    title: 'The future of Brazilian food logistics',
-    accent: 'Brazilian Food Logistics',
+    titleLine1: 'The future of',
+    titleLine2: 'Brazilian food logistics',
     subtitle:
       'We connect producers, carriers and exporters on one integrated platform with full ANVISA and MAPA compliance.',
     primary: 'Access platform',
@@ -63,8 +63,8 @@ const COPY = {
     brand: 'Brasil Food Transport',
     login: 'Login',
     register: 'Registrar',
-    title: 'El futuro de la logistica agroalimentaria brasilena',
-    accent: 'Agroalimentaria Brasilena',
+    titleLine1: 'El futuro de la logistica',
+    titleLine2: 'agroalimentaria brasilena',
     subtitle:
       'Conectamos productores, transportistas y exportadores en una sola plataforma integrada con compliance total de ANVISA y MAPA.',
     primary: 'Acceder a la plataforma',
@@ -83,6 +83,84 @@ const COPY = {
       ['Certificacion digital', 'Emision y validacion automatica de certificados sanitarios y documentos fiscales.'],
       ['Analytics avanzado', 'Paneles con indicadores de desempeno, costos y eficiencia logistica.'],
       ['Conexion global', 'Integracion nativa con LATAM Export y MFD para expansion internacional.'],
+    ],
+  },
+  ru: {
+    brand: 'Brazil Food Transport',
+    login: 'Vhod',
+    register: 'Registratsiya',
+    titleLine1: 'Budushchee logistiki',
+    titleLine2: 'brazilskogo agroprodovolstviya',
+    subtitle:
+      'My soedinyaem proizvoditeley, perevozchikov i eksporterov na edinoj integrirovannoj platforme s polnym compliance ANVISA i MAPA.',
+    primary: 'Voyti v platformu',
+    secondary: 'Uznat bolshe',
+    featuresTitle: 'Pochemu vybrat Brazil Food Transport?',
+    featuresSubtitle:
+      'Nasha platforma predlagaet eksklyuzivnye instrumenty dlya optimizatsii logistiki i zashchity kachestva produktov.',
+    ctaTitle: 'Gotovy transformirovat logistiku?',
+    ctaSubtitle:
+      'Prisoedinyaytes k kompaniyam, kotorye uzhe ispolzuyut Brazil Food Transport dlya upravleniya operatsiyami.',
+    ctaAction: 'Nachat seychas',
+    footer: 'Vse prava zashchishcheny.',
+    links: ['Usloviya ispolzovaniya', 'Konfidentsialnost', 'Podderzhka'],
+    cards: [
+      ['Upravlenie flotom', 'Monitoring transporta i gruzov v realnom vremeni s pryamoy integratsiey v sistemy trekinga.'],
+      ['Tsifrovaya sertifikatsiya', 'Avtomaticheskiy vypusk i proverka sanitarnykh sertifikatov i fiskalnykh dokumentov.'],
+      ['Prodvinutaya analitika', 'Paneli s pokazatelyami effektivnosti, zatrat i logisticheskoy proizvoditelnosti.'],
+      ['Globalnaya svyaz', 'Nativnaya integratsiya s portalami LATAM Export i MFD dlya mezhdunarodnogo rosta.'],
+    ],
+  },
+  ar: {
+    brand: 'Brasil Food Transport',
+    login: 'تسجيل الدخول',
+    register: 'تسجيل',
+    titleLine1: 'مستقبل الخدمات اللوجستية',
+    titleLine2: 'الغذائية الزراعية في البرازيل',
+    subtitle:
+      'نربط المنتجين والناقلين والمصدرين في منصة موحدة ومتكاملة مع امتثال كامل لمتطلبات ANVISA و MAPA.',
+    primary: 'الدخول الى المنصة',
+    secondary: 'اعرف المزيد',
+    featuresTitle: 'لماذا تختار Brasil Food Transport؟',
+    featuresSubtitle:
+      'توفر منصتنا ادوات حصرية لتحسين العمليات اللوجستية وضمان جودة الاغذية.',
+    ctaTitle: 'هل انت مستعد لتطوير لوجستياتك؟',
+    ctaSubtitle:
+      'انضم الى الشركات التي تستخدم Brasil Food Transport لادارة عملياتها.',
+    ctaAction: 'ابدأ الآن',
+    footer: 'جميع الحقوق محفوظة.',
+    links: ['شروط الاستخدام', 'الخصوصية', 'الدعم'],
+    cards: [
+      ['ادارة الاسطول', 'مراقبة المركبات والشحنات في الوقت الفعلي مع تكامل مباشر مع انظمة التتبع.'],
+      ['شهادات رقمية', 'اصدار واعتماد تلقائي للشهادات الصحية والمستندات الضريبية.'],
+      ['تحليلات متقدمة', 'لوحات تحكم بمؤشرات الاداء والتكاليف والكفاءة اللوجستية.'],
+      ['اتصال عالمي', 'تكامل مباشر مع بوابتي LATAM Export و MFD للتوسع الدولي.'],
+    ],
+  },
+  zh: {
+    brand: 'Brasil Food Transport',
+    login: '登录',
+    register: '注册',
+    titleLine1: '巴西农食物流的',
+    titleLine2: '未来平台',
+    subtitle:
+      '将生产者、承运商和出口商连接到同一体化平台，并满足 ANVISA 与 MAPA 的合规要求。',
+    primary: '进入平台',
+    secondary: '了解更多',
+    featuresTitle: '为什么选择 Brasil Food Transport？',
+    featuresSubtitle:
+      '平台提供专属工具，用于优化物流运营并保障食品质量。',
+    ctaTitle: '准备升级您的物流体系了吗？',
+    ctaSubtitle:
+      '加入已经使用 Brasil Food Transport 管理运营的企业。',
+    ctaAction: '立即开始',
+    footer: '版权所有。',
+    links: ['使用条款', '隐私', '支持'],
+    cards: [
+      ['车队管理', '实时监控车辆与货物，并直接接入追踪系统。'],
+      ['数字认证', '自动签发并校验卫生证书和税务文件。'],
+      ['高级分析', '提供绩效、成本和物流效率指标的控制面板。'],
+      ['全球连接', '与 LATAM Export 和 MFD 门户原生集成，支持国际扩张。'],
     ],
   },
 } as const;
@@ -118,8 +196,8 @@ export default function BrasilWelcomePage() {
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
         <div className="container mx-auto text-center relative z-10">
           <h1 className="text-4xl md:text-6xl font-bold mb-6">
-            {copy.title.split(' ').slice(0, 4).join(' ')} <br/>
-            <span className="text-yellow-400">{copy.accent}</span>
+            {copy.titleLine1} <br/>
+            <span className="text-yellow-400">{copy.titleLine2}</span>
           </h1>
           <p className="text-xl text-green-100 max-w-2xl mx-auto mb-10 leading-relaxed">
             {copy.subtitle}

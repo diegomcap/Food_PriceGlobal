@@ -11,8 +11,8 @@ const COPY = {
     brand: 'LATAM Export',
     login: 'Login',
     register: 'Registrar',
-    title: 'Conectando mercados latino-americanos',
-    accent: 'Latino-americanos',
+    titleLine1: 'Conectando mercados',
+    titleLine2: 'latino-americanos',
     subtitle:
       'Plataforma unificada para comercio exterior, logistica integrada e gestao aduaneira em toda a America Latina.',
     primary: 'Comecar agora',
@@ -31,8 +31,8 @@ const COPY = {
     brand: 'LATAM Export',
     login: 'Login',
     register: 'Register',
-    title: 'Connecting Latin American markets',
-    accent: 'Latin American',
+    titleLine1: 'Connecting',
+    titleLine2: 'Latin American markets',
     subtitle:
       'Unified platform for foreign trade, integrated logistics and customs management across Latin America.',
     primary: 'Start now',
@@ -51,8 +51,8 @@ const COPY = {
     brand: 'LATAM Export',
     login: 'Login',
     register: 'Registrar',
-    title: 'Conectando mercados latinoamericanos',
-    accent: 'Latinoamericanos',
+    titleLine1: 'Conectando mercados',
+    titleLine2: 'latinoamericanos',
     subtitle:
       'Plataforma unificada para comercio exterior, logistica integrada y gestion aduanera en toda America Latina.',
     primary: 'Comenzar ahora',
@@ -65,6 +65,66 @@ const COPY = {
       ['Logistica multimodal', 'Gestion de transporte maritimo, aereo y terrestre con seguimiento en tiempo real.'],
       ['Gestion de divisas', 'Conversion y cobertura de monedas locales para transacciones internacionales seguras.'],
       ['Tramites aduaneros', 'Automatizacion de documentacion y cumplimiento normativo para 18 paises.'],
+    ],
+  },
+  ru: {
+    brand: 'LATAM Export',
+    login: 'Vhod',
+    register: 'Registratsiya',
+    titleLine1: 'Soedinyaem rynki',
+    titleLine2: 'Latinskoy Ameriki',
+    subtitle:
+      'Edinaya platforma dlya vneshney torgovli, integrirovannoy logistiki i tamozhennogo upravleniya vo vsey Latinskoy Amerike.',
+    primary: 'Nachat seychas',
+    secondary: 'Izuchit resheniya',
+    sectionTitle: 'Kompleksnye eksportnye resheniya',
+    sectionSubtitle:
+      'My uproshchaem mezhdunarodnuyu torgovlyu s pomoshchyu instrumentov, sozdannykh dlya latinoamerikanskogo rynka.',
+    footer: 'Vse prava zashchishcheny.',
+    cards: [
+      ['Multimodalnaya logistika', 'Upravlenie morskimi, vozdushnymi i nazemnymi perevozkami s otslezhivaniem v realnom vremeni.'],
+      ['Valyutnoe upravlenie', 'Konvertatsiya i khedzhirovanie lokalnykh valyut dlya bolee bezopasnykh mezhdunarodnykh sdelok.'],
+      ['Tamozhennye protsessy', 'Avtomatizatsiya dokumentov i normativnogo compliance dlya 18 stran.'],
+    ],
+  },
+  ar: {
+    brand: 'LATAM Export',
+    login: 'تسجيل الدخول',
+    register: 'تسجيل',
+    titleLine1: 'ربط اسواق',
+    titleLine2: 'امريكا اللاتينية',
+    subtitle:
+      'منصة موحدة للتجارة الخارجية واللوجستيات المتكاملة وادارة الجمارك في جميع انحاء امريكا اللاتينية.',
+    primary: 'ابدأ الآن',
+    secondary: 'استكشف الحلول',
+    sectionTitle: 'حلول تصدير متكاملة',
+    sectionSubtitle:
+      'نبسط التجارة الدولية بادوات مصممة خصيصا لسوق امريكا اللاتينية.',
+    footer: 'جميع الحقوق محفوظة.',
+    cards: [
+      ['لوجستيات متعددة الوسائط', 'ادارة النقل البحري والجوي والبري مع تتبع لحظي.'],
+      ['ادارة العملات', 'تحويل العملات المحلية والتحوط لها من اجل معاملات دولية اكثر امانا.'],
+      ['اجراءات جمركية', 'اتمتة المستندات والامتثال التنظيمي في 18 دولة.'],
+    ],
+  },
+  zh: {
+    brand: 'LATAM Export',
+    login: '登录',
+    register: '注册',
+    titleLine1: '连接',
+    titleLine2: '拉丁美洲市场',
+    subtitle:
+      '面向整个拉丁美洲的外贸、综合物流与海关管理统一平台。',
+    primary: '立即开始',
+    secondary: '探索解决方案',
+    sectionTitle: '一体化出口解决方案',
+    sectionSubtitle:
+      '用专为拉美市场设计的工具简化国际贸易。',
+    footer: '版权所有。',
+    cards: [
+      ['多式联运物流', '统一管理海运、空运和陆运，并提供实时追踪。'],
+      ['汇率管理', '本地货币转换与套保，提升国际交易安全性。'],
+      ['海关流程', '为18个国家提供文档自动化与合规支持。'],
     ],
   },
 } as const;
@@ -100,8 +160,8 @@ export default function LatamWelcomePage() {
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/diagmonds-light.png')] opacity-10"></div>
         <div className="container mx-auto text-center relative z-10">
           <h1 className="text-4xl md:text-6xl font-bold mb-6">
-            {copy.title.split(' ').slice(0, 2).join(' ')} <br/>
-            <span className="text-orange-400">{copy.accent}</span>
+            {copy.titleLine1} <br/>
+            <span className="text-orange-400">{copy.titleLine2}</span>
           </h1>
           <p className="text-xl text-blue-100 max-w-2xl mx-auto mb-10 leading-relaxed">
             {copy.subtitle}

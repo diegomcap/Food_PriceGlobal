@@ -4,9 +4,12 @@ import React, { createContext, useContext, useState, ReactNode, useEffect } from
 import pt from '../../translations/pt.json';
 import en from '../../translations/en.json';
 import es from '../../translations/es.json';
+import ru from '../../translations/ru.json';
+import ar from '../../translations/ar.json';
+import zh from '../../translations/zh.json';
 
-export type Language = 'pt' | 'en' | 'es';
-export const PUBLIC_LANGUAGE_OPTIONS: Language[] = ['pt', 'en', 'es'];
+export type Language = 'pt' | 'en' | 'es' | 'ru' | 'ar' | 'zh';
+export const PUBLIC_LANGUAGE_OPTIONS: Language[] = ['pt', 'en', 'es', 'ru', 'ar', 'zh'];
 const STORAGE_KEY = 'foodpriceglobal-language';
 
 interface TranslationContextType {
@@ -19,6 +22,9 @@ const translations: Record<Language, Record<string, any>> = {
   pt,
   en,
   es,
+  ru,
+  ar,
+  zh,
 };
 
 const TranslationContext = createContext<TranslationContextType | undefined>(undefined);
@@ -44,7 +50,7 @@ export function TranslationProvider({ children }: { children: ReactNode }) {
 
     window.localStorage.setItem(STORAGE_KEY, language);
     document.documentElement.lang = language;
-    document.documentElement.dir = 'ltr';
+    document.documentElement.dir = language === 'ar' ? 'rtl' : 'ltr';
   }, [language]);
 
   const t = (key: string): string => {

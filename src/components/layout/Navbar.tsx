@@ -35,6 +35,36 @@ const MODULE_COPY = {
     latamMobile: 'LATAM',
     mfdMobile: 'MFD',
   },
+  ru: {
+    global: 'Global',
+    brasil: 'Brazil',
+    latam: 'LATAM',
+    mfd: 'MFD',
+    globalMobile: 'Global',
+    brasilMobile: 'Brazil',
+    latamMobile: 'LATAM',
+    mfdMobile: 'MFD',
+  },
+  ar: {
+    global: 'Global',
+    brasil: 'البرازيل',
+    latam: 'LATAM',
+    mfd: 'MFD',
+    globalMobile: 'Global',
+    brasilMobile: 'البرازيل',
+    latamMobile: 'LATAM',
+    mfdMobile: 'MFD',
+  },
+  zh: {
+    global: 'Global',
+    brasil: '巴西',
+    latam: 'LATAM',
+    mfd: 'MFD',
+    globalMobile: 'Global',
+    brasilMobile: '巴西',
+    latamMobile: 'LATAM',
+    mfdMobile: 'MFD',
+  },
 } as const;
 
 export function Navbar() {

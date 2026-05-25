@@ -9,7 +9,8 @@ const COPY = {
   pt: {
     back: 'Voltar para Home',
     badge: 'Logistica Internacional',
-    title: 'Conectando mercados globais com eficiencia e seguranca',
+    titleLine1: 'Conectando mercados globais',
+    titleLine2: 'com eficiencia e seguranca',
     subtitle:
       'Solucoes integradas de transporte aereo, maritimo e terrestre para a industria alimenticia mundial, com monitoramento em tempo real e compliance internacional.',
     primary: 'Acessar portal do cliente',
@@ -52,7 +53,8 @@ const COPY = {
   en: {
     back: 'Back to Home',
     badge: 'International Logistics',
-    title: 'Connecting global markets with efficiency and security',
+    titleLine1: 'Connecting global markets',
+    titleLine2: 'with efficiency and security',
     subtitle:
       'Integrated air, ocean and road transport solutions for the global food industry, with real-time monitoring and international compliance.',
     primary: 'Access client portal',
@@ -95,7 +97,8 @@ const COPY = {
   es: {
     back: 'Volver al Inicio',
     badge: 'Logistica Internacional',
-    title: 'Conectando mercados globales con eficiencia y seguridad',
+    titleLine1: 'Conectando mercados globales',
+    titleLine2: 'con eficiencia y seguridad',
     subtitle:
       'Soluciones integradas de transporte aereo, maritimo y terrestre para la industria alimentaria mundial, con monitoreo en tiempo real y compliance internacional.',
     primary: 'Acceder al portal del cliente',
@@ -135,6 +138,138 @@ const COPY = {
       },
     ],
   },
+  ru: {
+    back: 'Nazad na glavnuyu',
+    badge: 'Mezhdunarodnaya logistika',
+    titleLine1: 'Soedinyaem globalnye rynki',
+    titleLine2: 's effektivnostyu i bezopasnostyu',
+    subtitle:
+      'Kompleksnye resheniya dlya avia-, morskoj i avtomobilnoj dostavki dlya mirovoj pishchevoj industrii s monitorigom v realnom vremeni i mezhdunarodnym compliance.',
+    primary: 'Vojti v klientskiy portal',
+    secondary: 'Pogovorit so spetsialistom',
+    whyTitle: 'Pochemu vybrat FoodPrice Global?',
+    whySubtitle: 'Tekhnologii i ekspertiza vmeste zashchishchayut celostnost vashego gruza.',
+    cards: [
+      {
+        title: 'Ekspress-aviaperevozki',
+        description: 'Dostavka skoroporyashchikhsya gruzov s temperaturnym kontrolem i prioritetnoy pogruzkoy bolee chem v 120 stranakh.',
+      },
+      {
+        title: 'Morskie perevozki',
+        description: 'Resheniya FCL i LCL dlya krupnykh obemov s sovremennymi refkonteynerami.',
+      },
+      {
+        title: 'Nazemnaya set',
+        description: 'Svyazannyy park dlya last-mile dostavki i effektivnykh intermodalnykh svyazey.',
+      },
+    ],
+    highlights: [
+      {
+        title: 'Globalnoe pokrytie',
+        description: 'Prisutstvie na vseh kontinentakh s sertifitsirovannymi lokalnymi partnerami.',
+      },
+      {
+        title: 'Polnaya trasiruemost',
+        description: 'Kruglosutochny monitoring mesta nakhozhdeniya i usloviy perevozki gruza.',
+      },
+      {
+        title: 'Vstroennoe strakhovanie',
+        description: 'Polnaya zashchita ot riskov i povrezhdeniy na vsem marshrute.',
+      },
+      {
+        title: 'Analitika',
+        description: 'Detalnye otchety po effektivnosti i logisticheskim zatratam.',
+      },
+    ],
+  },
+  ar: {
+    back: 'العودة الى الرئيسية',
+    badge: 'اللوجستيات الدولية',
+    titleLine1: 'ربط الاسواق العالمية',
+    titleLine2: 'بكفاءة وامان',
+    subtitle:
+      'حلول متكاملة للنقل الجوي والبحري والبري لقطاع الغذاء العالمي مع مراقبة لحظية وامتثال دولي.',
+    primary: 'الدخول الى بوابة العميل',
+    secondary: 'التحدث مع مختص',
+    whyTitle: 'لماذا تختار FoodPrice Global؟',
+    whySubtitle: 'التقنية والخبرة تعملان معا لحماية سلامة شحنتك.',
+    cards: [
+      {
+        title: 'شحن جوي سريع',
+        description: 'نقل السلع القابلة للتلف مع التحكم في الحرارة واولوية الشحن في اكثر من 120 دولة.',
+      },
+      {
+        title: 'شحن بحري',
+        description: 'حلول FCL وLCL للكميات الكبيرة مع حاويات مبردة حديثة.',
+      },
+      {
+        title: 'شبكة برية',
+        description: 'اسطول متصل للتوزيع النهائي وروابط متعددة الوسائط بكفاءة.',
+      },
+    ],
+    highlights: [
+      {
+        title: 'تغطية عالمية',
+        description: 'وجود في كل القارات مع شركاء محليين معتمدين.',
+      },
+      {
+        title: 'تتبع كامل',
+        description: 'مراقبة 24/7 لموقع الشحنة وظروفها.',
+      },
+      {
+        title: 'تأمين مدمج',
+        description: 'حماية كاملة من المخاطر والاضرار طوال الرحلة.',
+      },
+      {
+        title: 'تحليلات',
+        description: 'تقارير تفصيلية عن الاداء والتكاليف اللوجستية.',
+      },
+    ],
+  },
+  zh: {
+    back: '返回首页',
+    badge: '国际物流',
+    titleLine1: '连接全球市场',
+    titleLine2: '兼顾效率与安全',
+    subtitle:
+      '为全球食品行业提供空运、海运和陆运一体化方案，支持实时监控与国际合规。',
+    primary: '进入客户门户',
+    secondary: '联系专家',
+    whyTitle: '为什么选择 FoodPrice Global？',
+    whySubtitle: '技术与专业能力结合，保障您的货物完整与安全。',
+    cards: [
+      {
+        title: '空运快线',
+        description: '为易腐货物提供温控运输和优先舱位，覆盖120多个国家。',
+      },
+      {
+        title: '海运运输',
+        description: '面向大宗货量的 FCL 和 LCL 方案，配备新一代冷藏集装箱。',
+      },
+      {
+        title: '陆运网络',
+        description: '互联车队支持最后一公里配送和高效多式联运。',
+      },
+    ],
+    highlights: [
+      {
+        title: '全球覆盖',
+        description: '与经过认证的本地伙伴一起覆盖所有大洲。',
+      },
+      {
+        title: '全程可追踪',
+        description: '全天候监控货物位置与运输条件。',
+      },
+      {
+        title: '综合保险',
+        description: '全程提供风险与损坏保护。',
+      },
+      {
+        title: '分析能力',
+        description: '提供绩效与物流成本的详细报告。',
+      },
+    ],
+  },
 } as const;
 
 export default function GlobalTransportPage() {
@@ -163,7 +298,9 @@ export default function GlobalTransportPage() {
               {copy.badge}
             </div>
             <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-              {copy.title}
+              {copy.titleLine1}
+              <br />
+              {copy.titleLine2}
             </h1>
             <p className="text-xl text-blue-100 max-w-2xl mb-10 leading-relaxed">
               {copy.subtitle}
