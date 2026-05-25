@@ -2,10 +2,45 @@ import Link from 'next/link';
 import { Menu, Globe, Truck, ShoppingCart, Activity, Shield, Info, Mail, Landmark } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from '@/context/TranslationContext';
+import LanguageSwitcher from '@/components/shared/LanguageSwitcher';
+
+const MODULE_COPY = {
+  pt: {
+    global: 'Global',
+    brasil: 'Brasil',
+    latam: 'LATAM',
+    mfd: 'MFD',
+    globalMobile: 'Global',
+    brasilMobile: 'Brasil',
+    latamMobile: 'LATAM',
+    mfdMobile: 'MFD',
+  },
+  en: {
+    global: 'Global',
+    brasil: 'Brazil',
+    latam: 'LATAM',
+    mfd: 'MFD',
+    globalMobile: 'Global',
+    brasilMobile: 'Brazil',
+    latamMobile: 'LATAM',
+    mfdMobile: 'MFD',
+  },
+  es: {
+    global: 'Global',
+    brasil: 'Brasil',
+    latam: 'LATAM',
+    mfd: 'MFD',
+    globalMobile: 'Global',
+    brasilMobile: 'Brasil',
+    latamMobile: 'LATAM',
+    mfdMobile: 'MFD',
+  },
+} as const;
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const { setLanguage, language, t } = useTranslation();
+  const copy = MODULE_COPY[language];
 
   return (
     <header className="bg-white/90 backdrop-blur-md shadow-sm fixed w-full z-50 top-0 border-b border-slate-100">
@@ -38,35 +73,20 @@ export function Navbar() {
           
           <div className="h-6 w-px bg-slate-200 mx-2"></div>
 
-          {/* Language Switcher */}
-          <div className="flex items-center gap-1 mr-2 bg-slate-100 p-1 rounded-lg">
-            {(['pt', 'en', 'es', 'ru', 'ar', 'zh'] as const).map((lang) => (
-              <button 
-                key={lang}
-                onClick={() => setLanguage(lang)} 
-                className={`text-[10px] font-bold px-1.5 py-0.5 rounded transition-all ${
-                  language === lang 
-                    ? 'bg-white text-emerald-600 shadow-sm' 
-                    : 'text-slate-400 hover:text-slate-600 hover:bg-slate-200/50'
-                }`}
-              >
-                {lang.toUpperCase()}
-              </button>
-            ))}
-          </div>
+          <LanguageSwitcher className="mr-2" />
 
           <Link href="/global" className="px-3 py-1.5 rounded-full bg-blue-50 text-blue-700 hover:bg-blue-100 text-sm font-semibold transition-colors flex items-center gap-1">
-            <Globe className="w-3 h-3" /> Global
+            <Globe className="w-3 h-3" /> {copy.global}
           </Link>
 
           <Link href="/brasil" className="px-3 py-1.5 rounded-full bg-green-50 text-green-700 hover:bg-green-100 text-sm font-semibold transition-colors flex items-center gap-1">
-            <span className="text-xs">🇧🇷</span> Brasil
+            <span className="text-xs">🇧🇷</span> {copy.brasil}
           </Link>
           <Link href="/latam" className="px-3 py-1.5 rounded-full bg-orange-50 text-orange-700 hover:bg-orange-100 text-sm font-semibold transition-colors flex items-center gap-1">
-            <span className="text-xs">🌎</span> LATAM
+            <span className="text-xs">🌎</span> {copy.latam}
           </Link>
            <Link href="/military" className="px-3 py-1.5 rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200 text-sm font-semibold transition-colors flex items-center gap-1">
-            <Shield className="w-3 h-3" /> MFD
+            <Shield className="w-3 h-3" /> {copy.mfd}
           </Link>
         </nav>
 
@@ -84,11 +104,12 @@ export function Navbar() {
             <Link href="#tabela-commodities" className="text-slate-600 font-medium">{t('nav.markets')}</Link>
             <Link href="#tendencias" className="text-slate-600 font-medium">{t('nav.trends')}</Link>
             <Link href="#fundos-estatais" className="text-slate-600 font-medium">{t('nav_funds')}</Link>
+            <LanguageSwitcher />
             <div className="h-px bg-slate-100 my-2"></div>
-            <Link href="/global" className="text-blue-600 font-medium">Global Food Transport</Link>
-            <Link href="/brasil" className="text-green-600 font-medium">Brasil Export</Link>
-            <Link href="/latam" className="text-orange-600 font-medium">LATAM Export</Link>
-            <Link href="/military" className="text-slate-700 font-medium">Military Food</Link>
+            <Link href="/global" className="text-blue-600 font-medium">{copy.globalMobile}</Link>
+            <Link href="/brasil" className="text-green-600 font-medium">{copy.brasilMobile}</Link>
+            <Link href="/latam" className="text-orange-600 font-medium">{copy.latamMobile}</Link>
+            <Link href="/military" className="text-slate-700 font-medium">{copy.mfdMobile}</Link>
           </div>
         </div>
       )}

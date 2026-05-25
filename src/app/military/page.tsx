@@ -3,9 +3,67 @@
 import React from 'react';
 import Link from 'next/link';
 import { Shield, Target, Lock, Database, ChevronRight } from 'lucide-react';
+import { useTranslation } from '@/context/TranslationContext';
+import LanguageSwitcher from '@/components/shared/LanguageSwitcher';
+
+const COPY = {
+  pt: {
+    brand: 'MFD DEFENSE',
+    login: 'Login seguro',
+    badge: 'SISTEMA CLASSIFICADO // NIVEL 3',
+    title: 'Sistemas militares avancados de alimentacao',
+    accent: 'ALIMENTACAO',
+    subtitle:
+      'Gestao estrategica da cadeia de suprimentos para operacoes de defesa, com nutricao de alta performance, vida util estendida e logistica segura.',
+    primary: 'Iniciar acesso',
+    secondary: 'Ver capacidades',
+    footer: 'Todos os direitos reservados. Acesso nao autorizado e estritamente proibido.',
+    cards: [
+      ['Logistica de precisao', 'Rastreamento em tempo real de suprimentos para zonas de combate e postos remotos.'],
+      ['Reservas estrategicas', 'Gestao automatizada de inventario para seguranca alimentar de longo prazo e resposta a desastres.'],
+      ['Protocolos seguros', 'Protecao ponta a ponta dos dados da cadeia de suprimentos com controles de acesso reforcados.'],
+    ],
+  },
+  en: {
+    brand: 'MFD DEFENSE',
+    login: 'Secure login',
+    badge: 'CLASSIFIED SYSTEM // LEVEL 3',
+    title: 'Advanced military food systems',
+    accent: 'FOOD SYSTEMS',
+    subtitle:
+      'Strategic supply-chain management for defense operations, with high-performance nutrition, extended shelf-life solutions and secure logistics.',
+    primary: 'Initialize access',
+    secondary: 'View capabilities',
+    footer: 'All rights reserved. Unauthorized access is strictly prohibited.',
+    cards: [
+      ['Precision logistics', 'Real-time supply tracking for active combat zones and remote outposts.'],
+      ['Strategic reserves', 'Automated inventory management for long-term food security and disaster response.'],
+      ['Secure protocols', 'End-to-end protection of supply-chain data with hardened access controls.'],
+    ],
+  },
+  es: {
+    brand: 'MFD DEFENSE',
+    login: 'Login seguro',
+    badge: 'SISTEMA CLASIFICADO // NIVEL 3',
+    title: 'Sistemas militares avanzados de alimentacion',
+    accent: 'ALIMENTACION',
+    subtitle:
+      'Gestion estrategica de la cadena de suministro para operaciones de defensa, con nutricion de alto desempeno, vida util extendida y logistica segura.',
+    primary: 'Iniciar acceso',
+    secondary: 'Ver capacidades',
+    footer: 'Todos los derechos reservados. El acceso no autorizado esta estrictamente prohibido.',
+    cards: [
+      ['Logistica de precision', 'Seguimiento en tiempo real de suministros para zonas de combate y puestos remotos.'],
+      ['Reservas estrategicas', 'Gestion automatizada de inventario para seguridad alimentaria de largo plazo y respuesta a desastres.'],
+      ['Protocolos seguros', 'Proteccion de extremo a extremo de los datos de la cadena de suministro con controles de acceso reforzados.'],
+    ],
+  },
+} as const;
 
 export default function MilitaryPage() {
   const currentYear = new Date().getFullYear();
+  const { language } = useTranslation();
+  const copy = COPY[language];
 
   return (
     <div className="min-h-screen bg-zinc-950 font-mono text-gray-300">
@@ -14,11 +72,12 @@ export default function MilitaryPage() {
         <div className="container mx-auto px-6 py-4 flex justify-between items-center">
           <div className="flex items-center gap-3 text-red-500 font-bold tracking-widest">
             <Shield className="w-6 h-6" />
-            MFD DEFENSE
+            {copy.brand}
           </div>
-          <div className="flex gap-4">
+          <div className="flex items-center gap-4">
+            <LanguageSwitcher className="bg-zinc-900" />
             <Link href="/military/login" className="px-6 py-2 border border-red-900/50 text-red-500 hover:bg-red-900/20 transition-all text-xs tracking-widest uppercase">
-              Secure Login
+              {copy.login}
             </Link>
           </div>
         </div>
@@ -29,23 +88,22 @@ export default function MilitaryPage() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(220,38,38,0.1),transparent_70%)]"></div>
         <div className="container mx-auto text-center relative z-10">
           <div className="inline-block px-4 py-1 border border-red-500/30 bg-red-950/30 text-red-400 text-xs tracking-[0.3em] mb-6 animate-pulse">
-            CLASSIFIED SYSTEM // LEVEL 3
+            {copy.badge}
           </div>
           <h1 className="text-4xl md:text-6xl font-bold mb-8 text-white tracking-tighter">
-            ADVANCED MILITARY <br/>
-            <span className="text-red-600 text-shadow-red">FOOD SYSTEMS</span>
+            {copy.title.split(' ').slice(0, 2).join(' ').toUpperCase()} <br/>
+            <span className="text-red-600 text-shadow-red">{copy.accent}</span>
           </h1>
           <p className="text-lg text-gray-400 max-w-2xl mx-auto mb-12 leading-relaxed tracking-wide">
-            Strategic supply chain management for defense operations. 
-            High-performance nutrition, extended shelf-life solutions, and secure logistics.
+            {copy.subtitle}
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-6">
             <Link href="/military/login" className="group px-8 py-4 bg-red-700 hover:bg-red-600 text-white font-bold tracking-widest text-sm uppercase transition-all shadow-[0_0_20px_rgba(220,38,38,0.4)] flex items-center justify-center gap-3">
-              Initialize Access
+              {copy.primary}
               <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
             <Link href="#capabilities" className="px-8 py-4 border border-gray-700 hover:border-gray-500 text-gray-300 font-bold tracking-widest text-sm uppercase transition-all">
-              View Capabilities
+              {copy.secondary}
             </Link>
           </div>
         </div>
@@ -57,18 +115,18 @@ export default function MilitaryPage() {
           <div className="grid md:grid-cols-3 gap-8">
             <CapabilityCard 
               icon={<Target className="w-8 h-8 text-red-500" />}
-              title="Precision Logistics"
-              description="Real-time supply tracking for active combat zones and remote outposts."
+              title={copy.cards[0][0]}
+              description={copy.cards[0][1]}
             />
             <CapabilityCard 
               icon={<Database className="w-8 h-8 text-red-500" />}
-              title="Strategic Reserves"
-              description="Automated inventory management for long-term food security and disaster response."
+              title={copy.cards[1][0]}
+              description={copy.cards[1][1]}
             />
             <CapabilityCard 
               icon={<Lock className="w-8 h-8 text-red-500" />}
-              title="Secure Protocols"
-              description="End-to-end encrypted supply chain data protection and biometric access control."
+              title={copy.cards[2][0]}
+              description={copy.cards[2][1]}
             />
           </div>
         </div>
@@ -78,8 +136,8 @@ export default function MilitaryPage() {
       <footer className="border-t border-red-900/30 py-12 px-6 bg-black text-center">
         <div className="container mx-auto">
           <p className="text-gray-600 text-xs tracking-widest uppercase">
-            &copy; {currentYear} Military Food Development. Department of Defense Contractor.
-            <br/>All rights reserved. Unauthorized access is strictly prohibited.
+            &copy; {currentYear} Military Food Development.
+            <br/>{copy.footer}
           </p>
         </div>
       </footer>

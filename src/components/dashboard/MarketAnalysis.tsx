@@ -97,55 +97,12 @@ export default function MarketAnalysis() {
     }
   ];
 
-  const summaryCopy = {
-    pt: [
-      { label: 'Blocos', value: '5' },
-      { label: 'Leitura', value: 'Curta' },
-      { label: 'Foco', value: 'Acao' },
-    ],
-    en: [
-      { label: 'Blocks', value: '5' },
-      { label: 'Read', value: 'Short' },
-      { label: 'Focus', value: 'Action' },
-    ],
-    es: [
-      { label: 'Bloques', value: '5' },
-      { label: 'Lectura', value: 'Corta' },
-      { label: 'Foco', value: 'Accion' },
-    ],
-    ru: [
-      { label: 'Bloki', value: '5' },
-      { label: 'Format', value: 'Korotkiy' },
-      { label: 'Fokus', value: 'Deystvie' },
-    ],
-    ar: [
-      { label: 'الكتل', value: '5' },
-      { label: 'القراءة', value: 'سريعة' },
-      { label: 'التركيز', value: 'فعل' },
-    ],
-    zh: [
-      { label: '模块', value: '5' },
-      { label: '阅读', value: '短' },
-      { label: '重点', value: '动作' },
-    ],
-  } as const;
-  const summary = summaryCopy[activeLanguage];
-
   return (
     <section id="analise-mercado" className="py-20 bg-slate-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-3xl font-bold text-center text-slate-900 mb-6 relative pb-4 after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-20 after:h-1 after:bg-gradient-to-r after:from-blue-500 after:to-green-500 after:rounded-full">
           {t('market_analysis_title')}
         </h2>
-
-        <div className="mx-auto mb-10 grid max-w-3xl gap-4 sm:grid-cols-3">
-          {summary.map((item) => (
-            <div key={item.label} className="rounded-2xl border border-slate-200 bg-white px-5 py-4 text-center shadow-sm">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">{item.label}</p>
-              <p className="mt-2 text-lg font-bold text-slate-900">{item.value}</p>
-            </div>
-          ))}
-        </div>
 
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-5">
           {analysisCards.map((card, index) => (

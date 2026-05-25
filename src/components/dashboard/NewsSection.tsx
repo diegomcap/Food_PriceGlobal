@@ -18,11 +18,6 @@ export default function NewsSection() {
       editorialTags: ['Fluxo', 'Risco', 'Timing'],
       marketNewsTitle: 'Noticias de mercado',
       marketNewsSubtitle: 'Cobertura continua por cadeia, com filtro por tema e busca dedicada.',
-      summary: [
-        { label: 'Alertas', value: '3' },
-        { label: 'Agenda', value: '3 datas' },
-        { label: 'Feed', value: 'Busca ativa' },
-      ],
     },
     en: {
       editorialTitle: 'Editorial alerts',
@@ -30,11 +25,6 @@ export default function NewsSection() {
       editorialTags: ['Flow', 'Risk', 'Timing'],
       marketNewsTitle: 'Market news',
       marketNewsSubtitle: 'Continuous coverage by chain, with category filters and dedicated search.',
-      summary: [
-        { label: 'Alerts', value: '3' },
-        { label: 'Agenda', value: '3 dates' },
-        { label: 'Feed', value: 'Live search' },
-      ],
     },
     es: {
       editorialTitle: 'Alertas editoriales',
@@ -42,11 +32,6 @@ export default function NewsSection() {
       editorialTags: ['Flujo', 'Riesgo', 'Timing'],
       marketNewsTitle: 'Noticias de mercado',
       marketNewsSubtitle: 'Cobertura continua por cadena, con filtros por tema y busqueda dedicada.',
-      summary: [
-        { label: 'Alertas', value: '3' },
-        { label: 'Agenda', value: '3 fechas' },
-        { label: 'Feed', value: 'Busqueda activa' },
-      ],
     },
     ru: {
       editorialTitle: 'Redaktsionnye alerty',
@@ -54,11 +39,6 @@ export default function NewsSection() {
       editorialTags: ['Potok', 'Risk', 'Vremya'],
       marketNewsTitle: 'Rynochnye novosti',
       marketNewsSubtitle: 'Nepreyrvnoye pokrytie po tsepochkam s filtrami po temam i otdelnym poiskom.',
-      summary: [
-        { label: 'Alerty', value: '3' },
-        { label: 'Agenda', value: '3 daty' },
-        { label: 'Potok', value: 'Zhivoy poisk' },
-      ],
     },
     ar: {
       editorialTitle: 'تنبيهات تحريرية',
@@ -66,11 +46,6 @@ export default function NewsSection() {
       editorialTags: ['تدفق', 'مخاطر', 'توقيت'],
       marketNewsTitle: 'اخبار السوق',
       marketNewsSubtitle: 'تغطية مستمرة حسب السلسلة مع فلاتر موضوعية وبحث مخصص.',
-      summary: [
-        { label: 'التنبيهات', value: '3' },
-        { label: 'الاجندة', value: '3 تواريخ' },
-        { label: 'التغذية', value: 'بحث نشط' },
-      ],
     },
     zh: {
       editorialTitle: '编辑预警',
@@ -78,11 +53,6 @@ export default function NewsSection() {
       editorialTags: ['流向', '风险', '时机'],
       marketNewsTitle: '市场新闻',
       marketNewsSubtitle: '按产业链持续覆盖，并提供主题筛选和专门搜索。',
-      summary: [
-        { label: '预警', value: '3' },
-        { label: '日程', value: '3 个日期' },
-        { label: '信息流', value: '主动搜索' },
-      ],
     },
   } as const;
   const copy = copyMap[(['pt', 'en', 'es', 'ru', 'ar', 'zh'].includes(language) ? language : 'en') as keyof typeof copyMap];
@@ -196,16 +166,6 @@ export default function NewsSection() {
     <section id="noticias" className="py-20 bg-white relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-3xl font-bold text-center text-slate-900 mb-12">{t('news_title')}</h2>
-
-        <div className="mb-10 grid gap-4 sm:grid-cols-3">
-          {copy.summary.map((item) => (
-            <div key={item.label} className="rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">{item.label}</p>
-              <p className="mt-2 text-lg font-bold text-slate-900">{item.value}</p>
-            </div>
-          ))}
-        </div>
-        
         <div className="flex flex-col lg:flex-row gap-12">
           {/* News Feed */}
           <div className="lg:w-2/3">
