@@ -21,6 +21,7 @@ type Copy = {
   eyebrow: string;
   title: string;
   subtitle: string;
+  loading: string;
   score: string;
   demand: string;
   logistics: string;
@@ -42,6 +43,7 @@ const COPY: Record<SupportedLanguage, Copy> = {
     title: 'Heatmap de hubs do agronegocio',
     subtitle:
       'Leitura rica por pais para exportacao agro: score comercial, pulso de demanda, pressao logistica e mix da cesta exportadora.',
+    loading: 'Carregando mapa...',
     score: 'Score exportador',
     demand: 'Pulso de demanda',
     logistics: 'Pressao logistica',
@@ -61,6 +63,7 @@ const COPY: Record<SupportedLanguage, Copy> = {
     title: 'Agri-trade export hubs',
     subtitle:
       'Rich country-by-country export read for agribusiness: trade score, demand pulse, logistics pressure and export basket mix.',
+    loading: 'Loading map...',
     score: 'Export score',
     demand: 'Demand pulse',
     logistics: 'Logistics pressure',
@@ -80,6 +83,7 @@ const COPY: Record<SupportedLanguage, Copy> = {
     title: 'Hubs de exportacion agro',
     subtitle:
       'Lectura rica por pais para exportacion agro: score comercial, pulso de demanda, presion logistica y mix exportador.',
+    loading: 'Cargando mapa...',
     score: 'Score exportador',
     demand: 'Pulso de demanda',
     logistics: 'Presion logistica',
@@ -98,6 +102,7 @@ const COPY: Record<SupportedLanguage, Copy> = {
     eyebrow: 'Karta eksporta',
     title: 'Agro eksport hubs',
     subtitle: 'Rich country-by-country export read for agribusiness.',
+    loading: 'Loading map...',
     score: 'Export score',
     demand: 'Demand pulse',
     logistics: 'Logistics pressure',
@@ -117,6 +122,7 @@ const COPY: Record<SupportedLanguage, Copy> = {
     title: 'مراكز تصدير الاعمال الزراعية',
     subtitle:
       'قراءة غنية لكل دولة للصادرات الزراعية: درجة تجارية ونبض الطلب وضغط لوجستي ومزيج السلة التصديرية.',
+    loading: 'جار تحميل الخريطة...',
     score: 'الدرجة التصديرية',
     demand: 'نبض الطلب',
     logistics: 'الضغط اللوجستي',
@@ -136,6 +142,7 @@ const COPY: Record<SupportedLanguage, Copy> = {
     title: '农业出口枢纽',
     subtitle:
       '按国家提供农业出口的丰富读数: 贸易评分、需求脉冲、物流压力和出口篮子结构。',
+    loading: '正在加载地图...',
     score: '出口评分',
     demand: '需求脉冲',
     logistics: '物流压力',
@@ -382,7 +389,7 @@ export default function AgroExportRichMap({ commodities, faoData, language }: Pr
           {worldMap ? (
             <HighchartsReact highcharts={HighchartsMap} constructorType="mapChart" options={mapOptions} />
           ) : (
-            <div className="flex h-[460px] items-center justify-center text-slate-500">Loading map...</div>
+            <div className="flex h-[460px] items-center justify-center text-slate-500">{copy.loading}</div>
           )}
         </div>
 

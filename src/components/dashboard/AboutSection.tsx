@@ -169,12 +169,62 @@ const COPY = {
     visualLabel: 'Visual',
     feedContextLabel: 'Contexto del feed',
   },
+  ar: {
+    eyebrow: 'كيف يعمل المكتب',
+    title: 'سياق حقيقي وقراءة تشغيلية واستمرارية للتغذية.',
+    intro:
+      'تمت اعادة تصميم المنتج ليعمل كطبقة قرار. ضوضاء مؤسسية اقل واشارات اكثر قابلية للاستخدام في اليوم التجاري.',
+    pillars: [
+      {
+        title: 'طبقات بيانات حقيقية',
+        detail: 'يتعايش FAO والسوق المراقب والعوامل الكلية والقراءة التحريرية داخل اطار واحد.',
+      },
+      {
+        title: 'استمرارية تشغيلية',
+        detail: 'تبقى القراءة حية عبر fallback مضبوط ولقطات محفوظة ومراقبة للمصادر.',
+      },
+      {
+        title: 'استخدام تجاري يومي',
+        detail: 'مصمم للهامش والتمرير السعري والتوقيت والمقارنة بين العقود والمراجع الرسمية.',
+      },
+    ],
+    mediaEyebrow: 'لوحة تشغيلية',
+    mediaTitle: 'سياق بصري للسلسلة التي تتم مراقبتها',
+    mediaNote: 'المشاهد ادناه تمثل سياقا بصريا للمكتب وليست بثا حيا مزيفا.',
+    visualLabel: 'مرئي',
+    feedContextLabel: 'سياق التغذية',
+  },
+  zh: {
+    eyebrow: '交易台如何运作',
+    title: '真实背景、运营解读与数据流连续性。',
+    intro:
+      '产品被重新设计为一层决策系统。减少泛泛的机构叙事，增加日常商业场景中可直接使用的信号。',
+    pillars: [
+      {
+        title: '真实数据层',
+        detail: 'FAO、监控市场、宏观驱动和编辑解读被放在同一个框架中。',
+      },
+      {
+        title: '运营连续性',
+        detail: '通过受控 fallback、持久化快照和来源可观测性，让解读持续在线。',
+      },
+      {
+        title: '日常商业用途',
+        detail: '围绕利润、价格传导、时机以及合约和官方参考之间的比较而设计。',
+      },
+    ],
+    mediaEyebrow: '运营画布',
+    mediaTitle: '监控链条的可视化背景',
+    mediaNote: '下方画面用于提供交易台的视觉背景，而不是伪装的实时视频流。',
+    visualLabel: '可视化',
+    feedContextLabel: '数据流背景',
+  },
 } as const;
 
 export default function AboutSection() {
   const { t, language } = useTranslation();
   const [currentFeedIndex, setCurrentFeedIndex] = useState(0);
-  const activeLanguage = language === 'pt' ? 'pt' : language === 'es' ? 'es' : 'en';
+  const activeLanguage = (['pt', 'en', 'es', 'ar', 'zh'].includes(language) ? language : 'en') as keyof typeof COPY;
   const copy = COPY[activeLanguage];
 
   useEffect(() => {

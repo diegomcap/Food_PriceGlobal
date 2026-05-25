@@ -42,11 +42,37 @@ const COPY = {
     proofItems: ['trading y hedge', 'origination y sourcing', 'exportacion y traslado'],
     quickAction: 'Ver lectura operativa',
   },
+  ar: {
+    eyebrow: 'ذكاء FoodPrice Global',
+    titleLead: 'المكتب العالمي من اجل',
+    titleAccent: 'قرارات زراعية لحظية',
+    subtitle:
+      'سلع، عوامل كلية، لوجستيات وتنبيهات قابلة للتنفيذ لاستباق المخاطر والتوقيت والهوامش في التداول والتصدير والتوريد والتحوط.',
+    primary: 'الاشتراك في Intelligence',
+    secondary: 'استكشاف البيانات الحية',
+    chips: ['سلع + عوامل كلية + شحن', 'قراءة تنفيذية يومية', 'تركيز على الهامش والمخاطر والتوقيت'],
+    proofLabel: 'مصمم لـ',
+    proofItems: ['التداول والتحوط', 'المنشأ والتوريد', 'التصدير والتمرير السعري'],
+    quickAction: 'عرض القراءة التشغيلية',
+  },
+  zh: {
+    eyebrow: 'FoodPrice Global Intelligence',
+    titleLead: '面向农业决策的',
+    titleAccent: '全球实时交易台',
+    subtitle:
+      '整合大宗商品、宏观、物流与可执行预警，帮助交易、出口、采购与套保团队提前把握风险、时机与利润空间。',
+    primary: '订阅 Intelligence',
+    secondary: '查看实时数据',
+    chips: ['商品 + 宏观 + 运费', '每日执行摘要', '聚焦利润、风险与时机'],
+    proofLabel: '适用于',
+    proofItems: ['交易与套保', '采购与原料来源', '出口与价格传导'],
+    quickAction: '查看运营解读',
+  },
 } as const;
 
 export function Hero() {
   const { language } = useTranslation();
-  const activeLanguage = language === 'pt' ? 'pt' : language === 'es' ? 'es' : 'en';
+  const activeLanguage = (['pt', 'en', 'es', 'ar', 'zh'].includes(language) ? language : 'en') as keyof typeof COPY;
   const copy = COPY[activeLanguage];
 
   return (

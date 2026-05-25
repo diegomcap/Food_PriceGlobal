@@ -84,6 +84,36 @@ const COPY = {
     riskTag: 'Riesgo',
     flowTag: 'Flujo',
   },
+  ar: {
+    eyebrow: 'مكتب الذكاء',
+    title: 'تنبيهات اليوم',
+    subtitle: 'قراءات قصيرة وقابلة للتنفيذ للمخاطر والتوقيت والتحركات الرئيسية في السوق.',
+    deskNote: 'يتم تشغيل التنبيهات عبر قواعد تجمع بين FAO والعقود المستقبلية والعوامل الكلية من اجل الهامش والتحوط والتدفق.',
+    loading: 'جار بناء التنبيهات من احدث مدخلات السوق...',
+    fallback: 'العمل على لقطة طوارئ',
+    lastUpdate: 'اخر قراءة',
+    ruleLabel: 'القاعدة',
+    actionLabel: 'الاجراء الموصى به',
+    faoTag: 'FAO',
+    futuresTag: 'العقود المستقبلية',
+    riskTag: 'مخاطر',
+    flowTag: 'تدفق',
+  },
+  zh: {
+    eyebrow: '情报交易台',
+    title: '今日预警',
+    subtitle: '围绕风险、时机和关键市场变化的短篇可执行解读。',
+    deskNote: '预警由规则触发，综合 FAO、期货与宏观驱动，用于利润、套保和流向判断。',
+    loading: '正在根据最新市场输入生成预警...',
+    fallback: '当前使用应急快照',
+    lastUpdate: '最近读取',
+    ruleLabel: '规则',
+    actionLabel: '建议动作',
+    faoTag: 'FAO',
+    futuresTag: '期货',
+    riskTag: '风险',
+    flowTag: '流向',
+  },
 } as const;
 
 function formatMagnitude(change: number) {
@@ -91,7 +121,7 @@ function formatMagnitude(change: number) {
 }
 
 function getCopyLanguage(language: string) {
-  if (language === 'pt' || language === 'es') {
+  if (language === 'pt' || language === 'es' || language === 'ar' || language === 'zh') {
     return language;
   }
 
@@ -354,6 +384,140 @@ export default function MarketAlertsSection() {
           action: replacementStress
             ? 'Revisar traslado, inventario corto y cobertura de insumos o derivados correlatos.'
             : 'Seguir monitoreando costo de reposicion sin adelantar un ajuste comercial fuerte.',
+          tone: replacementStress ? 'amber' : 'blue',
+        },
+      ] as AlertCard[];
+    }
+
+    if (activeLanguage === 'ar') {
+      return [
+        {
+          id: 'macro-pressure',
+          tag: copy.riskTag,
+          title: macroStress
+            ? 'الدولار والديزل والشحن يضغطون على هوامش التصدير'
+            : macroRelief
+              ? 'الدولار واللوجستيات يخففان تكلفة الخروج'
+              : 'الضغط الكلي اللوجستي ما زال تحت المراقبة التكتيكية',
+          detail: `DXY ${formatPercent(dollarChange)} و ULSD Diesel ${formatPercent(dieselChange)} و Baltic Dry ${formatPercent(freightChange)} و WTI ${formatPercent(crudeChange)}. هذا المزيج ${macroStress ? 'يرفع' : macroRelief ? 'يخفف' : 'يبقي تحت المراقبة'} تكلفة التحوط والشحن والتمرير الدولي.`,
+          rule: 'ارتفاع DXY فوق +0.25% مع ارتفاع الديزل او الشحن او WTI فوق +1.00%.',
+          action: macroStress
+            ? 'راجع تحوط العملات وتغطية الشحن وسياسة التمرير في مسارات التصدير.'
+            : macroRelief
+              ? 'قيّم مساحة تخفيف التحوطات القصيرة واعادة بناء الهامش اللوجستي.'
+              : 'استمر في مراقبة العملات والديزل والشحن قبل تعديل التحوطات.',
+          tone: macroStress ? 'red' : macroRelief ? 'emerald' : 'amber',
+        },
+        {
+          id: 'contract-breakout',
+          tag: copy.futuresTag,
+          title:
+            Math.abs(biggestMover.change) >= 2
+              ? `${t(biggestMover.id)} يكسر النطاق ويزيد التقلب`
+              : `${t(biggestMover.id)} يقود الحركة التكتيكية اليوم`,
+          detail: `${biggestMover.market} يسجل ${biggestMover.price.toFixed(2)} ${biggestMover.unit} مع تغير ${formatPercent(biggestMover.change)}. هذا العقد يملك اكبر تحرك نسبي داخل السلة المراقبة.`,
+          rule: 'اكبر عقد مراقب يتحرك بمقدار مطلق لا يقل عن 2.00% خلال اليوم.',
+          action:
+            Math.abs(biggestMover.change) >= 2
+              ? 'اعد تقييم التحوطات والفوارق والتعرض لمصدر الاصل قبل زيادة المخاطر.'
+              : 'راقب استمرارية الحركة قبل تعديل التغطيات او المشتريات.',
+          tone: Math.abs(biggestMover.change) >= 2.5 ? 'red' : Math.abs(biggestMover.change) >= 1.25 ? 'amber' : 'blue',
+        },
+        {
+          id: 'cereals-confirmation',
+          tag: copy.flowTag,
+          title: cerealsConfirmedUp
+            ? `FAO والعقود المستقبلية يؤكدان ضغط الحبوب في ${latestMonth}`
+            : cerealsConfirmedDown
+              ? `FAO والعقود المستقبلية يشيران الى هدوء في الحبوب خلال ${latestMonth}`
+              : `الحبوب ما زالت تحتاج الى تأكيد اضافي في ${latestMonth}`,
+          detail: `FAO Cereals ${formatPercent(cerealsChange)} والذرة ${formatPercent(corn?.change ?? 0)} والقمح ${formatPercent(wheat?.change ?? 0)}. هذه القراءة تجمع بين المرجع الرسمي والعقود المستقبلية لفهم الـ basis والاعلاف والتدفق العالمي.`,
+          rule: 'يجب ان يتحرك FAO Cereals ومتوسط الذرة والقمح في الاتجاه نفسه.',
+          action: cerealsConfirmedUp
+            ? 'راقب المشتريات والـ basis والتمرير في الذرة والقمح لحماية الهامش.'
+            : cerealsConfirmedDown
+              ? 'قيّم الشراء المتدرج وتغطية اخف اذا استمر الهدوء.'
+              : 'انتظر تأكيد مجمع الحبوب قبل تغيير خطة التحوط.',
+          tone: cerealsConfirmedUp ? 'red' : cerealsConfirmedDown ? 'emerald' : 'blue',
+        },
+        {
+          id: 'replacement-cost',
+          tag: copy.faoTag,
+          title: replacementStress
+            ? `${higherFaoMove.label} يدخل في ضغط تكلفة الاستبدال`
+            : `${higherFaoMove.label} ما زال بلا محفز قوي للاستبدال`,
+          detail: `${higherFaoMove.label} يغلق ${latestMonth} عند ${higherFaoMove.value.toFixed(1)} نقطة مع ${formatPercent(higherFaoMove.change)}. ${correlatedContract ? `${t(correlatedContract.id)} عند ${formatPercent(correlatedContract.change)}.` : ''} والذهب عند ${formatPercent(goldChange)} كمقياس دفاعي.`,
+          rule: 'صعود المؤشر الفرعي القيادي في FAO فوق 2.00% او تأكيده بواسطة العقد المرتبط والذهب.',
+          action: replacementStress
+            ? 'راجع التمرير والمخزون القصير وتغطية المدخلات او المشتقات المرتبطة.'
+            : 'استمر في مراقبة تكلفة الاستبدال دون فرض تعديل تجاري قوي.',
+          tone: replacementStress ? 'amber' : 'blue',
+        },
+      ] as AlertCard[];
+    }
+
+    if (activeLanguage === 'zh') {
+      return [
+        {
+          id: 'macro-pressure',
+          tag: copy.riskTag,
+          title: macroStress
+            ? '美元、柴油与运费正在压缩出口利润'
+            : macroRelief
+              ? '美元与物流正在缓解外运成本'
+              : '宏观物流压力仍处于战术观察中',
+          detail: `DXY ${formatPercent(dollarChange)}、ULSD Diesel ${formatPercent(dieselChange)}、Baltic Dry ${formatPercent(freightChange)} 和 WTI ${formatPercent(crudeChange)}。这一组合${macroStress ? '正在抬高' : macroRelief ? '正在缓解' : '继续维持观察'}套保、运费与价格传导成本。`,
+          rule: '当 DXY 高于 +0.25%，且柴油、运费或 WTI 中任一项高于 +1.00% 时触发。',
+          action: macroStress
+            ? '检查外汇套保、运费覆盖和出口链路上的价格传导策略。'
+            : macroRelief
+              ? '评估减轻短期套保并重建物流利润空间的窗口。'
+              : '在重新布局套保前继续交叉监控汇率、柴油和运费。',
+          tone: macroStress ? 'red' : macroRelief ? 'emerald' : 'amber',
+        },
+        {
+          id: 'contract-breakout',
+          tag: copy.futuresTag,
+          title:
+            Math.abs(biggestMover.change) >= 2
+              ? `${t(biggestMover.id)} 突破区间并加剧波动`
+              : `${t(biggestMover.id)} 领涨今日战术性波动`,
+          detail: `${biggestMover.market} 报 ${biggestMover.price.toFixed(2)} ${biggestMover.unit}，变动 ${formatPercent(biggestMover.change)}。该合约是当前监控篮子中日内位移最大的品种。`,
+          rule: '当日监控合约中绝对涨跌幅达到 2.00% 及以上时触发。',
+          action:
+            Math.abs(biggestMover.change) >= 2
+              ? '在扩大风险敞口前重新评估套保、价差和原产地暴露。'
+              : '在调整覆盖或采购前先观察走势是否延续。',
+          tone: Math.abs(biggestMover.change) >= 2.5 ? 'red' : Math.abs(biggestMover.change) >= 1.25 ? 'amber' : 'blue',
+        },
+        {
+          id: 'cereals-confirmation',
+          tag: copy.flowTag,
+          title: cerealsConfirmedUp
+            ? `FAO 与期货在 ${latestMonth} 确认谷物压力`
+            : cerealsConfirmedDown
+              ? `FAO 与期货在 ${latestMonth} 指向谷物缓和`
+              : `${latestMonth} 的谷物信号仍需更多确认`,
+          detail: `FAO Cereals ${formatPercent(cerealsChange)}、Corn ${formatPercent(corn?.change ?? 0)}、Wheat ${formatPercent(wheat?.change ?? 0)}。该读数把官方参考与期货结合，用于判断 basis、饲料与全球流向。`,
+          rule: 'FAO Cereals 与玉米、小麦平均值必须指向同一方向。',
+          action: cerealsConfirmedUp
+            ? '关注玉米和小麦的采购、basis 与价格传导，以保护利润。'
+            : cerealsConfirmedDown
+              ? '若缓和延续，可评估分批采购和更轻的覆盖策略。'
+              : '在谷物复合体确认之前，不要急于调整套保计划。',
+          tone: cerealsConfirmedUp ? 'red' : cerealsConfirmedDown ? 'emerald' : 'blue',
+        },
+        {
+          id: 'replacement-cost',
+          tag: copy.faoTag,
+          title: replacementStress
+            ? `${higherFaoMove.label} 进入替代成本压力区`
+            : `${higherFaoMove.label} 仍缺少强替代触发`,
+          detail: `${higherFaoMove.label} 在 ${latestMonth} 收于 ${higherFaoMove.value.toFixed(1)} 点，变动 ${formatPercent(higherFaoMove.change)}。${correlatedContract ? `${t(correlatedContract.id)} 变动 ${formatPercent(correlatedContract.change)}。` : ''}黄金 ${formatPercent(goldChange)}，作为防御情绪温度计。`,
+          rule: '当领先的 FAO 子指数高于 2.00%，或被相关合约与黄金共同确认时触发。',
+          action: replacementStress
+            ? '检查价格传导、短库存以及相关投入品或衍生品的覆盖。'
+            : '继续监控替代成本，无需强行做出激进商业调整。',
           tone: replacementStress ? 'amber' : 'blue',
         },
       ] as AlertCard[];

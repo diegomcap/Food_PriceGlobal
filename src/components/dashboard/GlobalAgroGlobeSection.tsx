@@ -349,7 +349,7 @@ const COPY_MAP: Record<SupportedLanguage, Copy> = {
     },
   },
   ar: {
-    eyebrow: 'Global Agro Pulse',
+    eyebrow: 'نبض الزراعة العالمي',
     title: 'الكرة الزراعية بمحرك حقيقي من الـ pipeline',
     subtitle:
       'الخريطة تستخدم الان اشارات حقيقية من السلع والعوامل الكلية و FAO لاعادة معايرة الضغط حسب السلة. الجغرافيا ما زالت استراتيجية لكن محرك القراءة اصبح من الـ pipeline الحية.',
@@ -380,10 +380,10 @@ const COPY_MAP: Record<SupportedLanguage, Copy> = {
     averageLabel: 'المتوسط',
     empty: 'لا توجد دول متاحة لهذه السلة.',
     scoreBadge: 'الدرجة المركبة',
-    pipelineBadge: 'Pipeline حية',
-    pipelineHealthy: 'Pipeline سليمة',
-    pipelineWarning: 'Pipeline تحت المراقبة',
-    pipelineCritical: 'Pipeline متدهورة',
+    pipelineBadge: 'تدفق حي',
+    pipelineHealthy: 'التدفق سليم',
+    pipelineWarning: 'التدفق تحت المراقبة',
+    pipelineCritical: 'التدفق متدهور',
     signalTitle: 'اشارات السلة الحية',
     sourcesTitle: 'محرك البيانات',
     sourceLabel: 'المصدر',
@@ -408,7 +408,7 @@ const COPY_MAP: Record<SupportedLanguage, Copy> = {
     },
   },
   zh: {
-    eyebrow: 'Global Agro Pulse',
+    eyebrow: '全球农业脉冲',
     title: '由实时 pipeline 驱动的农业地球仪',
     subtitle:
       '该地图现在使用真实的商品、宏观和 FAO 信号来重新校准每个篮子的压力。地理层仍是战略参数，但读取引擎已经来自实时 pipeline。',
@@ -439,10 +439,10 @@ const COPY_MAP: Record<SupportedLanguage, Copy> = {
     averageLabel: '平均值',
     empty: '该篮子没有可用国家。',
     scoreBadge: '综合评分',
-    pipelineBadge: '实时 pipeline',
-    pipelineHealthy: 'Pipeline 健康',
-    pipelineWarning: 'Pipeline 需关注',
-    pipelineCritical: 'Pipeline 降级',
+    pipelineBadge: '实时数据流',
+    pipelineHealthy: '数据流健康',
+    pipelineWarning: '数据流需关注',
+    pipelineCritical: '数据流已降级',
     signalTitle: '篮子实时信号',
     sourcesTitle: '数据引擎',
     sourceLabel: '来源',
@@ -508,7 +508,23 @@ function getOverallStatusClasses(status: OverallStatus) {
   }
 }
 
-function getSummary(copy: Copy, commodityLabel: string, country: CountryPoint, signal: GlobeSignal) {
+function getSummary(language: SupportedLanguage, copy: Copy, commodityLabel: string, country: CountryPoint, signal: GlobeSignal) {
+  if (language === 'ar') {
+    return `${country.country} يسجل ${copy.scoreLabel} عند ${country.score} ضمن ${commodityLabel}، مع ${formatSignedPercent(signal.commodityChange)} في السلعة و${formatSignedPercent(signal.faoChange)} في FAO وضغط لوجستي حالي داخل السلة.`;
+  }
+
+  if (language === 'zh') {
+    return `${country.country} 在 ${commodityLabel} 中的${copy.scoreLabel}为 ${country.score}，同时商品变动为 ${formatSignedPercent(signal.commodityChange)}，FAO 变动为 ${formatSignedPercent(signal.faoChange)}，并承受该篮子的当前物流压力。`;
+  }
+
+  if (language === 'es') {
+    return `${country.country} concentra ${copy.scoreLabel.toLowerCase()} ${country.score} en ${commodityLabel.toLowerCase()}, combinado con ${formatSignedPercent(signal.commodityChange)} en la commodity, ${formatSignedPercent(signal.faoChange)} en el FAO y la presion logistica actual de la canasta.`;
+  }
+
+  if (language === 'en' || language === 'ru') {
+    return `${country.country} posts a ${copy.scoreLabel.toLowerCase()} of ${country.score} in ${commodityLabel.toLowerCase()}, combined with ${formatSignedPercent(signal.commodityChange)} in the commodity, ${formatSignedPercent(signal.faoChange)} in FAO and the basket's current logistics pressure.`;
+  }
+
   return `${country.country} concentra ${copy.scoreLabel.toLowerCase()} ${country.score} em ${commodityLabel.toLowerCase()}, combinado a ${formatSignedPercent(signal.commodityChange)} na commodity, ${formatSignedPercent(signal.faoChange)} no FAO e pressao logistica atual da cesta.`;
 }
 
@@ -841,7 +857,7 @@ export function GlobalAgroGlobeSection() {
               {selectedCountry && signal && (
                 <>
                   <p className="rounded-2xl border border-white/10 bg-slate-900/60 px-4 py-3 text-sm leading-7 text-slate-300">
-                    {getSummary(copy, commodityLabel, selectedCountry, signal)}
+                    {getSummary(activeLanguage, copy, commodityLabel, selectedCountry, signal)}
                   </p>
 
                   <div className="mt-5 grid gap-3 sm:grid-cols-2">

@@ -53,11 +53,43 @@ const COPY = {
     noteTitle: 'Contacto mas honesto',
     noteBody: 'Salen el telefono placeholder y las redes vacias. Entra un CTA directo coherente con la operacion actual del producto.',
   },
+  ar: {
+    eyebrow: 'تحدث مع المكتب',
+    title: 'تواصل مع الفريق عبر قناة حقيقية، لا عبر نموذج شكلي.',
+    subtitle:
+      'اذا كان الهدف مناقشة التحوط او التوريد او التصدير او هيكل الهامش او الوصول الى المنتج، فالبريد الالكتروني هو الطريق المباشر حاليا.',
+    primary: 'فتح تواصل عبر البريد',
+    secondary: 'طلب عرض توضيحي',
+    emailLabel: 'القناة الرئيسية',
+    emailValue: 'contato@foodpriceglobal.com',
+    responseLabel: 'المسار المتوقع',
+    responseValue: 'فرز تجاري ورد بشري',
+    coverageLabel: 'محاور النقاش',
+    coverageItems: ['التداول والتحوط', 'المنشأ والتوريد', 'التصدير والتمرير السعري', 'ذكاء السوق'],
+    noteTitle: 'تواصل اكثر وضوحا',
+    noteBody: 'تم حذف الهاتف الوهمي والشبكات الفارغة. والآن يوجد CTA مباشر متسق مع طريقة عمل المنتج فعليا.',
+  },
+  zh: {
+    eyebrow: '联系交易台',
+    title: '通过真实渠道与团队沟通，而不是使用摆设式表单。',
+    subtitle:
+      '如果你想讨论套保、采购、出口、利润结构或产品接入，当前最直接的路径就是电子邮件。',
+    primary: '发送邮件联系',
+    secondary: '申请演示',
+    emailLabel: '主要渠道',
+    emailValue: 'contato@foodpriceglobal.com',
+    responseLabel: '预期流程',
+    responseValue: '商业筛选与人工回复',
+    coverageLabel: '沟通主题',
+    coverageItems: ['交易与套保', '采购与原料来源', '出口与价格传导', '市场情报'],
+    noteTitle: '更真实的联系路径',
+    noteBody: '移除了占位电话和空白社媒，改为与当前产品运营状态一致的直接 CTA。',
+  },
 } as const;
 
 export default function ContactSection() {
   const { language } = useTranslation();
-  const activeLanguage = language === 'pt' ? 'pt' : language === 'es' ? 'es' : 'en';
+  const activeLanguage = (['pt', 'en', 'es', 'ar', 'zh'].includes(language) ? language : 'en') as keyof typeof COPY;
   const copy = COPY[activeLanguage];
   const emailHref = `mailto:${copy.emailValue}`;
   const demoHref = `mailto:${copy.emailValue}?subject=${encodeURIComponent('FoodPrice Global Demo Request')}`;

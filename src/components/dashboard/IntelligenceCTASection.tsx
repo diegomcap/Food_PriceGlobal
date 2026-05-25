@@ -95,11 +95,71 @@ const COPY = {
     valueBody:
       'Menos ruido, mas decision. El producto conecta mercado fisico, futuros, macro y logistica en una sola lectura para la operacion agro.',
   },
+  ar: {
+    eyebrow: 'الاشتراك في Intelligence',
+    title: 'مسار متميز لهامش افضل وتوقيت ادق ومخاطر اوضح في القطاع الزراعي.',
+    subtitle:
+      'هذا الاصدار التجاري ينظم عرض المنتج للتداول والتصدير والتوريد والتحوط عبر قراءة تنفيذية وتغطية ذات اولوية ووصول مباشر الى المكتب.',
+    primary: 'طلب وصول مميز',
+    secondary: 'التحدث مع المكتب',
+    audienceLabel: 'مصمم لـ',
+    audienceItems: ['التداول والتحوط', 'المنشأ والتوريد', 'التصدير والتمرير السعري'],
+    pillars: [
+      {
+        title: 'قراءة تنفيذية يومية',
+        body: 'ملخص واضح للاشارات التي تحرك الهوامش والتدفقات والطاقة والعملات والشحن.',
+        icon: LineChart,
+      },
+      {
+        title: 'تنبيهات قابلة للتنفيذ',
+        body: 'مسار اولوية للتنبيهات حسب الاصل والقاعدة وكسر النطاق وضغط السوق.',
+        icon: BellRing,
+      },
+      {
+        title: 'تغطية تجارية',
+        body: 'مسار اولي للحديث عن الوصول الى المنتج والتغطية والعروض التوضيحية والانضمام المميز.',
+        icon: BriefcaseBusiness,
+      },
+    ],
+    valueTitle: 'القيمة التجارية',
+    valueBody:
+      'ضجيج اقل وقرار اكثر. المنتج يربط السوق الفعلي والعقود المستقبلية والعوامل الكلية واللوجستيات في قراءة تشغيلية واحدة للقطاع الزراعي.',
+  },
+  zh: {
+    eyebrow: '订阅 Intelligence',
+    title: '为农业业务提供更高利润率、更准时机和更清晰风险的高级路径。',
+    subtitle:
+      '这个商业化 MVP 将产品打包为面向交易、出口、采购与套保团队的执行方案，包含高层解读、优先覆盖和直达交易台的联系路径。',
+    primary: '申请高级访问',
+    secondary: '联系交易台',
+    audienceLabel: '适用于',
+    audienceItems: ['交易与套保', '采购与原料来源', '出口与价格传导'],
+    pillars: [
+      {
+        title: '每日执行解读',
+        body: '清晰总结影响利润、流向、能源、汇率和运费的核心信号。',
+        icon: LineChart,
+      },
+      {
+        title: '可执行预警',
+        body: '按资产、规则、区间突破和市场压力提供优先级更高的预警路径。',
+        icon: BellRing,
+      },
+      {
+        title: '商业覆盖',
+        body: '围绕产品接入、覆盖范围、演示和高级开通的初始沟通路径。',
+        icon: BriefcaseBusiness,
+      },
+    ],
+    valueTitle: '商业主张',
+    valueBody:
+      '更少噪音，更多决策。产品把现货、期货、宏观与物流整合成一套农业运营视图。',
+  },
 } as const;
 
 export default function IntelligenceCTASection() {
   const { language } = useTranslation();
-  const activeLanguage = language === 'pt' ? 'pt' : language === 'es' ? 'es' : 'en';
+  const activeLanguage = (['pt', 'en', 'es', 'ar', 'zh'].includes(language) ? language : 'en') as keyof typeof COPY;
   const copy = COPY[activeLanguage];
   const demoHref = 'mailto:contato@foodpriceglobal.com?subject=FoodPrice%20Global%20Premium%20Access';
 

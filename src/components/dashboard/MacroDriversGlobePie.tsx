@@ -26,6 +26,7 @@ type Copy = {
   subtitle: string;
   description: string;
   clickHint: string;
+  loading: string;
   filterLabel: string;
   top10: string;
   top30: string;
@@ -42,6 +43,7 @@ const COPY: Record<SupportedLanguage, Copy> = {
     description:
       'Variable pie interativo indicando os principais hubs macro do agronegocio. O score combina cambio, energia, diesel e frete maritimo e e recalculado a cada atualizacao periodica do feed macro.',
     clickHint: 'Clique em uma fatia para girar o globe ate o pais correspondente.',
+    loading: 'Carregando globe...',
     filterLabel: 'Filtro',
     top10: 'Top 10',
     top30: 'Top 30',
@@ -56,6 +58,7 @@ const COPY: Record<SupportedLanguage, Copy> = {
     description:
       'Interactive variable pie showing the leading agribusiness macro hubs. The score combines FX, energy, diesel and ocean freight on every periodic macro-feed refresh.',
     clickHint: 'Click a slice to rotate the globe to the corresponding country.',
+    loading: 'Loading globe...',
     filterLabel: 'Filter',
     top10: 'Top 10',
     top30: 'Top 30',
@@ -70,6 +73,7 @@ const COPY: Record<SupportedLanguage, Copy> = {
     description:
       'Variable pie interactivo que muestra los principales hubs macro del agronegocio. El score combina FX, energia, diesel y flete maritimo en cada actualizacion periodica del feed macro.',
     clickHint: 'Haz clic en una porcion para girar el globo al pais correspondiente.',
+    loading: 'Cargando globo...',
     filterLabel: 'Filtro',
     top10: 'Top 10',
     top30: 'Top 30',
@@ -84,6 +88,7 @@ const COPY: Record<SupportedLanguage, Copy> = {
     description:
       'Interactive variable pie showing the leading agribusiness macro hubs. The score combines FX, energy, diesel and ocean freight on every periodic macro-feed refresh.',
     clickHint: 'Click a slice to rotate the globe to the corresponding country.',
+    loading: 'Loading globe...',
     filterLabel: 'Filter',
     top10: 'Top 10',
     top30: 'Top 30',
@@ -93,32 +98,34 @@ const COPY: Record<SupportedLanguage, Copy> = {
     dominantLabel: 'Dominant pressure',
   },
   ar: {
-    title: '2026 Top macro hubs by composite pressure',
-    subtitle: 'In composite points using DXY, WTI, Natural Gas, Gold, ULSD Diesel and Baltic Dry.',
+    title: 'ابرز المراكز الكلية في 2026 حسب الضغط المركب',
+    subtitle: 'بنقاط مركبة تستخدم DXY و WTI و Natural Gas و Gold و ULSD Diesel و Baltic Dry.',
     description:
-      'Interactive variable pie showing the leading agribusiness macro hubs. The score combines FX, energy, diesel and ocean freight on every periodic macro-feed refresh.',
-    clickHint: 'Click a slice to rotate the globe to the corresponding country.',
-    filterLabel: 'Filter',
+      'مخطط variable pie تفاعلي يوضح ابرز المراكز الكلية في الاعمال الزراعية. الدرجة تجمع بين العملات والطاقة والديزل والشحن البحري مع كل تحديث دوري للتغذية الكلية.',
+    clickHint: 'اضغط على شريحة لتدوير الكرة نحو الدولة المقابلة.',
+    loading: 'جار تحميل الكرة...',
+    filterLabel: 'الفلتر',
     top10: 'Top 10',
     top30: 'Top 30',
     top100: 'Top 100',
-    all: 'All',
-    totalLabel: 'Combined pressure',
-    dominantLabel: 'Dominant pressure',
+    all: 'الكل',
+    totalLabel: 'الضغط المركب',
+    dominantLabel: 'الضغط المهيمن',
   },
   zh: {
-    title: '2026 Top macro hubs by composite pressure',
-    subtitle: 'In composite points using DXY, WTI, Natural Gas, Gold, ULSD Diesel and Baltic Dry.',
+    title: '2026 年按综合压力排序的宏观枢纽',
+    subtitle: '采用 DXY、WTI、Natural Gas、Gold、ULSD Diesel 和 Baltic Dry 的综合评分。',
     description:
-      'Interactive variable pie showing the leading agribusiness macro hubs. The score combines FX, energy, diesel and ocean freight on every periodic macro-feed refresh.',
-    clickHint: 'Click a slice to rotate the globe to the corresponding country.',
-    filterLabel: 'Filter',
+      '交互式 variable pie 展示农业业务中的主要宏观枢纽。评分结合外汇、能源、柴油和海运费，并随宏观数据流的周期性更新而重算。',
+    clickHint: '点击任一扇区即可将地球仪旋转到对应国家。',
+    loading: '正在加载地球仪...',
+    filterLabel: '筛选',
     top10: 'Top 10',
     top30: 'Top 30',
     top100: 'Top 100',
-    all: 'All',
-    totalLabel: 'Combined pressure',
-    dominantLabel: 'Dominant pressure',
+    all: '全部',
+    totalLabel: '综合压力',
+    dominantLabel: '主导压力',
   },
 };
 
@@ -470,7 +477,7 @@ export default function MacroDriversGlobePie({ drivers, language }: Props) {
       {worldMap && modulesReady ? (
         <HighchartsReact highcharts={HighchartsMap} constructorType='mapChart' options={chartOptions} />
       ) : (
-        <div className='flex h-[730px] items-center justify-center text-slate-500'>Loading globe...</div>
+        <div className='flex h-[730px] items-center justify-center text-slate-500'>{copy.loading}</div>
       )}
       <figcaption className='px-3 pb-1 pt-0 text-sm leading-7 text-slate-600'>
         <p>{copy.description}</p>
